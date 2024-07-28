@@ -40,7 +40,6 @@ const InscriC = ({ navigation }) => {
     });
   };
 
-  
   const [error, setError] = useState(false);
   const [nom, setNom] = useState("");
   const [prenom, setPrenom] = useState("");
@@ -89,8 +88,6 @@ const InscriC = ({ navigation }) => {
       !prenom ||
       !Num_tel ||
       Num_tel < 0 ||
-      
-     
       password.length < 6 ||
       Num_tel.length != 8 ||
       (!regEx.test(email) && email != "")
@@ -108,18 +105,15 @@ const InscriC = ({ navigation }) => {
       formData.append("email", email);
       formData.append("password", password);
       formData.append("cin", cin);
-    
+
       formData.append("avatar", avatarFile);
-      const response = await fetch(
-        "http://192.168.148.216:3000/add-user",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          body: formData,
-        }
-      );
+      const response = await fetch("http://192.168.148.216:3000/add-user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        body: formData,
+      });
 
       const data = await response.json();
       if (data.email !== "" && data.password !== "") {
@@ -145,381 +139,372 @@ const InscriC = ({ navigation }) => {
       console.log(error);
     }
   };
-  
- 
 
   return (
-  
-      <View style={styles.container}>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <Toast />
+    <View style={styles.container}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <Toast />
 
-          <StatusBar backgroundColor="white" />
+        <StatusBar backgroundColor="white" />
 
-          <Animatable.View
-            animation="fadeInUpBig"
+        <Animatable.View
+          animation="fadeInUpBig"
+          style={[
+            styles.footer,
+            {
+              backgroundColor: colors.background,
+              marginTop: 100,
+              marginLeft: 15,
+              marginRight: 15,
+              borderRadius: 40,
+            },
+          ]}
+        >
+          <View>
+            <TouchableOpacity
+              onPress={openImageLibrary}
+              style={styles.uploadBtnContainer}
+            >
+              {avatar ? (
+                <Image
+                  source={{ uri: avatar }}
+                  style={{ width: "70%", height: "100%" }}
+                />
+              ) : (
+                <Text
+                  style={styles.uploadBtn}
+                  onChangeText={(text) => setProfileImage(text)}
+                >
+                  Cliquer pour choisir une image
+                </Text>
+              )}
+            </TouchableOpacity>
+          </View>
+          <Text
             style={[
-              styles.footer,
+              styles.text_footer,
               {
-                backgroundColor: colors.background,
-                marginTop: 100,
-                marginLeft: 15,
-                marginRight: 15,
-                borderRadius:40
+                color: colors.text,
+                fontSize: 15,
+                marginTop: 25,
+                marginBottom: 15,
               },
             ]}
           >
-            <View>
-              <TouchableOpacity
-                onPress={openImageLibrary}
-                style={styles.uploadBtnContainer}
-              >
-                {avatar ? (
-                  <Image
-                    source={{ uri: avatar }} // Utilisez l'URI de l'image sélectionnée
-                    style={{ width: "70%", height: "100%" }}
-                  />
-                ) : (
-                  <Text
-                    style={styles.uploadBtn}
-                    onChangeText={(text) => setProfileImage(text)}
-                  >
-                    Cliquer pour choisir une image
-                  </Text>
-                )}
-              </TouchableOpacity>
-            </View>
-            <Text
+            Nom
+          </Text>
+          <View style={styles.action}>
+            <Icon
+              name="user"
+              color="#01BACF"
+              size={20}
+              style={{
+                marginTop: -10,
+              }}
+            />
+
+            <TextInput
+              placeholder="nom "
+              placeholderTextColor="#666666"
               style={[
-                styles.text_footer,
+                styles.textInput,
                 {
                   color: colors.text,
-                  fontSize: 15,
-                  marginTop: 25,
-                  marginBottom: 15,
                 },
               ]}
-            >
-              Nom
+              autoCapitalize="none"
+              onChangeText={(val) => setNom(val)}
+            />
+          </View>
+          {error && !nom && (
+            <Text style={{ color: "red", fontSize: 10, fontWeight: "bold" }}>
+              {" "}
+              champ obligatoire *
             </Text>
-            <View style={styles.action}>
-              <Icon
-                name="user"
-                color="#01BACF"
-                size={20}
-                style={{
-                  marginTop: -10,
-                }}
-              />
-
-              <TextInput
-                placeholder="nom "
-                placeholderTextColor="#666666"
-                style={[
-                  styles.textInput,
-                  {
-                    color: colors.text,
-                  },
-                ]}
-                autoCapitalize="none"
-                onChangeText={(val) => setNom(val)}
-              />
-            </View>
-            {error && !nom && (
-              <Text style={{ color: "red", fontSize: 10, fontWeight: "bold" }}>
-                {" "}
-                champ obligatoire *
-              </Text>
-            )}
-            <Text
+          )}
+          <Text
+            style={[
+              styles.text_footer,
+              {
+                color: colors.text,
+                fontSize: 15,
+                marginTop: 35,
+                marginBottom: 15,
+              },
+            ]}
+          >
+            Prenom
+          </Text>
+          <View style={styles.action}>
+            <Icon
+              name="user"
+              style={{
+                marginTop: -10,
+              }}
+              color="#01BACF"
+              size={20}
+            />
+            <TextInput
+              placeholder="prenom "
+              placeholderTextColor="#666666"
               style={[
-                styles.text_footer,
+                styles.textInput,
                 {
                   color: colors.text,
-                  fontSize: 15,
-                  marginTop: 35,
-                  marginBottom: 15,
                 },
               ]}
-            >
-              Prenom
+              autoCapitalize="none"
+              onChangeText={(val) => setPrenom(val)}
+            />
+          </View>
+          {error && !prenom && (
+            <Text style={{ color: "red", fontSize: 10, fontWeight: "bold" }}>
+              {" "}
+              champ obligatoire *
             </Text>
-            <View style={styles.action}>
-              <Icon
-                name="user"
-                style={{
-                  marginTop: -10,
-                }}
-                color="#01BACF"
-                size={20}
-              />
-              <TextInput
-                placeholder="prenom "
-                placeholderTextColor="#666666"
-                style={[
-                  styles.textInput,
-                  {
-                    color: colors.text,
-                  },
-                ]}
-                autoCapitalize="none"
-                onChangeText={(val) => setPrenom(val)}
-              />
-            </View>
-            {error && !prenom && (
-              <Text style={{ color: "red", fontSize: 10, fontWeight: "bold" }}>
-                {" "}
-                champ obligatoire *
-              </Text>
-            )}
-            <Text
+          )}
+          <Text
+            style={[
+              styles.text_footer,
+              {
+                color: colors.text,
+                fontSize: 15,
+                marginTop: 35,
+                marginBottom: 15,
+              },
+            ]}
+          >
+            Numéro du téléphone
+          </Text>
+          <View style={styles.action}>
+            <Icon
+              name="phone"
+              color="#01BACF"
+              size={20}
+              style={{
+                marginTop: -10,
+              }}
+            />
+            <TextInput
+              placeholder=" Numéro  du téléphone"
+              placeholderTextColor="#666666"
+              keyboardType="numeric"
               style={[
-                styles.text_footer,
+                styles.textInput,
                 {
                   color: colors.text,
-                  fontSize: 15,
-                  marginTop: 35,
-                  marginBottom: 15,
                 },
               ]}
-            >
-              Numéro du téléphone
-            </Text>
-            <View style={styles.action}>
-              <Icon
-                name="phone"
-                color="#01BACF"
-                size={20}
-                style={{
-                  marginTop: -10,
-                }}
-              />
-              <TextInput
-                placeholder=" Numéro  du téléphone"
-                placeholderTextColor="#666666"
-                keyboardType="numeric"
-                style={[
-                  styles.textInput,
-                  {
-                    color: colors.text,
-                  },
-                ]}
-                autoCapitalize="none"
-                onChangeText={(val) => setNumero(val)}
-              />
-            </View>
-            
-            {error && Num_tel.length != 8 && (
-              <Text style={{ color: "red", fontSize: 10, fontWeight: "bold" }}>
-                Numéro du téléphone doit contenir 8 chiffres
-              </Text>
-            )}
-            {error && Num_tel < 0 && (
-              <Text style={{ color: "red", fontSize: 10, fontWeight: "bold" }}>
-                Numéro du téléphone doit etre positive
-              </Text>
-            )}
+              autoCapitalize="none"
+              onChangeText={(val) => setNumero(val)}
+            />
+          </View>
 
-            <Text
+          {error && Num_tel.length != 8 && (
+            <Text style={{ color: "red", fontSize: 10, fontWeight: "bold" }}>
+              Numéro du téléphone doit contenir 8 chiffres
+            </Text>
+          )}
+          {error && Num_tel < 0 && (
+            <Text style={{ color: "red", fontSize: 10, fontWeight: "bold" }}>
+              Numéro du téléphone doit etre positive
+            </Text>
+          )}
+
+          <Text
+            style={[
+              styles.text_footer,
+              {
+                color: colors.text,
+                fontSize: 15,
+                marginTop: 35,
+                marginBottom: 15,
+              },
+            ]}
+          >
+            Cin
+          </Text>
+          <View style={styles.action}>
+            <Icon
+              name="calendar"
+              color="#01BACF"
+              size={20}
+              style={{
+                marginTop: -10,
+              }}
+            />
+
+            <TextInput
+              placeholder=" Cin"
+              placeholderTextColor="#666666"
+              keyboardType="numeric"
               style={[
-                styles.text_footer,
+                styles.textInput,
                 {
                   color: colors.text,
-                  fontSize: 15,
-                  marginTop: 35,
-                  marginBottom: 15,
                 },
               ]}
-            >
-              Cin
-            </Text>
-            <View style={styles.action}>
-              <Icon
-                name="calendar"
-                color="#01BACF"
-                size={20}
-                style={{
-                  marginTop: -10,
-                }}
-              />
+              autoCapitalize="none"
+              onChangeText={(val) => setCin(val)}
+            />
+          </View>
 
-<TextInput
-  placeholder=" Cin"
-  placeholderTextColor="#666666"
-  keyboardType="numeric"
-  style={[
-    styles.textInput,
-    {
-      color: colors.text,
-    },
-  ]}
-  autoCapitalize="none"
-  onChangeText={(val) => setCin(val)}
-/>
-
-            </View>
-           
-            
-           
-           
-
-            <Text
+          <Text
+            style={[
+              styles.text_footer,
+              {
+                color: colors.text,
+                fontSize: 15,
+                marginTop: 35,
+                marginBottom: 15,
+              },
+            ]}
+          >
+            Email
+          </Text>
+          <View style={styles.action}>
+            <Icon
+              name="mail"
+              color="#01BACF"
+              size={20}
+              style={{
+                marginTop: -10,
+              }}
+            />
+            <TextInput
+              placeholder="Email"
+              placeholderTextColor="#666666"
               style={[
-                styles.text_footer,
+                styles.textInput,
                 {
                   color: colors.text,
-                  fontSize: 15,
-                  marginTop: 35,
-                  marginBottom: 15,
                 },
               ]}
-            >
-              Email
+              autoCapitalize="none"
+              onChangeText={(val) => setEmail(val)}
+            />
+          </View>
+          {error && !email && (
+            <Text style={{ color: "red", fontSize: 10, fontWeight: "bold" }}>
+              {" "}
+              champ obligatoire *
             </Text>
-            <View style={styles.action}>
-              <Icon
-                name="mail"
-                color="#01BACF"
-                size={20}
-                style={{
-                  marginTop: -10,
-                }}
-              />
-              <TextInput
-                placeholder="Email"
-                placeholderTextColor="#666666"
-                style={[
-                  styles.textInput,
-                  {
-                    color: colors.text,
-                  },
-                ]}
-                autoCapitalize="none"
-                onChangeText={(val) => setEmail(val)}
-              />
-            </View>
-            {error && !email && (
-              <Text style={{ color: "red", fontSize: 10, fontWeight: "bold" }}>
-                {" "}
-                champ obligatoire *
-              </Text>
-            )}
+          )}
 
-            {error && !regEx.test(email) && (
-              <Text style={{ color: "red", fontSize: 10, fontWeight: "bold" }}>
-                {" "}
-                email invalide
-              </Text>
-            )}
+          {error && !regEx.test(email) && (
+            <Text style={{ color: "red", fontSize: 10, fontWeight: "bold" }}>
+              {" "}
+              email invalide
+            </Text>
+          )}
 
-            <Text
+          <Text
+            style={[
+              styles.text_footer,
+              {
+                color: colors.text,
+                marginTop: 35,
+                fontSize: 15,
+                marginBottom: 15,
+              },
+            ]}
+          >
+            Mot de passe
+          </Text>
+          <View style={styles.action}>
+            <Feather
+              name="lock"
+              color="#01BACF"
+              size={20}
+              style={{
+                marginTop: -10,
+              }}
+            />
+            <TextInput
+              placeholder="Mot de passe du client"
+              placeholderTextColor="#666666"
+              secureTextEntry={data.secureTextEntry ? true : false}
               style={[
-                styles.text_footer,
+                styles.textInput,
                 {
                   color: colors.text,
-                  marginTop: 35,
-                  fontSize: 15,
-                  marginBottom: 15,
                 },
               ]}
-            >
-              Mot de passe
+              autoCapitalize="none"
+              onChangeText={(val) => setPassword(val)}
+            />
+            <TouchableOpacity onPress={updateSecureTextEntry}>
+              {data.secureTextEntry ? (
+                <Feather name="eye-off" color="grey" size={20} />
+              ) : (
+                <Feather name="eye" color="grey" size={20} />
+              )}
+            </TouchableOpacity>
+          </View>
+          {error && !password && (
+            <Text style={{ color: "red", fontSize: 10, fontWeight: "bold" }}>
+              {" "}
+              champ obligatoire *
             </Text>
-            <View style={styles.action}>
-              <Feather
-                name="lock"
-                color="#01BACF"
-                size={20}
-                style={{
-                  marginTop: -10,
-                }}
-              />
-              <TextInput
-                placeholder="Mot de passe du client"
-                placeholderTextColor="#666666"
-                secureTextEntry={data.secureTextEntry ? true : false}
-                style={[
-                  styles.textInput,
-                  {
-                    color: colors.text,
-                  },
-                ]}
-                autoCapitalize="none"
-                onChangeText={(val) => setPassword(val)}
-              />
-              <TouchableOpacity onPress={updateSecureTextEntry}>
-                {data.secureTextEntry ? (
-                  <Feather name="eye-off" color="grey" size={20} />
-                ) : (
-                  <Feather name="eye" color="grey" size={20} />
-                )}
-              </TouchableOpacity>
-            </View>
-            {error && !password && (
-              <Text style={{ color: "red", fontSize: 10, fontWeight: "bold" }}>
-                {" "}
-                champ obligatoire *
-              </Text>
-            )}
-            {error && password.length < 6 && (
-              <Text style={{ color: "red", fontSize: 10, fontWeight: "bold" }}>
-                {" "}
-                Mot de passe doit contenir minimum 6 caractéres{" "}
-              </Text>
-            )}
+          )}
+          {error && password.length < 6 && (
+            <Text style={{ color: "red", fontSize: 10, fontWeight: "bold" }}>
+              {" "}
+              Mot de passe doit contenir minimum 6 caractéres{" "}
+            </Text>
+          )}
 
-            <View style={styles.button}>
-              <TouchableOpacity
+          <View style={styles.button}>
+            <TouchableOpacity
+              style={styles.signIn}
+              onPress={() => {
+                AddClient();
+              }}
+            >
+              <LinearGradient
+                colors={["#01BACF", "#0EBFE3"]}
                 style={styles.signIn}
-                onPress={() => {
-                  AddClient();
-                }}
-              >
-                <LinearGradient
-                  colors={["#01BACF", "#0EBFE3"]}
-                  style={styles.signIn}
-                >
-                  <Text
-                    style={[
-                      styles.textSign,
-                      {
-                        color: "#fff",
-                      },
-                    ]}
-                  >
-                    S'inscrire
-                  </Text>
-                </LinearGradient>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                onPress={() => navigation.navigate("LoginC")}
-                style={[
-                  styles.signIn,
-                  {
-                    borderColor: "#01BACF",
-                    borderWidth: 1,
-                    marginTop: 30,
-                    marginBottom: 50,
-                  },
-                ]}
               >
                 <Text
                   style={[
                     styles.textSign,
                     {
-                      color: "#01BACF",
+                      color: "#fff",
                     },
                   ]}
                 >
-                  Connexion
+                  S'inscrire
                 </Text>
-              </TouchableOpacity>
-            </View>
-          </Animatable.View>
-        </ScrollView>
-      </View>
-    
+              </LinearGradient>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => navigation.navigate("LoginC")}
+              style={[
+                styles.signIn,
+                {
+                  borderColor: "#01BACF",
+                  borderWidth: 1,
+                  marginTop: 30,
+                  marginBottom: 50,
+                },
+              ]}
+            >
+              <Text
+                style={[
+                  styles.textSign,
+                  {
+                    color: "#01BACF",
+                  },
+                ]}
+              >
+                Connexion
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </Animatable.View>
+      </ScrollView>
+    </View>
   );
 };
 
@@ -528,7 +513,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#219C90",
-    
   },
   footer: {
     flex: 3,

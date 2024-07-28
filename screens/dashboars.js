@@ -27,11 +27,9 @@ import medicament from "../assets/med.png";
 
 import document from "../assets/doc.png";
 
-
 import { Alert } from "react-native";
 
 export default function Dashboard({ navigation }) {
- 
   const [showMenu, setShowMenu] = useState(false);
   const [user, setUser] = useState("");
   const [userId, setUserId] = useState("");
@@ -57,12 +55,8 @@ export default function Dashboard({ navigation }) {
     fetchData();
   }, []);
 
-
-
   const logoutUser = async () => {
-         
-      navigation.navigate("LoginC");
-   
+    navigation.navigate("LoginC");
   };
 
   return (
@@ -96,7 +90,7 @@ export default function Dashboard({ navigation }) {
               {user?.Data?.nom} {user?.Data?.prenom}
             </Text>
 
-            <View style={{ flexGrow: 1, marginTop: 20  , marginRight:48}}>
+            <View style={{ flexGrow: 1, marginTop: 20, marginRight: 48 }}>
               <TouchableOpacity
                 onPress={() => {
                   if (title == "LogOut") {
@@ -105,9 +99,11 @@ export default function Dashboard({ navigation }) {
                   }
                 }}
               >
-                <TouchableOpacity onPress={() => {
+                <TouchableOpacity
+                  onPress={() => {
                     navigation.navigate("dash");
-                  }} >
+                  }}
+                >
                   <View
                     style={{
                       flexDirection: "row",
@@ -115,7 +111,7 @@ export default function Dashboard({ navigation }) {
                       paddingVertical: 8,
                       backgroundColor: "white",
                       paddingLeft: 5,
-                     
+
                       borderRadius: 8,
                       marginTop: 30,
                     }}
@@ -180,13 +176,6 @@ export default function Dashboard({ navigation }) {
                   </View>
                 </TouchableOpacity>
 
-               
-
-               
-                
-
-               
-
                 <TouchableOpacity onPress={logoutUser}>
                   <View
                     style={{
@@ -245,152 +234,129 @@ export default function Dashboard({ navigation }) {
           {
             // Menu Button...
           }
-          
-            <ScrollView
-              style={{ marginVertical: 0 }}
-             
+
+          <ScrollView style={{ marginVertical: 0 }}>
+            <Animated.View
+              style={{
+                transform: [
+                  {
+                    translateY: closeButtonOffset,
+                  },
+                ],
+              }}
+              source={require("../assets/4.jpg")}
             >
-              <Animated.View
-                style={{
-                  transform: [
-                    {
-                      translateY: closeButtonOffset,
-                    },
-                  ],
+              <TouchableOpacity
+                onPress={() => {
+                  Animated.timing(scaleValue, {
+                    toValue: showMenu ? 1 : 0.88,
+                    duration: 300,
+                    useNativeDriver: true,
+                  }).start();
+
+                  Animated.timing(offsetValue, {
+                    toValue: showMenu ? 0 : 230,
+                    duration: 300,
+                    useNativeDriver: true,
+                  }).start();
+
+                  Animated.timing(closeButtonOffset, {
+                    toValue: !showMenu ? -30 : 0,
+                    duration: 300,
+                    useNativeDriver: true,
+                  }).start();
+
+                  setShowMenu(!showMenu);
                 }}
                 source={require("../assets/4.jpg")}
               >
-                <TouchableOpacity
-                  onPress={() => {
-                    Animated.timing(scaleValue, {
-                      toValue: showMenu ? 1 : 0.88,
-                      duration: 300,
-                      useNativeDriver: true,
-                    }).start();
-
-                    Animated.timing(offsetValue, {
-                      // YOur Random Value...
-                      toValue: showMenu ? 0 : 230,
-                      duration: 300,
-                      useNativeDriver: true,
-                    }).start();
-
-                    Animated.timing(closeButtonOffset, {
-                      // YOur Random Value...
-                      toValue: !showMenu ? -30 : 0,
-                      duration: 300,
-                      useNativeDriver: true,
-                    }).start();
-
-                    setShowMenu(!showMenu);
-                  }}
-                  source={require("../assets/4.jpg")}
-                >
-                  <Image
-                    source={showMenu ? close : menu}
-                    style={{
-                      width: 30,
-                      height: 30,
-                      tintColor: "green",
-                      marginTop: 40,
-                      marginLeft: 20,
-                    }}
-                  ></Image>
-                </TouchableOpacity>
-                <View style={styles.content}>
-                  {/* Affichage de l'image kk.png si des données sont récupérées */}
-                  {rendezVous.length > 0 ? (
-                    <TouchableOpacity
-                      onPress={() => handleImageClick(rendezVous[0])}
-                    >
-                      <Image
-                        source={require("../assets/rouge.png")}
-                        style={{ width: 70, height: 70, marginLeft: 300 }}
-                      />
-                    </TouchableOpacity>
-                  ) : (
-                    <Image
-                      source={require("../assets/blanc.png")}
-                      style={{ width: 70, height: 70, marginLeft: 250 }}
-                    />
-                  )}
-                  {/* Affichage des détails du rendez-vous sélectionné */}
-                  {/*  {selectedRendezVous && (
-                  <View style={styles.detailsContainer}>
-                    <Text>Date: {selectedRendezVous.date}</Text>
-                    <Text>Heure: {selectedRendezVous.heure}</Text>
-                    <Text>
-                      Nom du docteur: {selectedRendezVous.nom_docteur}
-                    </Text>
-                  
-                  </View>
-                )}*/}
-
-                  {selectedRendezVous &&
-                    Alert.alert(
-                      "Détails du rendez-vous",
-                      `Date: ${selectedRendezVous.date}\nHeure: ${selectedRendezVous.heure}\nNom du docteur: ${selectedRendezVous.nom_docteur}`,
-                      [
-                        {
-                          text: "OK",
-                          onPress: () => console.log("OK Pressed"),
-                        },
-                      ],
-                      { cancelable: false, titleStyle: { color: "red" } }
-                    )}
-                </View>
-                <Text
+                <Image
+                  source={showMenu ? close : menu}
                   style={{
-                    fontSize: 18,
-                    fontWeight: "bold",
-                    alignSelf: "center",
-                    marginTop: 30,
-                    color: "#427CA2",
-                    marginBottom: 20,
+                    width: 30,
+                    height: 30,
+                    tintColor: "#219C90",
+                    marginTop: 40,
+                    marginLeft: 20,
                   }}
-                ></Text>
-                <ScrollView horizontal={true}></ScrollView>
+                ></Image>
+              </TouchableOpacity>
+              <View style={styles.content}>
+                {rendezVous.length > 0 ? (
+                  <TouchableOpacity
+                    onPress={() => handleImageClick(rendezVous[0])}
+                  >
+                    <Image
+                      source={require("../assets/rouge.png")}
+                      style={{ width: 70, height: 70, marginLeft: 300 }}
+                    />
+                  </TouchableOpacity>
+                ) : (
+                  <Image
+                    source={require("../assets/blanc.png")}
+                    style={{ width: 70, height: 70, marginLeft: 250 }}
+                  />
+                )}
 
-                {/* <Image
-                source={require("../assets/gg.jpg")}
-                style={{ width: 400, height: 250 }}
-              />*/}
-              </Animated.View>
+                {selectedRendezVous &&
+                  Alert.alert(
+                    "Détails du rendez-vous",
+                    `Date: ${selectedRendezVous.date}\nHeure: ${selectedRendezVous.heure}\nNom du docteur: ${selectedRendezVous.nom_docteur}`,
+                    [
+                      {
+                        text: "OK",
+                        onPress: () => console.log("OK Pressed"),
+                      },
+                    ],
+                    { cancelable: false, titleStyle: { color: "red" } }
+                  )}
+              </View>
               <Text
                 style={{
-                  fontSize: 20,
+                  fontSize: 18,
                   fontWeight: "bold",
                   alignSelf: "center",
+                  marginTop: 30,
                   color: "#427CA2",
-                  marginTop: 350, // Vous pouvez ajuster ou retirer ce marginTop si nécessaire
-                  textShadowOffset: { width: -1, height: 1 },
-                  textShadowRadius: 10,
-                  padding: 10,
-                  backgroundColor: "rgba(255, 255, 255, 0.8)",
-                  borderRadius: 10,
+                  marginBottom: 20,
                 }}
-              >
-                Bienvenue,
-              </Text>
-              <Text
-                style={{
-                  fontSize: 20,
-                  fontWeight: "bold",
-                  alignSelf: "center",
+              ></Text>
+              <ScrollView horizontal={true}></ScrollView>
+            </Animated.View>
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: "bold",
+                alignSelf: "center",
+                color: "#427CA2",
+                marginTop: 350,
+                textShadowOffset: { width: -1, height: 1 },
+                textShadowRadius: 10,
+                padding: 10,
+                backgroundColor: "rgba(255, 255, 255, 0.8)",
+                borderRadius: 10,
+              }}
+            >
+              Bienvenue,
+            </Text>
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: "bold",
+                alignSelf: "center",
 
-                  color: "#427CA2",
+                color: "#427CA2",
 
-                  textShadowOffset: { width: -1, height: 1 },
-                  textShadowRadius: 10,
-                  padding: 10,
-                  backgroundColor: "rgba(255, 255, 255, 0.8)",
-                  borderRadius: 10,
-                }}
-              >
-                nous sommes à votre service
-              </Text>
-            </ScrollView>
-      
+                textShadowOffset: { width: -1, height: 1 },
+                textShadowRadius: 10,
+                padding: 10,
+                backgroundColor: "rgba(255, 255, 255, 0.8)",
+                borderRadius: 10,
+              }}
+            >
+              nous sommes à votre service
+            </Text>
+          </ScrollView>
         </Animated.View>
       </SafeAreaView>
     </>
@@ -413,7 +379,7 @@ const styles = StyleSheet.create({
     height: 120,
     width: 120,
     borderRadius: 125 / 5,
- marginRight:40,
+    marginRight: 40,
 
     borderWidth: 0,
     overflow: "hidden",

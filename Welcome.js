@@ -27,15 +27,16 @@ const Welcome = ({ navigation }) => {
     <View style={styles.container}>
       <Text style={styles.title}>FarmManager</Text>
       <Image source={h} style={styles.logo} resizeMode="contain" />
-    
-      <Text style={styles.text}>
-  Avec <Text style={styles.highlight}>FarmManager</Text>, nous facilitons la gestion de votre ferme pour que vous puissiez vous concentrer sur l'essentiel.
-</Text>
 
+      <Text style={styles.text}>
+        Avec <Text style={styles.highlight}>FarmManager</Text>, nous facilitons
+        la gestion de votre ferme pour que vous puissiez vous concentrer sur
+        l'essentiel.
+      </Text>
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate("LoginC")} 
+        onPress={() => navigation.navigate("LoginC")}
       >
         <Text style={styles.buttonText}>Commencer</Text>
       </TouchableOpacity>
@@ -45,8 +46,8 @@ const Welcome = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    fontFamily: "Arial", 
-    lineHeight: 24, 
+    fontFamily: "Arial",
+    lineHeight: 24,
     flex: 1,
     backgroundColor: "#219C90",
     justifyContent: "center",
@@ -54,10 +55,9 @@ const styles = StyleSheet.create({
     marginTop: -screenHeight * 0.4,
   },
   logo: {
-    width: screenWidth *1.2, // 80% de la largeur de l'écran
-    height: screenHeight * 0.4, // 50% de la hauteur de l'écran
-    marginTop: screenHeight *0.05
-    ,
+    width: screenWidth * 1.2,
+    height: screenHeight * 0.4,
+    marginTop: screenHeight * 0.05,
   },
   button: {
     width: 250,
@@ -65,40 +65,39 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     marginTop: 60,
     alignItems: "center",
-    backgroundColor: "#01BACF", // Correction ici
+    backgroundColor: "#01BACF",
   },
 
   buttonText: {
-    color: "#FFFFFF", // Couleur du texte du bouton
-    fontSize: 16, // Taille de police du texte du bouton
-    fontWeight: "bold", // Gras pour le texte du bouton
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "bold",
   },
   texte: {
     textAlign: "center",
 
-    fontSize: 18, // Changer la taille de la police selon vos préférences
-    color: "#ffffff", // Couleur du texte en blanc
+    fontSize: 18,
+    color: "#ffffff",
   },
   title: {
     marginTop: screenHeight * 0.4,
-    // Utilisation de la police Arial
     fontSize: 22,
     color: "#ffffff",
     fontFamily: "Sevillana-Regular",
   },
   text: {
-    color: "#FFFFFF", // Couleur du texte en blanc
+    color: "#FFFFFF",
     textAlign: "center",
     fontSize: 18,
-    fontFamily: "Arial", // Changer la police selon vos préférences
-    lineHeight: 24, // Espacement des lignes
-    marginHorizontal: 20, // Marge horizontale
-    marginTop: 20, // Marge supérieure
+    fontFamily: "Arial",
+    lineHeight: 24,
+    marginHorizontal: 20,
+    marginTop: 20,
   },
   highlight: {
-    fontWeight: "bold", // Texte en gras
-    color: "#01BACF", // Couleur du texte en surbrillance
-    fontFamily: "Arial", // Changer la police selon vos préférences
+    fontWeight: "bold",
+    color: "#01BACF",
+    fontFamily: "Arial",
   },
 });
 

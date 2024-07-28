@@ -116,24 +116,21 @@ const LoginC = ({ navigation }) => {
       .then((response) => {
         if (!response.ok) {
           Toast.show({
-            type: 'error',
-            text1:'Connexion éroner',
-            text2:'vérifier votre champs',
+            type: "error",
+            text1: "Connexion éroner",
+            text2: "vérifier votre champs",
             visibilityTime: 9000,
-    
-          })  
-          
-          
+          });
+
           throw new Error("Identifiants invalides");
         }
         return response.json();
       })
       .then((res) => {
-       
         navigation.navigate("dash");
-        console.log("Réponse de l'API :", res); 
-        storeClientData(res); 
-        // navigation.navigate("dash");
+        console.log("Réponse de l'API :", res);
+        storeClientData(res);
+
         Toast.show({
           position: "top",
           type: "success",
@@ -164,7 +161,7 @@ const LoginC = ({ navigation }) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email: email }), // Supposant quue "emaail" contient l'adresse e-mail saisie par l'utilisateur
+      body: JSON.stringify({ email: email }),
     })
       .then((response) => {
         if (!response.ok) {
@@ -190,16 +187,9 @@ const LoginC = ({ navigation }) => {
         return response.json();
       })
       .then((data) => {
-        
-       
         setModalVisible(false);
-        // Afficher un message à l'utilisateur indiquant que l'e-mail de réinitialisation a été envoyé avec succès
       })
-      .catch((error) => {
-        // Gérez les erreurs, par exemple affichez un message d'erreur à l'utilisateur
-        console.error(error);
-        // Afficher un message à l'utilisateur indiquant qu'une erreur s'est produite lors de l'envoi de l'e-mail de réinitialisation
-      });
+      .catch((error) => {});
   };
 
   return (
@@ -397,8 +387,6 @@ const LoginC = ({ navigation }) => {
                 Mot de passe oublié?
               </Text>
             </TouchableOpacity>
-
-            
           </View>
         </Animatable.View>
       </ScrollView>
@@ -420,7 +408,7 @@ const LoginC = ({ navigation }) => {
               onChangeText={setEmail}
               value={email}
             />
-           
+
             <View
               style={{ flexDirection: "row", justifyContent: "space-between" }}
             >
@@ -429,7 +417,7 @@ const LoginC = ({ navigation }) => {
                   backgroundColor: "#219C90",
                   padding: 10,
                   borderRadius: 5,
-                  width: 100, 
+                  width: 100,
                   alignItems: "center",
                 }}
                 onPress={sendPasswordReset}
@@ -441,7 +429,7 @@ const LoginC = ({ navigation }) => {
                   backgroundColor: "#219C90",
                   padding: 10,
                   borderRadius: 5,
-                  width: 100, 
+                  width: 100,
                   alignItems: "center",
                   marginLeft: 10, // Ajoutez une marge à gauche pour créer un espace
                 }}
@@ -551,7 +539,7 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: "center",
     elevation: 5,
-    width: "80%", // Augmentation de la largeur à 80%
+    width: "80%",
   },
   modalTitle: {
     fontSize: 24,
