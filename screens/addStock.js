@@ -6,188 +6,122 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  TextInput,
   View,
   ScrollView,
-  ImageBackground,
+  Dimensions,
 } from "react-native";
 import profile from "../assets/prof.png";
 import { getClientData } from "../utils/AsyncStorageClient";
-import stock from "../assets/stocker.png"
+import { LinearGradient } from "expo-linear-gradient";
+
+// Tab ICons...
+import animal from "../assets/betail.png";
+import animals from "../assets/kl.jpg";
 import home from "../assets/home.png";
-import * as Notifications from "expo-notifications";
-import * as Device from "expo-device";
+import stock from "../assets/stocker.png";
+import DatePicker from 'react-native-date-picker';
 import logout from "../assets/logout.png";
-import cland from "../assets/clandr.png";
-import list from "../assets/hihi.png";
-import axios from "axios";
-import Contact from "../assets/b.png";
+import { AntDesign } from "@expo/vector-icons";
+const { width: WIDTH } = Dimensions.get("window");
+// Menu
+
 import menu from "../assets/menu.png";
-import enfant1 from "../assets/enfant.png";
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import cland from "../assets/clandr.png";
+
 import close from "../assets/close.png";
-import medicament from "../assets/med.png";
-import animal from "../assets/betail.png"
-import document from "../assets/doc.png";
 
-import { Alert } from "react-native";
+import { useIsFocused } from "@react-navigation/native";
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-  }),
-});
-export default function Dashboard({ navigation }) {
+import { Button } from "react-native-paper";
+import Toast from "react-native-toast-message";
+export default function AddStock({ navigation }) {
+  const [currentTab, setCurrentTab] = useState("Home");
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [isButtonVisible, setIsButtonVisible] = useState(true);
+  const [date, setDate] = useState(new Date());
+  const [open, setOpen] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+
   const [user, setUser] = useState("");
-  const [userId, setUserId] = useState("");
-  const [hasNotification, setHasNotification] = useState(false);
-  const [rendezVous, setRendezVous] = useState([]);
-  const [selectedRendezVous, setSelectedRendezVous] = useState(null);
   const offsetValue = useRef(new Animated.Value(0)).current;
+  // Scale Intially must be One...
   const scaleValue = useRef(new Animated.Value(1)).current;
   const closeButtonOffset = useRef(new Animated.Value(0)).current;
-  const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  async function registerForPushNotificationsAsync() {
-    let token;
-    if (Platform.OS === "android") {
-      await Notifications.setNotificationChannelAsync("default", {
-        name: "default",
-        importance: Notifications.AndroidImportance.MAX,
-        vibrationPattern: [0, 250, 250, 250],
-        lightColor: "#FF231F7C",
-        sound: "default",
-      });
-    }
-
-    if (Platform.OS === "ios") {
-      await Notifications.setNotificationChannelAsync("default", {
-        name: "default",
-        importance: Notifications.AndroidImportance.MAX,
-        vibrationPattern: [0, 250, 250, 250],
-        sound: "default",
-      });
-
-      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-      if (status !== "granted") {
-        alert("Failed to get permission for push notifications!");
-        return;
-      }
-    }
-
-    token = (await Notifications.getExpoPushTokenAsync()).data;
-    console.log(token);
-
-    return token;
-  }
-  const getNotificationPermission = async () => {
-    const { status: existingStatus } = await Permissions.getAsync(
-      Permissions.NOTIFICATIONS
-    );
-    let finalStatus = existingStatus;
-    if (existingStatus !== "granted") {
-      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-      finalStatus = status;
-    }
-    return finalStatus === "granted";
+  const [quantite, setQuantité] = useState("");
+  const [date_peremption, setDatePremption] = useState("");
+  const [produit, setProduitName] = useState("");
+  const showDatePicker = () => setDatePickerVisibility(true);
+  const hideDatePicker = () => setDatePickerVisibility(false);
+  const handleDateConfirm = (date) => {
+    setDatePremption(date);
+    hideDatePicker();
   };
 
+  const [error, setError] = useState(false);
+  const regEx = /[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,8}(.[a-z{2,8}])?/g;
   useEffect(() => {
-    registerForPushNotificationsAsync()
-      .then((token) => {
-        console.log("token: ", token);
-       
-      })
-      .catch((err) => console.log(err));
-  }, []);
-  const fetchDataa = async () => {
-    try {
-      const clientData = await getClientData();
-      setIsLoading(true);
-      const response = await axios.get(
-        `http://192.168.148.216:3000/conges/${clientData?.Data?._id}`
-      );
-      setData(response.data);
-      setIsLoading(false);
-      scheduleNotifications(response.data);
-    } catch (error) {
-      console.error("Error fetching rendez-vous data: ", error);
-      setIsLoading(false);
-    }
-  };
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const userData = await getClientData();
-        setUser(userData);
-        setUserId(userData.Data._id);
-        console.log("UserData:", userData);
-        console.log("User ID:", userData.Data._id);
-      } catch (error) {
-        console.error("Error fetching user dbata:", error);
-      }
+   
+    const fetchUserData = async () => {
+      const userData = await getClientData();
+
+      setUser(userData);
     };
 
-    fetchData();
-    fetchDataa();
-    getNotificationPermission();
+    fetchUserData();
   }, []);
-  const scheduleNotifications = async (conges) => {
+  const addStock = async () => {
+    const data = await getClientData();
+    console.log("lllllll"+animal)
     try {
-      for (const item of conges) {
-        const congeS = item.status;
-        if (congeS === "En attente") {
-          await Notifications.scheduleNotificationAsync({
-            content: {
-              title: "Rappel de Congé",
-              body: `Vous avez une demande de congé en attente de l'employé ${item.employeur.nom} ${item.employeur.prenom}`,
-              data: { item },
-              sound: "default",
-            },
-            trigger: {
-              hour: 20, 
-              minute: 53,
-              repeats: true, 
-            },
-          });
-          
-      
-          setRendezVous(prevRendezVous => [...prevRendezVous, item]);
+    
+      const requestBody = JSON.stringify({
+        nomProduit: produit,
+        quantite: quantite,
+        date_peremption: date_peremption,
+       
+        proprietaire: data.Data._id,
+      });
+
+      const response = await fetch(
+        "http://192.168.148.216:3000/add-stock",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: requestBody,
         }
+      );
+
+      if (response.ok) {
+        Toast.show({
+          position: "top",
+          type: "success",
+
+          text1: "Ajouter un stock",
+          text2: "Stock ajouté avec succès",
+          
+
+          autoHide: true,
+          visibilityTime: 3000,
+          autoHide: true,
+          onHide: () => {
+            navigation.navigate("stock");
+          },
+          onShow: () => {},
+        });
+       
+      } else {
+      
+        console.error("Échec de l'ajout du médicament");
       }
-      setHasNotification(true);
     } catch (error) {
-      console.error("Error scheduling notifications: ", error);
+      console.error("Erreur lors de l'ajout du contact:", error);
     }
   };
-
-  const handleImageClick = () => {
-    if (rendezVous.length === 0) {
-      Alert.alert("Pas de notifications", "Aucun rendez-vous disponible.");
-      return;
-    }
-
-
-    const details = rendezVous.map(item => 
-      `demande: \nDate Début: ${new Date(item.dateDébut).toLocaleDateString()}\nDate Fin: ${new Date(item.dateFin).toLocaleDateString()}\nNom de l'employeur: ${item.employeur.nom} ${item.employeur.prenom}`
-    ).join("\n\n");
-
-    Alert.alert(
-      "Détails des Congés",
-      details,
-      [{ text: "OK", onPress: () => console.log("OK Pressed") }],
-      { cancelable: false, titleStyle: { color: "red" } }
-    );
-
-    setHasNotification(false);
-    setRendezVous([]);
-  };
-
-  const logoutUser = async () => {
-    navigation.navigate("LoginC");
-  };
-
   return (
     <>
       <SafeAreaView style={styles.container}>
@@ -195,9 +129,10 @@ export default function Dashboard({ navigation }) {
           <View
             style={{
               justifyContent: "flex-start",
-              padding: 15,
+              padding: 14,
               alignItems: "center",
-              marginBottom: 20,
+              marginBottom: 21,
+              marginTop: 100,
             }}
           >
             <TouchableOpacity style={styles.uploadBtnContainer}>
@@ -219,7 +154,7 @@ export default function Dashboard({ navigation }) {
               {user?.Data?.nom} {user?.Data?.prenom}
             </Text>
 
-            <View style={{ flexGrow: 1, marginTop: 20, marginRight: 48 }}>
+            <View style={{ flexGrow: 1, marginRight: 40 }}>
               <TouchableOpacity
                 onPress={() => {
                   if (title == "LogOut") {
@@ -238,9 +173,9 @@ export default function Dashboard({ navigation }) {
                       flexDirection: "row",
                       alignItems: "center",
                       paddingVertical: 8,
-                      backgroundColor: "white",
-                      paddingLeft: 5,
-
+                      backgroundColor: "transparent",
+                      paddingLeft: 13,
+                      paddingRight: 35,
                       borderRadius: 8,
                       marginTop: 30,
                     }}
@@ -250,7 +185,7 @@ export default function Dashboard({ navigation }) {
                       style={{
                         width: 25,
                         height: 25,
-                        tintColor: "#79C2BE",
+                        tintColor: "white",
                       }}
                     ></Image>
 
@@ -259,7 +194,7 @@ export default function Dashboard({ navigation }) {
                         fontSize: 15,
                         fontWeight: "bold",
                         paddingLeft: 15,
-                        color: "#79C2BE",
+                        color: "white",
                       }}
                     >
                       Acceuil
@@ -314,7 +249,7 @@ export default function Dashboard({ navigation }) {
                       flexDirection: "row",
                       alignItems: "center",
                       paddingVertical: 8,
-                      backgroundColor: "transparent",
+                      backgroundColor: "white",
                       paddingLeft: 5,
                       paddingRight: 35,
                       borderRadius: 8,
@@ -326,7 +261,7 @@ export default function Dashboard({ navigation }) {
                       style={{
                         width: 25,
                         height: 25,
-                        tintColor: "white",
+                        tintColor: "#79C2BE",
                       }}
                     ></Image>
 
@@ -335,7 +270,7 @@ export default function Dashboard({ navigation }) {
                         fontSize: 15,
                         fontWeight: "bold",
                         paddingLeft: 15,
-                        color: "white",
+                        color: "#79C2BE",
                       }}
                     >
                       Animal
@@ -345,7 +280,7 @@ export default function Dashboard({ navigation }) {
 
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("conge");
+                    navigation.navigate("update");
                   }}
                 >
                   <View
@@ -354,7 +289,7 @@ export default function Dashboard({ navigation }) {
                       alignItems: "center",
                       paddingVertical: 8,
                       backgroundColor: "transparent",
-                    
+
                       paddingRight: 48,
                       borderRadius: 8,
                       marginTop: 20,
@@ -384,7 +319,7 @@ export default function Dashboard({ navigation }) {
 
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("stock");
+                    navigation.navigate("update");
                   }}
                 >
                   <View
@@ -393,7 +328,7 @@ export default function Dashboard({ navigation }) {
                       alignItems: "center",
                       paddingVertical: 8,
                       backgroundColor: "transparent",
-                    marginLeft:5,
+                      marginLeft: 5,
                       paddingRight: 48,
                       borderRadius: 8,
                       marginTop: 20,
@@ -420,14 +355,19 @@ export default function Dashboard({ navigation }) {
                     </Text>
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={logoutUser}>
+
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("LoginC");
+                  }}
+                >
                   <View
                     style={{
                       flexDirection: "row",
                       alignItems: "center",
                       paddingVertical: 8,
                       backgroundColor: "transparent",
-                      paddingLeft: 8,
+                      paddingLeft: 13,
                       paddingRight: 30,
                       borderRadius: 8,
                       marginTop: 20,
@@ -468,17 +408,16 @@ export default function Dashboard({ navigation }) {
             bottom: 0,
             left: 0,
             right: 0,
-            paddingHorizontal: 10,
+            paddingHorizontal: 15,
             paddingVertical: 20,
             borderRadius: showMenu ? 15 : 0,
-            // Transforming View...
+           
             transform: [{ scale: scaleValue }, { translateX: offsetValue }],
           }}
         >
           {
             // Menu Button...
           }
-
           <ScrollView style={{ marginVertical: 0 }}>
             <Animated.View
               style={{
@@ -488,7 +427,6 @@ export default function Dashboard({ navigation }) {
                   },
                 ],
               }}
-              source={require("../assets/4.jpg")}
             >
               <TouchableOpacity
                 onPress={() => {
@@ -499,12 +437,14 @@ export default function Dashboard({ navigation }) {
                   }).start();
 
                   Animated.timing(offsetValue, {
+                   
                     toValue: showMenu ? 0 : 230,
                     duration: 300,
                     useNativeDriver: true,
                   }).start();
 
                   Animated.timing(closeButtonOffset, {
+                  
                     toValue: !showMenu ? -30 : 0,
                     duration: 300,
                     useNativeDriver: true,
@@ -512,83 +452,88 @@ export default function Dashboard({ navigation }) {
 
                   setShowMenu(!showMenu);
                 }}
-                source={require("../assets/4.jpg")}
               >
                 <Image
                   source={showMenu ? close : menu}
                   style={{
                     width: 30,
                     height: 30,
-                    tintColor: "#219C90",
+                    tintColor: "#79C2BE",
                     marginTop: 40,
-                    marginLeft: 20,
                   }}
                 ></Image>
               </TouchableOpacity>
-              <View style={styles.content}>
-                {hasNotification? (
-                  <TouchableOpacity
-                   onPress={handleImageClick}
-                  >
-                    <Image
-                      source={require("../assets/rouge.png")}
-                      style={{ width: 70, height: 70, marginLeft: 250 }}
-                    />
-                  </TouchableOpacity>
-                ) : (
-                  <Image
-                    source={require("../assets/blanc.png")}
-                    style={{ width: 70, height: 70, marginLeft: 250 }}
-                  />
-                )}
 
-                
-              </View>
-              <Text
-                style={{
-                  fontSize: 18,
-                  fontWeight: "bold",
-                  alignSelf: "center",
-                  marginTop: 30,
-                  color: "#427CA2",
-                  marginBottom: 20,
-                }}
-              ></Text>
-              <ScrollView horizontal={true}></ScrollView>
+              <ScrollView horizontal={true}>
+                <Toast />
+                <View style={styles.popupContainer}>
+      <Image
+        source={require('../assets/stocker.png')}
+        style={{
+          width: 110,
+          height: 100,
+          alignSelf: 'center',
+          marginTop: 5,
+          tintColor: '#7FA1C3',
+        }}
+      />
+      <Text style={[styles.textSign, { color: 'grey' }]}>Nouveau Stock</Text>
+      <View style={styles.inputContainer}>
+        <Image
+          source={require('../assets/stocker.png')}
+          style={styles.icon}
+        />
+        <TextInput
+          placeholder="Produit"
+          style={styles.input}
+          onChangeText={(val) => setProduitName(val)}
+        />
+      </View>
+      <View style={styles.inputContainer}>
+        <Image
+          source={require('../assets/des-boites.png')}
+          style={styles.icon}
+        />
+        <TextInput
+          placeholder="Quantité"
+          style={styles.input}
+          onChangeText={(val) => setQuantité(val)}
+        />
+      </View>
+      <View style={styles.inputContainer}>
+        <Image
+          source={require('../assets/calendrier.png')}
+          style={styles.icon}
+        />
+        <TouchableOpacity onPress={() => setDatePickerVisibility(true)}>
+          <TextInput
+            placeholder="Date Peremption"
+          style={{width:240}}
+            value={date.toDateString()}
+            editable={false}
+          />
+        </TouchableOpacity>
+      </View>
+      <View style={styles.button}>
+        <TouchableOpacity style={styles.signIn} onPress={addStock}>
+          <LinearGradient
+            colors={['#7FA1C3', '#7FA1C3']}
+            style={styles.linearGradient}
+          >
+            <Text style={[styles.textSign, { color: '#fff' }]}>Ajouter</Text>
+          </LinearGradient>
+        </TouchableOpacity>
+      </View>
+      <DateTimePickerModal
+        isVisible={isDatePickerVisible}
+        mode="date" // Utilisez "date" pour un sélecteur de date ou "time" pour un sélecteur d'heure
+        onConfirm={handleDateConfirm}
+        onCancel={hideDatePicker}
+      />
+    </View>
+
+              </ScrollView>
             </Animated.View>
-            <Text
-              style={{
-                fontSize: 20,
-                fontWeight: "bold",
-                alignSelf: "center",
-                color: "#427CA2",
-                marginTop: 350,
-                textShadowOffset: { width: -1, height: 1 },
-                textShadowRadius: 10,
-                padding: 10,
-                backgroundColor: "rgba(255, 255, 255, 0.8)",
-                borderRadius: 10,
-              }}
-            >
-              Bienvenue,
-            </Text>
-            <Text
-              style={{
-                fontSize: 20,
-                fontWeight: "bold",
-                alignSelf: "center",
-
-                color: "#427CA2",
-
-                textShadowOffset: { width: -1, height: 1 },
-                textShadowRadius: 10,
-                padding: 10,
-                backgroundColor: "rgba(255, 255, 255, 0.8)",
-                borderRadius: 10,
-              }}
-            >
-              nous sommes à votre service
-            </Text>
           </ScrollView>
         </Animated.View>
       </SafeAreaView>
@@ -606,6 +551,13 @@ const styles = StyleSheet.create({
   s: {
     color: "#rgb(97, 172, 243)",
     backgroundColor: "#79C2BE",
+    marginTop: -100,
+  },
+  button: {
+    alignItems: "center",
+    marginTop: 70,
+    borderRadius: 8,
+    padding: 10,
   },
 
   uploadBtnContainer: {
@@ -617,5 +569,83 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     overflow: "hidden",
     marginTop: 50,
+  },
+
+  signIn: {
+    backgroundColor: "#7FA1C3",
+    width: WIDTH - 60,
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 8,
+    marginBottom: 30,
+    marginTop: -50,
+  },
+  textSign: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  loginFormTextInput: {
+    width: WIDTH - 55,
+    height: 45,
+    borderBottomWidth: 1,
+    borderColor: "#rgb(97, 172, 243)",
+    fontSize: 16,
+    paddingLeft: 45,
+    marginHorizontal: 25,
+    marginTop: 25,
+  },
+  popupContainer: {
+    backgroundColor: "white",
+    padding: 10,
+    marginLeft: 10,
+    borderRadius: 10,
+    marginBottom:20,
+    elevation: 5,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    alignItems: "center",
+    width: "90%",
+    marginTop: "20%",
+    alignSelf: "center",
+  },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 0.6,
+    borderColor: "#79C2BE",
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    marginTop: 20,
+    height: 50,
+  },
+
+  icon: {
+    marginRight: 11,
+    width: 25, // Ajustez la largeur selon vos besoins
+    height: 25,
+    color: "#79C2BE",
+    tintColor: "#7FA1C3",
+  },
+  input: {
+    flex: 1,
+    height: 70,
+    marginLeft: 10,
+    borderWidth: 0,
+    borderColor: "rgb(70, 143, 183)",
+    borderRadius: 8,
+    paddingHorizontal: 0,
+  },
+  buttons: {
+    backgroundColor: "#0147A6",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "white",
+    fontWeight: "bold",
   },
 });

@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     fontFamily: "Arial",
     lineHeight: 24,
     flex: 1,
-    backgroundColor: "#219C90",
+    backgroundColor: "#79C2BE",
     justifyContent: "center",
     alignItems: "center",
     marginTop: -screenHeight * 0.4,
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     marginTop: 60,
     alignItems: "center",
-    backgroundColor: "#01BACF",
+    backgroundColor: "#4A919E",
   },
 
   buttonText: {
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   },
   highlight: {
     fontWeight: "bold",
-    color: "#01BACF",
+    color: "#4A919E",
     fontFamily: "Arial",
   },
 });

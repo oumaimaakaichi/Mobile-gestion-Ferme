@@ -105,7 +105,7 @@ const InscriC = ({ navigation }) => {
       formData.append("email", email);
       formData.append("password", password);
       formData.append("cin", cin);
-
+formData.append("role" , "Ferme");
       formData.append("avatar", avatarFile);
       const response = await fetch("http://192.168.148.216:3000/add-user", {
         method: "POST",
@@ -462,7 +462,7 @@ const InscriC = ({ navigation }) => {
               }}
             >
               <LinearGradient
-                colors={["#01BACF", "#0EBFE3"]}
+                colors={["#01BACF", "#01BACF"]}
                 style={styles.signIn}
               >
                 <Text
@@ -512,7 +512,7 @@ export default InscriC;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#219C90",
+    backgroundColor: "#79C2BE",
   },
   footer: {
     flex: 3,

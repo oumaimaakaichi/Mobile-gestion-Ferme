@@ -227,7 +227,7 @@ const LoginC = ({ navigation }) => {
             Email
           </Text>
           <View style={styles.action}>
-            <Icon name="user" color="#01BACF" style={styles.icon} size={20} />
+            <Icon name="user" color="#79C2BE" style={styles.icon} size={20} />
 
             <TextInput
               placeholder="Email"
@@ -288,7 +288,7 @@ const LoginC = ({ navigation }) => {
             <Feather
               name="lock"
               style={styles.icon}
-              color="#01BACF"
+              color="#79C2BE"
               size={20}
             />
             <TextInput
@@ -343,7 +343,7 @@ const LoginC = ({ navigation }) => {
               }}
             >
               <LinearGradient
-                colors={["#01BACF", "#0EBFE3"]}
+                colors={["#79C2BE", "#79C2BE"]}
                 style={styles.signIn}
               >
                 <Text
@@ -364,7 +364,7 @@ const LoginC = ({ navigation }) => {
               style={[
                 styles.signIn,
                 {
-                  borderColor: "#01BACF",
+                  borderColor: "#79C2BE",
                   borderWidth: 1,
                   marginTop: 30,
                   marginBottom: 50,
@@ -375,7 +375,7 @@ const LoginC = ({ navigation }) => {
                 style={[
                   styles.textSign,
                   {
-                    color: "#0EBFE3",
+                    color: "#79C2BE",
                   },
                 ]}
               >
@@ -383,7 +383,7 @@ const LoginC = ({ navigation }) => {
               </Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setModalVisible(true)}>
-              <Text style={{ color: "#0EBFE3", marginTop: 10 }}>
+              <Text style={{ color: "#79C2BE", marginTop: 10 }}>
                 Mot de passe oublié?
               </Text>
             </TouchableOpacity>
@@ -450,7 +450,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
 
-    backgroundColor: "#219C90",
+    backgroundColor: "#79C2BE",
   },
   header: {
     flex: 1,
@@ -484,7 +484,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginTop: 10,
     borderBottomWidth: 1,
-    borderBottomColor: "#01BACF",
+    borderBottomColor: "#79C2BE",
     paddingBottom: 5,
   },
   actionError: {

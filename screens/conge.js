@@ -14,12 +14,11 @@ import profile from "../assets/prof.png";
 import { getClientData } from "../utils/AsyncStorageClient";
 import stock from "../assets/stocker.png"
 import home from "../assets/home.png";
-import * as Notifications from "expo-notifications";
-import * as Device from "expo-device";
+
 import logout from "../assets/logout.png";
 import cland from "../assets/clandr.png";
 import list from "../assets/hihi.png";
-import axios from "axios";
+import CongesList from "./listeCongé";
 import Contact from "../assets/b.png";
 import menu from "../assets/menu.png";
 import enfant1 from "../assets/enfant.png";
@@ -27,95 +26,31 @@ import close from "../assets/close.png";
 import medicament from "../assets/med.png";
 import animal from "../assets/betail.png"
 import document from "../assets/doc.png";
-
+import { useIsFocused } from "@react-navigation/native";
 import { Alert } from "react-native";
-
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-  }),
-});
-export default function Dashboard({ navigation }) {
+import ListAnimal from "./ListeAnimals";
+export default function Conge({ navigation }) {
   const [showMenu, setShowMenu] = useState(false);
   const [user, setUser] = useState("");
   const [userId, setUserId] = useState("");
-  const [hasNotification, setHasNotification] = useState(false);
-  const [rendezVous, setRendezVous] = useState([]);
-  const [selectedRendezVous, setSelectedRendezVous] = useState(null);
+ 
   const offsetValue = useRef(new Animated.Value(0)).current;
   const scaleValue = useRef(new Animated.Value(1)).current;
   const closeButtonOffset = useRef(new Animated.Value(0)).current;
-  const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  async function registerForPushNotificationsAsync() {
-    let token;
-    if (Platform.OS === "android") {
-      await Notifications.setNotificationChannelAsync("default", {
-        name: "default",
-        importance: Notifications.AndroidImportance.MAX,
-        vibrationPattern: [0, 250, 250, 250],
-        lightColor: "#FF231F7C",
-        sound: "default",
-      });
-    }
-
-    if (Platform.OS === "ios") {
-      await Notifications.setNotificationChannelAsync("default", {
-        name: "default",
-        importance: Notifications.AndroidImportance.MAX,
-        vibrationPattern: [0, 250, 250, 250],
-        sound: "default",
-      });
-
-      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-      if (status !== "granted") {
-        alert("Failed to get permission for push notifications!");
-        return;
-      }
-    }
-
-    token = (await Notifications.getExpoPushTokenAsync()).data;
-    console.log(token);
-
-    return token;
-  }
-  const getNotificationPermission = async () => {
-    const { status: existingStatus } = await Permissions.getAsync(
-      Permissions.NOTIFICATIONS
-    );
-    let finalStatus = existingStatus;
-    if (existingStatus !== "granted") {
-      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-      finalStatus = status;
-    }
-    return finalStatus === "granted";
-  };
-
+  const isFocused = useIsFocused();
+  let data = "";
+  
   useEffect(() => {
-    registerForPushNotificationsAsync()
-      .then((token) => {
-        console.log("token: ", token);
-       
-      })
-      .catch((err) => console.log(err));
-  }, []);
-  const fetchDataa = async () => {
-    try {
-      const clientData = await getClientData();
-      setIsLoading(true);
-      const response = await axios.get(
-        `http://192.168.148.216:3000/conges/${clientData?.Data?._id}`
-      );
-      setData(response.data);
-      setIsLoading(false);
-      scheduleNotifications(response.data);
-    } catch (error) {
-      console.error("Error fetching rendez-vous data: ", error);
-      setIsLoading(false);
-    }
-  };
+    const fetchData = async () => {
+      try {
+        const data = await getClientData();
+        setUser(data);
+      } catch (error) {
+        console.error("Error fetchinsg client data:", error);
+      }
+    };
+    fetchData();
+  }, [isFocused]);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -130,59 +65,7 @@ export default function Dashboard({ navigation }) {
     };
 
     fetchData();
-    fetchDataa();
-    getNotificationPermission();
   }, []);
-  const scheduleNotifications = async (conges) => {
-    try {
-      for (const item of conges) {
-        const congeS = item.status;
-        if (congeS === "En attente") {
-          await Notifications.scheduleNotificationAsync({
-            content: {
-              title: "Rappel de Congé",
-              body: `Vous avez une demande de congé en attente de l'employé ${item.employeur.nom} ${item.employeur.prenom}`,
-              data: { item },
-              sound: "default",
-            },
-            trigger: {
-              hour: 20, 
-              minute: 53,
-              repeats: true, 
-            },
-          });
-          
-      
-          setRendezVous(prevRendezVous => [...prevRendezVous, item]);
-        }
-      }
-      setHasNotification(true);
-    } catch (error) {
-      console.error("Error scheduling notifications: ", error);
-    }
-  };
-
-  const handleImageClick = () => {
-    if (rendezVous.length === 0) {
-      Alert.alert("Pas de notifications", "Aucun rendez-vous disponible.");
-      return;
-    }
-
-
-    const details = rendezVous.map(item => 
-      `demande: \nDate Début: ${new Date(item.dateDébut).toLocaleDateString()}\nDate Fin: ${new Date(item.dateFin).toLocaleDateString()}\nNom de l'employeur: ${item.employeur.nom} ${item.employeur.prenom}`
-    ).join("\n\n");
-
-    Alert.alert(
-      "Détails des Congés",
-      details,
-      [{ text: "OK", onPress: () => console.log("OK Pressed") }],
-      { cancelable: false, titleStyle: { color: "red" } }
-    );
-
-    setHasNotification(false);
-    setRendezVous([]);
-  };
 
   const logoutUser = async () => {
     navigation.navigate("LoginC");
@@ -238,7 +121,7 @@ export default function Dashboard({ navigation }) {
                       flexDirection: "row",
                       alignItems: "center",
                       paddingVertical: 8,
-                      backgroundColor: "white",
+                      backgroundColor: "transparent",
                       paddingLeft: 5,
 
                       borderRadius: 8,
@@ -250,7 +133,7 @@ export default function Dashboard({ navigation }) {
                       style={{
                         width: 25,
                         height: 25,
-                        tintColor: "#79C2BE",
+                        tintColor: "white",
                       }}
                     ></Image>
 
@@ -259,7 +142,7 @@ export default function Dashboard({ navigation }) {
                         fontSize: 15,
                         fontWeight: "bold",
                         paddingLeft: 15,
-                        color: "#79C2BE",
+                        color: "white",
                       }}
                     >
                       Acceuil
@@ -345,7 +228,7 @@ export default function Dashboard({ navigation }) {
 
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("conge");
+                    navigation.navigate("update");
                   }}
                 >
                   <View
@@ -353,7 +236,7 @@ export default function Dashboard({ navigation }) {
                       flexDirection: "row",
                       alignItems: "center",
                       paddingVertical: 8,
-                      backgroundColor: "transparent",
+                      backgroundColor: "white",
                     
                       paddingRight: 48,
                       borderRadius: 8,
@@ -365,7 +248,7 @@ export default function Dashboard({ navigation }) {
                       style={{
                         width: 40,
                         height: 40,
-                        tintColor: "white",
+                        tintColor: "#79C2BE",
                       }}
                     ></Image>
 
@@ -374,7 +257,7 @@ export default function Dashboard({ navigation }) {
                         fontSize: 15,
                         fontWeight: "bold",
                         paddingLeft: 5,
-                        color: "white",
+                        color: "#79C2BE",
                       }}
                     >
                       Congés
@@ -525,70 +408,22 @@ export default function Dashboard({ navigation }) {
                   }}
                 ></Image>
               </TouchableOpacity>
-              <View style={styles.content}>
-                {hasNotification? (
-                  <TouchableOpacity
-                   onPress={handleImageClick}
-                  >
-                    <Image
-                      source={require("../assets/rouge.png")}
-                      style={{ width: 70, height: 70, marginLeft: 250 }}
-                    />
-                  </TouchableOpacity>
-                ) : (
-                  <Image
-                    source={require("../assets/blanc.png")}
-                    style={{ width: 70, height: 70, marginLeft: 250 }}
-                  />
-                )}
-
-                
-              </View>
-              <Text
-                style={{
-                  fontSize: 18,
-                  fontWeight: "bold",
-                  alignSelf: "center",
-                  marginTop: 30,
-                  color: "#427CA2",
-                  marginBottom: 20,
-                }}
-              ></Text>
+              
+             
               <ScrollView horizontal={true}></ScrollView>
             </Animated.View>
-            <Text
-              style={{
-                fontSize: 20,
-                fontWeight: "bold",
-                alignSelf: "center",
-                color: "#427CA2",
-                marginTop: 350,
-                textShadowOffset: { width: -1, height: 1 },
-                textShadowRadius: 10,
-                padding: 10,
-                backgroundColor: "rgba(255, 255, 255, 0.8)",
-                borderRadius: 10,
-              }}
-            >
-              Bienvenue,
-            </Text>
-            <Text
-              style={{
-                fontSize: 20,
-                fontWeight: "bold",
-                alignSelf: "center",
+          
 
-                color: "#427CA2",
+              <ScrollView horizontal={true}>
+                <View style={{ marginBottom: 10 }}>
+                <CongesList proprietaireId={user?.Data?._id} navigation={navigation}/>
+                </View>
+              </ScrollView>
 
-                textShadowOffset: { width: -1, height: 1 },
-                textShadowRadius: 10,
-                padding: 10,
-                backgroundColor: "rgba(255, 255, 255, 0.8)",
-                borderRadius: 10,
-              }}
-            >
-              nous sommes à votre service
-            </Text>
+
+
+
+
           </ScrollView>
         </Animated.View>
       </SafeAreaView>
@@ -607,7 +442,13 @@ const styles = StyleSheet.create({
     color: "#rgb(97, 172, 243)",
     backgroundColor: "#79C2BE",
   },
-
+  contactButtonImage: {
+    width: 30,
+    height: 30,
+    tintColor: "#79C2BE",
+    marginLeft: 290,
+    marginBottom:20
+  },
   uploadBtnContainer: {
     height: 120,
     width: 120,
