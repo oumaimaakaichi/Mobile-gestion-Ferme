@@ -16,16 +16,24 @@ import { useFocusEffect } from '@react-navigation/native';
 
 const { width: WIDTH } = Dimensions.get('window');
 
-export default function ListStock({ navigation }) {
+export default function ListStockEmpl({ navigation }) {
   const [data, setData] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [editStock, setEditStock] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
 
+  // Initialize quantity based on editStock.quantite or default to 0
+  const [quantity, setQuantity] = useState(editStock.quantite || 0);
+
+  useEffect(() => {
+    // Update quantity when editStock changes
+    setQuantity(editStock.quantite || 0);
+  }, [editStock]);
+
   const fetchData = async () => {
     const userData = await getClientData();
     const response = await fetch(
-      `http://192.168.148.216:3000/stocks-by-owner/${userData?.Data?._id}`
+      `http://192.168.148.216:3000/stocks-by-owner/${userData?.Data?.proprietaire}`
     );
     const jsonData = await response.json();
     setData(jsonData);
@@ -41,20 +49,34 @@ export default function ListStock({ navigation }) {
     }, [])
   );
 
+  const incrementQuantity = () => {
+    setQuantity(prevQuantity => {
+      const newQuantity = prevQuantity + 1;
+      setEditStock({ ...editStock, quantite: newQuantity });
+      return newQuantity;
+    });
+  };
+
+  const decrementQuantity = () => {
+    setQuantity(prevQuantity => {
+      if (prevQuantity > 0) {
+        const newQuantity = prevQuantity - 1;
+        setEditStock({ ...editStock, quantite: newQuantity });
+        return newQuantity;
+      }
+      return prevQuantity;
+    });
+  };
+
   const handleEdit = async () => {
     try {
       const response = await axios.patch(`http://192.168.148.216:3000/update-stock/${editStock._id}`, editStock);
       setData(prevData => prevData.map(item => item._id === editStock._id ? response.data : item));
       setModalVisible(false);
-      fetchData()
+      fetchData();
     } catch (error) {
       console.error(error);
     }
-  };
-
-  const edit = (item) => {
-    setEditStock(item);
-    setModalVisible(true);
   };
 
   const formatDate = (dateStr) => {
@@ -72,9 +94,11 @@ export default function ListStock({ navigation }) {
           <View style={styles.itemContent}>
             <View style={{ flexDirection: "row" }}>
               <Text style={styles.contactText}>Stock:</Text>
-
               <TouchableOpacity
-                onPress={() => edit(item)}
+                onPress={() => {
+                  setEditStock(item);
+                  setModalVisible(true);
+                }}
                 style={{ marginLeft: 180 }}
               >
                 <Image
@@ -143,20 +167,21 @@ export default function ListStock({ navigation }) {
         <View style={styles.modalView}>
           <Text style={styles.modalTitle}>Modifier les informations de produit</Text>
           <Text style={styles.modalTitlee}>Quantité:</Text>
-          <TextInput
-            style={styles.inputs}
-            placeholder="quantité"
-            keyboardType="numeric"
-            defaultValue={editStock.quantite?.toString()}
-            onChangeText={(text) => setEditStock({ ...editStock, quantite: parseInt(text) })}
-          />
-           <Text style={styles.modalTitleee}>Date Peremption:</Text>
-          <TextInput
-            style={styles.inputs}
-            placeholder="Date Peremption:"
-            defaultValue={formatDate(editStock.date_peremption)}
-            onChangeText={(text) => setEditStock({ ...editStock, date_peremption: text })}
-          />
+          <View style={styles.inputContainer}>
+           
+            <TextInput
+            
+              value={quantity.toString()}
+              editable={false} // Rendre le champ non modifiable
+              keyboardType="numeric"
+            />
+             <TouchableOpacity onPress={decrementQuantity} style={styles.decrementButton}>
+             <Image
+                  source={require('../assets/vcsremoved_93492.png')}
+                 
+                />
+            </TouchableOpacity>
+          </View>
           <View style={styles.modalButtons}>
             <TouchableOpacity onPress={handleEdit} style={styles.saveButton}>
               <Text style={styles.buttonText}>Enregistrer</Text>
@@ -178,6 +203,18 @@ const styles = StyleSheet.create({
     width: WIDTH - 30,
     alignSelf: 'center',
     borderRadius: 7
+  },
+  decrementButton: {
+    
+    padding: 10,
+    borderRadius: 4,
+    marginLeft: 162,
+  },
+  incrementButton: {
+    backgroundColor: '#ddd',
+    padding: 10,
+    borderRadius: 4,
+    marginLeft: 10,
   },
   inputContainer: {
     flexDirection: 'row',
@@ -287,19 +324,19 @@ const styles = StyleSheet.create({
     marginBottom: 50,
   },
   modalTitlee: {
- marginRight:130,
+    marginRight: 130,
     fontSize: 16,
     fontWeight: 'bold',
     color: 'black',
     marginBottom: 10,
   },
   modalTitleee: {
-    marginRight:70,
-       fontSize: 16,
-       fontWeight: 'bold',
-       color: 'black',
-       marginBottom: 10,
-     },
+    marginRight: 70,
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'black',
+    marginBottom: 10,
+  },
   inputs: {
     width: '80%',
     height: 40,

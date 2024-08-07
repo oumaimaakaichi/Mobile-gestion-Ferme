@@ -6,123 +6,79 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  TextInput,
   View,
   ScrollView,
-  Dimensions,
+  ImageBackground,
 } from "react-native";
 import profile from "../assets/prof.png";
 import { getClientData } from "../utils/AsyncStorageClient";
-import { LinearGradient } from "expo-linear-gradient";
-
-// Tab ICons...
-import animal from "../assets/betail.png";
-import animals from "../assets/kl.jpg";
+import stock from "../assets/stocker.png"
 import home from "../assets/home.png";
-import stock from "../assets/stocker.png";
-import DatePicker from 'react-native-date-picker';
+import * as Notifications from "expo-notifications";
+import * as Device from "expo-device";
 import logout from "../assets/logout.png";
-import { AntDesign } from "@expo/vector-icons";
-const { width: WIDTH } = Dimensions.get("window");
-// Menu
-
-import menu from "../assets/menu.png";
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import cland from "../assets/clandr.png";
-
+import list from "../assets/hihi.png";
+import axios from "axios";
+import Contact from "../assets/b.png";
+import menu from "../assets/menu.png";
+import enfant1 from "../assets/enfant.png";
 import close from "../assets/close.png";
+import medicament from "../assets/med.png";
+import animal from "../assets/betail.png"
+import document from "../assets/doc.png";
+import ListStockEmpl from "./listeStockEmp";
+import { Alert } from "react-native";
 
-import { useIsFocused } from "@react-navigation/native";
-
-import { Button } from "react-native-paper";
-import Toast from "react-native-toast-message";
-export default function AddStock({ navigation }) {
-  const [currentTab, setCurrentTab] = useState("Home");
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [showPopup, setShowPopup] = useState(false);
-  const [isButtonVisible, setIsButtonVisible] = useState(true);
-  const [date, setDate] = useState(new Date());
-  const [open, setOpen] = useState(false);
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+});
+export default function StockEmplo({ navigation }) {
   const [showMenu, setShowMenu] = useState(false);
-
   const [user, setUser] = useState("");
+  const [userId, setUserId] = useState("");
+  const [hasNotification, setHasNotification] = useState(false);
+  const [rendezVous, setRendezVous] = useState([]);
+  const [selectedRendezVous, setSelectedRendezVous] = useState(null);
   const offsetValue = useRef(new Animated.Value(0)).current;
-  // Scale Intially must be One...
   const scaleValue = useRef(new Animated.Value(1)).current;
   const closeButtonOffset = useRef(new Animated.Value(0)).current;
-  const [quantite, setQuantité] = useState("");
-  const [date_peremption, setDatePremption] = useState("");
-  const [produit, setProduitName] = useState("");
-  const showDatePicker = () => setDatePickerVisibility(true);
-  const hideDatePicker = () => setDatePickerVisibility(false);
-  const handleDateConfirm = (date) => {
-    setDatePremption(date);
-    setDate(date)
-    hideDatePicker();
-  };
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  
+ 
 
-  const [error, setError] = useState(false);
-  const regEx = /[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,8}(.[a-z{2,8}])?/g;
+  
+ 
   useEffect(() => {
-   
-    const fetchUserData = async () => {
-      const userData = await getClientData();
-
-      setUser(userData);
+    const fetchData = async () => {
+      try {
+        const userData = await getClientData();
+        setUser(userData);
+        setUserId(userData.Data._id);
+        console.log("UserData:", userData);
+        console.log("User ID:", userData.Data._id);
+      } catch (error) {
+        console.error("Error fetching user dbata:", error);
+      }
     };
 
-    fetchUserData();
-  }, []);
-  const addStock = async () => {
-    const data = await getClientData();
-    console.log("lllllll"+animal)
-    try {
+    fetchData();
+  
     
-      const requestBody = JSON.stringify({
-        nomProduit: produit,
-        quantite: quantite,
-        date_peremption: date_peremption,
-       
-        proprietaire: data.Data._id,
-      });
+  }, []);
+  
 
-      const response = await fetch(
-        "http://192.168.148.216:3000/add-stock",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: requestBody,
-        }
-      );
 
-      if (response.ok) {
-        Toast.show({
-          position: "top",
-          type: "success",
-
-          text1: "Ajouter un stock",
-          text2: "Stock ajouté avec succès",
-          
-
-          autoHide: true,
-          visibilityTime: 3000,
-          autoHide: true,
-          onHide: () => {
-            navigation.navigate("stock");
-          },
-          onShow: () => {},
-        });
-       
-      } else {
-      
-        console.error("Échec de l'ajout du médicament");
-      }
-    } catch (error) {
-      console.error("Erreur lors de l'ajout du contact:", error);
-    }
+    
+  const logoutUser = async () => {
+    navigation.navigate("loginE");
   };
+
   return (
     <>
       <SafeAreaView style={styles.container}>
@@ -130,10 +86,9 @@ export default function AddStock({ navigation }) {
           <View
             style={{
               justifyContent: "flex-start",
-              padding: 14,
+              padding: 15,
               alignItems: "center",
-              marginBottom: 21,
-              marginTop: 100,
+              marginBottom: 20,
             }}
           >
             <TouchableOpacity style={styles.uploadBtnContainer}>
@@ -155,7 +110,7 @@ export default function AddStock({ navigation }) {
               {user?.Data?.nom} {user?.Data?.prenom}
             </Text>
 
-            <View style={{ flexGrow: 1, marginRight: 40 }}>
+            <View style={{ flexGrow: 1, marginTop: 20, marginRight: 48 }}>
               <TouchableOpacity
                 onPress={() => {
                   if (title == "LogOut") {
@@ -166,7 +121,7 @@ export default function AddStock({ navigation }) {
               >
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("dash");
+                    navigation.navigate("dashEmpl");
                   }}
                 >
                   <View
@@ -175,8 +130,8 @@ export default function AddStock({ navigation }) {
                       alignItems: "center",
                       paddingVertical: 8,
                       backgroundColor: "transparent",
-                      paddingLeft: 13,
-                      paddingRight: 35,
+                      paddingLeft: 5,
+
                       borderRadius: 8,
                       marginTop: 30,
                     }}
@@ -204,7 +159,7 @@ export default function AddStock({ navigation }) {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("update");
+                    navigation.navigate("prof");
                   }}
                 >
                   <View
@@ -242,7 +197,7 @@ export default function AddStock({ navigation }) {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("animal");
+                    navigation.navigate("animall");
                   }}
                 >
                   <View
@@ -250,7 +205,7 @@ export default function AddStock({ navigation }) {
                       flexDirection: "row",
                       alignItems: "center",
                       paddingVertical: 8,
-                      backgroundColor: "white",
+                      backgroundColor: "transparent",
                       paddingLeft: 5,
                       paddingRight: 35,
                       borderRadius: 8,
@@ -262,7 +217,7 @@ export default function AddStock({ navigation }) {
                       style={{
                         width: 25,
                         height: 25,
-                        tintColor: "#79C2BE",
+                        tintColor: "white",
                       }}
                     ></Image>
 
@@ -271,7 +226,7 @@ export default function AddStock({ navigation }) {
                         fontSize: 15,
                         fontWeight: "bold",
                         paddingLeft: 15,
-                        color: "#79C2BE",
+                        color: "white",
                       }}
                     >
                       Animal
@@ -281,7 +236,7 @@ export default function AddStock({ navigation }) {
 
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("conge");
+                    navigation.navigate("demandeConge");
                   }}
                 >
                   <View
@@ -290,7 +245,7 @@ export default function AddStock({ navigation }) {
                       alignItems: "center",
                       paddingVertical: 8,
                       backgroundColor: "transparent",
-
+                    
                       paddingRight: 48,
                       borderRadius: 8,
                       marginTop: 20,
@@ -313,14 +268,13 @@ export default function AddStock({ navigation }) {
                         color: "white",
                       }}
                     >
-                      Congés
+                      Demande Congé
                     </Text>
                   </View>
                 </TouchableOpacity>
-
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("stock");
+                    navigation.navigate("listeC");
                   }}
                 >
                   <View
@@ -329,7 +283,45 @@ export default function AddStock({ navigation }) {
                       alignItems: "center",
                       paddingVertical: 8,
                       backgroundColor: "transparent",
-                      marginLeft: 5,
+                    
+                      paddingRight: 48,
+                      borderRadius: 8,
+                      marginTop: 20,
+                    }}
+                  >
+                    <Image
+                      source={cland}
+                      style={{
+                        width: 40,
+                        height: 40,
+                        tintColor: "white",
+                      }}
+                    ></Image>
+
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        fontWeight: "bold",
+                        paddingLeft: 5,
+                        color: "white",
+                      }}
+                    >
+                     Mes demandes
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("");
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      paddingVertical: 8,
+                      backgroundColor: "white",
+                    marginLeft:5,
                       paddingRight: 48,
                       borderRadius: 8,
                       marginTop: 20,
@@ -340,7 +332,7 @@ export default function AddStock({ navigation }) {
                       style={{
                         width: 25,
                         height: 25,
-                        tintColor: "white",
+                        tintColor: "#79C2BE",
                       }}
                     ></Image>
 
@@ -349,26 +341,21 @@ export default function AddStock({ navigation }) {
                         fontSize: 15,
                         fontWeight: "bold",
                         paddingLeft: 15,
-                        color: "white",
+                        color: "#79C2BE",
                       }}
                     >
                       Stock
                     </Text>
                   </View>
                 </TouchableOpacity>
-
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate("LoginC");
-                  }}
-                >
+                <TouchableOpacity onPress={logoutUser}>
                   <View
                     style={{
                       flexDirection: "row",
                       alignItems: "center",
                       paddingVertical: 8,
                       backgroundColor: "transparent",
-                      paddingLeft: 13,
+                      paddingLeft: 8,
                       paddingRight: 30,
                       borderRadius: 8,
                       marginTop: 20,
@@ -409,16 +396,17 @@ export default function AddStock({ navigation }) {
             bottom: 0,
             left: 0,
             right: 0,
-            paddingHorizontal: 15,
+            paddingHorizontal: 10,
             paddingVertical: 20,
             borderRadius: showMenu ? 15 : 0,
-           
+            // Transforming View...
             transform: [{ scale: scaleValue }, { translateX: offsetValue }],
           }}
         >
           {
             // Menu Button...
           }
+
           <ScrollView style={{ marginVertical: 0 }}>
             <Animated.View
               style={{
@@ -428,6 +416,7 @@ export default function AddStock({ navigation }) {
                   },
                 ],
               }}
+              source={require("../assets/4.jpg")}
             >
               <TouchableOpacity
                 onPress={() => {
@@ -438,14 +427,12 @@ export default function AddStock({ navigation }) {
                   }).start();
 
                   Animated.timing(offsetValue, {
-                   
                     toValue: showMenu ? 0 : 230,
                     duration: 300,
                     useNativeDriver: true,
                   }).start();
 
                   Animated.timing(closeButtonOffset, {
-                  
                     toValue: !showMenu ? -30 : 0,
                     duration: 300,
                     useNativeDriver: true,
@@ -453,88 +440,38 @@ export default function AddStock({ navigation }) {
 
                   setShowMenu(!showMenu);
                 }}
+                source={require("../assets/4.jpg")}
               >
                 <Image
                   source={showMenu ? close : menu}
                   style={{
                     width: 30,
                     height: 30,
-                    tintColor: "#79C2BE",
+                    tintColor: "#219C90",
                     marginTop: 40,
+                    marginLeft: 20,
                   }}
                 ></Image>
               </TouchableOpacity>
+              <View style={styles.content}>
+                
 
-              <ScrollView horizontal={true}>
-                <Toast />
-                <View style={styles.popupContainer}>
-      <Image
-        source={require('../assets/stocker.png')}
-        style={{
-          width: 110,
-          height: 100,
-          alignSelf: 'center',
-          marginTop: 5,
-          tintColor: '#7FA1C3',
-        }}
-      />
-      <Text style={[styles.textSign, { color: 'grey' }]}>Nouveau Stock</Text>
-      <View style={styles.inputContainer}>
-        <Image
-          source={require('../assets/stocker.png')}
-          style={styles.icon}
-        />
-        <TextInput
-          placeholder="Produit"
-          style={styles.input}
-          onChangeText={(val) => setProduitName(val)}
-        />
-      </View>
-      <View style={styles.inputContainer}>
-        <Image
-          source={require('../assets/des-boites.png')}
-          style={styles.icon}
-        />
-        <TextInput
-          placeholder="Quantité"
-          style={styles.input}
-          onChangeText={(val) => setQuantité(val)}
-        />
-      </View>
-      <View style={styles.inputContainer}>
-        <Image
-          source={require('../assets/calendrier.png')}
-          style={styles.icon}
-        />
-        <TouchableOpacity onPress={() => setDatePickerVisibility(true)}>
-          <TextInput
-            placeholder="Date Peremption"
-          style={{width:240}}
-            value={date.toDateString()}
-            editable={false}
-          />
-        </TouchableOpacity>
-      </View>
-      <View style={styles.button}>
-        <TouchableOpacity style={styles.signIn} onPress={addStock}>
-          <LinearGradient
-            colors={['#7FA1C3', '#7FA1C3']}
-            style={styles.linearGradient}
-          >
-            <Text style={[styles.textSign, { color: '#fff' }]}>Ajouter</Text>
-          </LinearGradient>
-        </TouchableOpacity>
-      </View>
-      <DateTimePickerModal
-        isVisible={isDatePickerVisible}
-        mode="date" 
-        onConfirm={handleDateConfirm}
-        onCancel={hideDatePicker}
-      />
-    </View>
-
-              </ScrollView>
+                
+              </View>
+              <Text
+                style={{
+                  fontSize: 18,
+                  fontWeight: "bold",
+                  alignSelf: "center",
+                  marginTop: 30,
+                  color: "#427CA2",
+                  marginBottom: 20,
+                }}
+              ></Text>
+              <ScrollView horizontal={true}></ScrollView>
             </Animated.View>
+           
+           <ListStockEmpl></ListStockEmpl>
           </ScrollView>
         </Animated.View>
       </SafeAreaView>
@@ -545,20 +482,13 @@ export default function AddStock({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#79C2BE",
+    backgroundColor: "#B4D6CD",
     alignItems: "flex-start",
     justifyContent: "flex-start",
   },
   s: {
     color: "#rgb(97, 172, 243)",
-    backgroundColor: "#79C2BE",
-    marginTop: -100,
-  },
-  button: {
-    alignItems: "center",
-    marginTop: 70,
-    borderRadius: 8,
-    padding: 10,
+    backgroundColor: "#B4D6CD",
   },
 
   uploadBtnContainer: {
@@ -570,83 +500,5 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     overflow: "hidden",
     marginTop: 50,
-  },
-
-  signIn: {
-    backgroundColor: "#7FA1C3",
-    width: WIDTH - 60,
-    height: 50,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 8,
-    marginBottom: 30,
-    marginTop: -50,
-  },
-  textSign: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  loginFormTextInput: {
-    width: WIDTH - 55,
-    height: 45,
-    borderBottomWidth: 1,
-    borderColor: "#rgb(97, 172, 243)",
-    fontSize: 16,
-    paddingLeft: 45,
-    marginHorizontal: 25,
-    marginTop: 25,
-  },
-  popupContainer: {
-    backgroundColor: "white",
-    padding: 10,
-    marginLeft: 10,
-    borderRadius: 10,
-    marginBottom:20,
-    elevation: 5,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    alignItems: "center",
-    width: "90%",
-    marginTop: "20%",
-    alignSelf: "center",
-  },
-  inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderWidth: 0.6,
-    borderColor: "#79C2BE",
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginTop: 20,
-    height: 50,
-  },
-
-  icon: {
-    marginRight: 11,
-    width: 25, // Ajustez la largeur selon vos besoins
-    height: 25,
-    color: "#79C2BE",
-    tintColor: "#7FA1C3",
-  },
-  input: {
-    flex: 1,
-    height: 70,
-    marginLeft: 10,
-    borderWidth: 0,
-    borderColor: "rgb(70, 143, 183)",
-    borderRadius: 8,
-    paddingHorizontal: 0,
-  },
-  buttons: {
-    backgroundColor: "#0147A6",
-    padding: 10,
-    borderRadius: 5,
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "bold",
   },
 });

@@ -13,24 +13,50 @@ import AddStock from "./screens/addStock";
 import Stocks from "./screens/stock";
 import Conge from "./screens/conge";
 import CongeDétail from "./screens/congeDétail";
+import OnBoardScreenL from "./screens/homme2";
+import LoginEmployeur from "./screens/LoginEmployeur";
+import DashboardEmployeur from "./screens/dashEmployeur";
+import DemandeConge from "./screens/demandeCongé";
+import ListeC from "./screens/listeCongee";
+import CongeE from "./screens/congeE";
+import Animalss from "./screens/animalE";
+import AnimalDétail2 from "./screens/detaiLAnimal";
+import ProfilEmpl from "./screens/profilEmpl";
+import StockEmplo from "./screens/stockEmpl";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+
+
+
+
+
+
+  
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Welcome" screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Welcome" component={Welcome} />
         <Stack.Screen name="LoginC" component={LoginC} />
         <Stack.Screen name="InscriC" component={InscriC} />
+        <Stack.Screen name="demandeConge" component={DemandeConge} />
         <Stack.Screen name="dash" component={Dashboard} />
         <Stack.Screen name="update" component={Profil} />
         <Stack.Screen name="animal" component={Animals} />
         <Stack.Screen name="addAnimal" component={AddAnimal} />
         <Stack.Screen name="OneAnimal" component={AnimalDétail} />
+        <Stack.Screen name="OneAnimall" component={AnimalDétail2} />
         <Stack.Screen name="stock" component={Stocks} />
         <Stack.Screen name="addStock" component={AddStock} />
         <Stack.Screen name="conge" component={Conge} />
         <Stack.Screen name="OneCongé" component={CongeDétail} />
+        <Stack.Screen name="home2" component={OnBoardScreenL} />
+        <Stack.Screen name="loginE" component={LoginEmployeur} />
+        <Stack.Screen name="dashEmpl" component={DashboardEmployeur} />
+        <Stack.Screen name="listeC" component={CongeE} />
+        <Stack.Screen name="animall" component={Animalss} />
+        <Stack.Screen name="prof" component={ProfilEmpl} />
+        <Stack.Screen name="stockE" component={StockEmplo} />
       </Stack.Navigator>
     </NavigationContainer>
   );

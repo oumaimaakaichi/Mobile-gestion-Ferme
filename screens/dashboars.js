@@ -27,7 +27,7 @@ import close from "../assets/close.png";
 import medicament from "../assets/med.png";
 import animal from "../assets/betail.png"
 import document from "../assets/doc.png";
-
+import backg from "../assets//lopp-removebg-preview.png"
 import { Alert } from "react-native";
 
 Notifications.setNotificationHandler({
@@ -544,25 +544,23 @@ export default function Dashboard({ navigation }) {
 
                 
               </View>
-              <Text
-                style={{
-                  fontSize: 18,
-                  fontWeight: "bold",
-                  alignSelf: "center",
-                  marginTop: 30,
-                  color: "#427CA2",
-                  marginBottom: 20,
-                }}
-              ></Text>
+             
               <ScrollView horizontal={true}></ScrollView>
             </Animated.View>
+            <Image source={backg} style={{
+                    width: 300,
+                    height: 330,
+                    
+                    marginTop: 40,
+                    marginLeft: 20,
+                  }}></Image>
             <Text
               style={{
                 fontSize: 20,
                 fontWeight: "bold",
                 alignSelf: "center",
                 color: "#427CA2",
-                marginTop: 350,
+                marginTop: 70,
                 textShadowOffset: { width: -1, height: 1 },
                 textShadowRadius: 10,
                 padding: 10,
@@ -587,7 +585,7 @@ export default function Dashboard({ navigation }) {
                 borderRadius: 10,
               }}
             >
-              nous sommes à votre service
+              Nous sommes à votre service
             </Text>
           </ScrollView>
         </Animated.View>

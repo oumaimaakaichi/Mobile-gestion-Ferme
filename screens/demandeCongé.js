@@ -14,20 +14,20 @@ import {
 import profile from "../assets/prof.png";
 import { getClientData } from "../utils/AsyncStorageClient";
 import { LinearGradient } from "expo-linear-gradient";
-
 // Tab ICons...
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import animal from "../assets/betail.png";
-import animals from "../assets/kl.jpg";
+import conge from "../assets/dema-removebg-preview.png";
 import home from "../assets/home.png";
 import stock from "../assets/stocker.png";
-import DatePicker from 'react-native-date-picker';
+import * as ImagePicker from "expo-image-picker";
 import logout from "../assets/logout.png";
 import { AntDesign } from "@expo/vector-icons";
 const { width: WIDTH } = Dimensions.get("window");
 // Menu
 
 import menu from "../assets/menu.png";
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
+
 import cland from "../assets/clandr.png";
 
 import close from "../assets/close.png";
@@ -36,58 +36,74 @@ import { useIsFocused } from "@react-navigation/native";
 
 import { Button } from "react-native-paper";
 import Toast from "react-native-toast-message";
-export default function AddStock({ navigation }) {
+export default function DemandeConge({ navigation }) {
   const [currentTab, setCurrentTab] = useState("Home");
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
   const [showPopup, setShowPopup] = useState(false);
   const [isButtonVisible, setIsButtonVisible] = useState(true);
-  const [date, setDate] = useState(new Date());
-  const [open, setOpen] = useState(false);
-  const [showMenu, setShowMenu] = useState(false);
 
+  const [showMenu, setShowMenu] = useState(false);
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [isDatePickerVisiblee, setDatePickerVisibilityy] = useState(false);
   const [user, setUser] = useState("");
   const offsetValue = useRef(new Animated.Value(0)).current;
   // Scale Intially must be One...
   const scaleValue = useRef(new Animated.Value(1)).current;
   const closeButtonOffset = useRef(new Animated.Value(0)).current;
-  const [quantite, setQuantité] = useState("");
-  const [date_peremption, setDatePremption] = useState("");
-  const [produit, setProduitName] = useState("");
-  const showDatePicker = () => setDatePickerVisibility(true);
-  const hideDatePicker = () => setDatePickerVisibility(false);
-  const handleDateConfirm = (date) => {
-    setDatePremption(date);
-    setDate(date)
-    hideDatePicker();
-  };
-
-  const [error, setError] = useState(false);
+  const [dateD, setDateD] = useState("");
+  const [dateFin, setDateF] = useState("");
+ 
+  const [date, setDate] = useState(new Date());
+  const [datee, setDatee] = useState(new Date());
   const regEx = /[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,8}(.[a-z{2,8}])?/g;
   useEffect(() => {
    
     const fetchUserData = async () => {
       const userData = await getClientData();
-
+console.log(userData.Data._id)
       setUser(userData);
     };
 
     fetchUserData();
   }, []);
-  const addStock = async () => {
+  const [selectedImage, setSelectedImage] = useState(null);
+ 
+
+  const showDatePicker = () => setDatePickerVisibility(true);
+  const hideDatePicker = () => setDatePickerVisibility(false);
+  const handleDateConfirm = (date) => {
+    setDate(date);
+    hideDatePicker();
+    setDateD(dateFin)
+  };
+
+
+
+
+  const showDatePickerr = () => setDatePickerVisibilityy(true);
+  const hideDatePickerr = () => setDatePickerVisibilityy(false);
+  const handleDateConfirmm = (date) => {
+    setDatee(date)
+    setDateF(date)
+    hideDatePicker();
+  };
+
+  
+  const addConge = async () => {
     const data = await getClientData();
-    console.log("lllllll"+animal)
+    
     try {
     
       const requestBody = JSON.stringify({
-        nomProduit: produit,
-        quantite: quantite,
-        date_peremption: date_peremption,
+        dateDébut: date,
+        dateFin: datee,
+  
        
-        proprietaire: data.Data._id,
+        employeur: data.Data._id,
       });
 
       const response = await fetch(
-        "http://192.168.148.216:3000/add-stock",
+        "http://192.168.148.216:3000/add-conge",
         {
           method: "POST",
           headers: {
@@ -102,22 +118,22 @@ export default function AddStock({ navigation }) {
           position: "top",
           type: "success",
 
-          text1: "Ajouter un stock",
-          text2: "Stock ajouté avec succès",
+          text1: "Ajouter un demande de congé",
+          text2: "demande ajouté avec succès",
           
 
           autoHide: true,
           visibilityTime: 3000,
           autoHide: true,
           onHide: () => {
-            navigation.navigate("stock");
+            navigation.navigate("dashEmpl");
           },
           onShow: () => {},
         });
        
       } else {
       
-        console.error("Échec de l'ajout du médicament");
+        console.error("Échec de l'ajout du demande");
       }
     } catch (error) {
       console.error("Erreur lors de l'ajout du contact:", error);
@@ -166,7 +182,7 @@ export default function AddStock({ navigation }) {
               >
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("dash");
+                    navigation.navigate("dashEmpl");
                   }}
                 >
                   <View
@@ -204,7 +220,7 @@ export default function AddStock({ navigation }) {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("update");
+                    navigation.navigate("prof");
                   }}
                 >
                   <View
@@ -242,7 +258,7 @@ export default function AddStock({ navigation }) {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("animal");
+                    navigation.navigate("animall");
                   }}
                 >
                   <View
@@ -250,7 +266,7 @@ export default function AddStock({ navigation }) {
                       flexDirection: "row",
                       alignItems: "center",
                       paddingVertical: 8,
-                      backgroundColor: "white",
+                      backgroundColor: "transparent",
                       paddingLeft: 5,
                       paddingRight: 35,
                       borderRadius: 8,
@@ -262,7 +278,7 @@ export default function AddStock({ navigation }) {
                       style={{
                         width: 25,
                         height: 25,
-                        tintColor: "#79C2BE",
+                        tintColor: "white",
                       }}
                     ></Image>
 
@@ -271,7 +287,7 @@ export default function AddStock({ navigation }) {
                         fontSize: 15,
                         fontWeight: "bold",
                         paddingLeft: 15,
-                        color: "#79C2BE",
+                        color: "white",
                       }}
                     >
                       Animal
@@ -281,7 +297,45 @@ export default function AddStock({ navigation }) {
 
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("conge");
+                    navigation.navigate("demandeConge");
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      paddingVertical: 8,
+                      backgroundColor: "white",
+
+                      paddingRight: 48,
+                      borderRadius: 8,
+                      marginTop: 20,
+                    }}
+                  >
+                    <Image
+                      source={cland}
+                      style={{
+                        width: 40,
+                        height: 40,
+                        tintColor: "#79C2BE",
+                      }}
+                    ></Image>
+
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        fontWeight: "bold",
+                        paddingLeft: 5,
+                        color: "#79C2BE",
+                      }}
+                    >
+                      Demande Congé
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("listeC");
                   }}
                 >
                   <View
@@ -313,14 +367,13 @@ export default function AddStock({ navigation }) {
                         color: "white",
                       }}
                     >
-                      Congés
+                      Mes demandes
                     </Text>
                   </View>
                 </TouchableOpacity>
-
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("stock");
+                    navigation.navigate("stockE");
                   }}
                 >
                   <View
@@ -359,7 +412,7 @@ export default function AddStock({ navigation }) {
 
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("LoginC");
+                    navigation.navigate("loginE");
                   }}
                 >
                   <View
@@ -368,7 +421,7 @@ export default function AddStock({ navigation }) {
                       alignItems: "center",
                       paddingVertical: 8,
                       backgroundColor: "transparent",
-                      paddingLeft: 13,
+                      paddingLeft: 8,
                       paddingRight: 30,
                       borderRadius: 8,
                       marginTop: 20,
@@ -468,71 +521,72 @@ export default function AddStock({ navigation }) {
               <ScrollView horizontal={true}>
                 <Toast />
                 <View style={styles.popupContainer}>
-      <Image
-        source={require('../assets/stocker.png')}
-        style={{
-          width: 110,
-          height: 100,
-          alignSelf: 'center',
-          marginTop: 5,
-          tintColor: '#7FA1C3',
-        }}
-      />
-      <Text style={[styles.textSign, { color: 'grey' }]}>Nouveau Stock</Text>
-      <View style={styles.inputContainer}>
-        <Image
-          source={require('../assets/stocker.png')}
-          style={styles.icon}
-        />
-        <TextInput
-          placeholder="Produit"
-          style={styles.input}
-          onChangeText={(val) => setProduitName(val)}
-        />
-      </View>
-      <View style={styles.inputContainer}>
-        <Image
-          source={require('../assets/des-boites.png')}
-          style={styles.icon}
-        />
-        <TextInput
-          placeholder="Quantité"
-          style={styles.input}
-          onChangeText={(val) => setQuantité(val)}
-        />
-      </View>
-      <View style={styles.inputContainer}>
-        <Image
-          source={require('../assets/calendrier.png')}
-          style={styles.icon}
-        />
-        <TouchableOpacity onPress={() => setDatePickerVisibility(true)}>
-          <TextInput
-            placeholder="Date Peremption"
-          style={{width:240}}
+                  <Image
+                    source={conge}
+                    style={{
+                      width: 210,
+                      height: 180,
+                      alignSelf: "center",
+                      marginTop: 5,
+                    }}
+                  />
+                
+                <TouchableOpacity onPress={() => setDatePickerVisibility(true)}>
+                  <View style={styles.inputContainer}>
+                    <Image
+                      source={require("../assets/calendrier.png")}
+                      style={styles.icon}
+                    />
+                    <TextInput placeholder="Date début"    style={{width:240}}
             value={date.toDateString()}
+            editable={false}/>
+                  </View>
+</TouchableOpacity>
+
+
+<TouchableOpacity onPress={() => setDatePickerVisibilityy(true)}>
+                  <View style={styles.inputContainer} >
+                    <Image
+                      source={require("../assets/calendrier.png")}
+                      style={styles.icon}
+                    />
+                    <TextInput
+                      placeholder="Date Fin"
+                      style={{width:240}}
+            value={datee.toDateString()}
             editable={false}
-          />
-        </TouchableOpacity>
-      </View>
-      <View style={styles.button}>
-        <TouchableOpacity style={styles.signIn} onPress={addStock}>
-          <LinearGradient
-            colors={['#7FA1C3', '#7FA1C3']}
-            style={styles.linearGradient}
-          >
-            <Text style={[styles.textSign, { color: '#fff' }]}>Ajouter</Text>
-          </LinearGradient>
-        </TouchableOpacity>
-      </View>
-      <DateTimePickerModal
+                    />
+                  </View>
+</TouchableOpacity>
+                 
+                  <DateTimePickerModal
         isVisible={isDatePickerVisible}
-        mode="date" 
+        mode="date" // Utilisez "date" pour un sélecteur de date ou "time" pour un sélecteur d'heure
         onConfirm={handleDateConfirm}
         onCancel={hideDatePicker}
       />
-    </View>
+ <DateTimePickerModal
+        isVisible={isDatePickerVisiblee}
+        mode="date" // Utilisez "date" pour un sélecteur de date ou "time" pour un sélecteur d'heure
+        onConfirm={handleDateConfirmm}
+        onCancel={hideDatePickerr}
+      />
+                 
+                 
 
+                  <View style={styles.button}>
+                    <TouchableOpacity style={styles.signIn} onPress={addConge}>
+                      <LinearGradient
+                        colors={["#7FA1C3", "#7FA1C3"]}
+                        style={styles.linearGradient}
+                      >
+                        <Text style={[styles.textSign, { color: "#fff" }]}>
+                          Ajouter
+                        </Text>
+                      </LinearGradient>
+                    </TouchableOpacity>
+                  </View>
+                </View>
               </ScrollView>
             </Animated.View>
           </ScrollView>
@@ -545,20 +599,21 @@ export default function AddStock({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#79C2BE",
+    backgroundColor: "#B4D6CD",
     alignItems: "flex-start",
     justifyContent: "flex-start",
   },
   s: {
     color: "#rgb(97, 172, 243)",
-    backgroundColor: "#79C2BE",
+    backgroundColor: "#B4D6CD",
     marginTop: -100,
   },
   button: {
     alignItems: "center",
     marginTop: 70,
     borderRadius: 8,
-    padding: 10,
+    padding: 5,
+    paddingHorizontal: 10,
   },
 
   uploadBtnContainer: {
@@ -570,8 +625,41 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     overflow: "hidden",
     marginTop: 50,
+    marginBottom:40
   },
-
+  imageContainer: {
+    marginTop: 20,
+    alignItems: "center",
+  },
+  image: {
+    width: WIDTH - 40,
+    height: 200,
+    borderRadius: 10,
+    resizeMode: "cover",
+  },
+  uploadButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    backgroundColor: "#e0f0ff",
+  },
+  uploadIcon: {
+    width: 40,
+    height: 40,
+  },
+  cameraIcon: {
+    width: 37,
+    height: 37,
+    tintColor: "blue",
+  },
+  uploadText: {
+    fontSize: 16,
+    fontWeight: "500",
+    marginLeft: 10,
+  },
   signIn: {
     backgroundColor: "#7FA1C3",
     width: WIDTH - 60,
@@ -581,6 +669,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 30,
     marginTop: -50,
+    paddingHorizontal: 20,
   },
   textSign: {
     fontSize: 18,
@@ -601,7 +690,6 @@ const styles = StyleSheet.create({
     padding: 10,
     marginLeft: 10,
     borderRadius: 10,
-    marginBottom:20,
     elevation: 5,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
@@ -609,14 +697,15 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     alignItems: "center",
     width: "90%",
-    marginTop: "20%",
+    marginTop: "30%",
     alignSelf: "center",
+    marginBottom:20
   },
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
     borderWidth: 0.6,
-    borderColor: "#79C2BE",
+    borderColor: "#7FA1C3",
     borderRadius: 5,
     paddingHorizontal: 10,
     marginTop: 20,

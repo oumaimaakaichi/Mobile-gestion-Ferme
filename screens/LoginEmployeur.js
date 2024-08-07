@@ -29,7 +29,7 @@ import axios from "axios";
 import Icon from "react-native-vector-icons/Feather";
 import Toast from "react-native-toast-message";
 LogBox.ignoreAllLogs(true);
-const LoginC = ({ navigation }) => {
+const LoginEmployeur = ({ navigation }) => {
   const [data, setData] = React.useState({
     email: "",
     password: "",
@@ -132,7 +132,7 @@ const LoginC = ({ navigation }) => {
     
         console.log("Réponse de l'API :", res);
         storeClientData(res);
-if(res.Data.role==="Ferme"){
+        if(res.Data.role==="Employeur"){
         Toast.show({
           position: "top",
           type: "success",
@@ -144,7 +144,7 @@ if(res.Data.role==="Ferme"){
           visibilityTime: 1000,
           autoHide: true,
           onHide: () => { 
-            navigation.navigate("dash");
+            navigation.navigate("dashEmpl");
           },
           onShow: () => {},
         });}
@@ -361,31 +361,9 @@ if(res.Data.role==="Ferme"){
               </LinearGradient>
             </TouchableOpacity>
 
-            <TouchableOpacity
-              onPress={() => navigation.navigate("InscriC")}
-              style={[
-                styles.signIn,
-                {
-                  borderColor: "#79C2BE",
-                  borderWidth: 1,
-                  marginTop: 30,
-                  marginBottom: 50,
-                },
-              ]}
-            >
-              <Text
-                style={[
-                  styles.textSign,
-                  {
-                    color: "#79C2BE",
-                  },
-                ]}
-              >
-                Créer nouveau compte
-              </Text>
-            </TouchableOpacity>
+           
             <TouchableOpacity onPress={() => setModalVisible(true)}>
-              <Text style={{ color: "#79C2BE", marginTop: 10 }}>
+              <Text style={{ color: "#79C2BE", marginTop: 40 }}>
                 Mot de passe oublié?
               </Text>
             </TouchableOpacity>
@@ -433,7 +411,7 @@ if(res.Data.role==="Ferme"){
                   borderRadius: 5,
                   width: 100,
                   alignItems: "center",
-                  marginLeft: 10, // Ajoutez une marge à gauche pour créer un espace
+                  marginLeft: 10, 
                 }}
                 onPress={() => setModalVisible(false)}
               >
@@ -447,12 +425,12 @@ if(res.Data.role==="Ferme"){
   );
 };
 
-export default LoginC;
+export default LoginEmployeur;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
 
-    backgroundColor: "#79C2BE",
+    backgroundColor: "#B4D6CD",
   },
   header: {
     flex: 1,
@@ -508,7 +486,7 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: "center",
-    marginTop: 40,
+    marginTop: 50,
   },
   signIn: {
     width: "100%",

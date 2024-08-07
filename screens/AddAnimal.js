@@ -106,7 +106,7 @@ export default function AddAnimal({ navigation }) {
     try {
       if (selectedImage) {
         const imageUri = selectedImage;
-        const imageName = imageUri.split('/').pop(); // Extraire le nom du fichier à partir de l'URI
+        const imageName = imageUri.split('/').pop(); 
   
         const formData = new FormData();
         formData.append('animal', animal);
@@ -307,7 +307,7 @@ export default function AddAnimal({ navigation }) {
 
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("update");
+                    navigation.navigate("conge");
                   }}
                 >
                   <View
@@ -346,7 +346,7 @@ export default function AddAnimal({ navigation }) {
 
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("update");
+                    navigation.navigate("stock");
                   }}
                 >
                   <View
@@ -506,12 +506,12 @@ export default function AddAnimal({ navigation }) {
                 
                   <TouchableOpacity  onPress={handleImagePick}   style={styles.uploadButton}>
           <Image source={require('../assets/pload.png')} style={styles.uploadIcon} />
-          <Text style={styles.uploadText}>Télécharger une photo</Text>
+          <Text style={styles.uploadText}>Télécharger une photo          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity  onPress={handleTakePhoto} style={styles.uploadButton}>
           <Image source={require('../assets/camera-to-take-photos.png')} style={styles.cameraIcon} />
-          <Text style={styles.uploadText}>Prendre une nouvelle photo</Text>
+          <Text style={styles.uploadText}>Prendre une nouvelle photo   </Text>
         </TouchableOpacity>
         {selectedImage && (
           <View style={styles.imageContainer}>
@@ -591,7 +591,7 @@ export default function AddAnimal({ navigation }) {
                   <View style={styles.button}>
                     <TouchableOpacity style={styles.signIn} onPress={addAnimals}>
                       <LinearGradient
-                        colors={["#79C2BE", "#79C2BE"]}
+                        colors={["#7FA1C3", "#7FA1C3"]}
                         style={styles.linearGradient}
                       >
                         <Text style={[styles.textSign, { color: "#fff" }]}>
@@ -627,6 +627,7 @@ const styles = StyleSheet.create({
     marginTop: 70,
     borderRadius: 8,
     padding: 5,
+    paddingHorizontal: 10,
   },
 
   uploadBtnContainer: {
@@ -673,7 +674,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   signIn: {
-    backgroundColor: "#79C2BE",
+    backgroundColor: "#7FA1C3",
     width: WIDTH - 60,
     height: 50,
     justifyContent: "center",
@@ -681,6 +682,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 30,
     marginTop: -50,
+    paddingHorizontal: 20,
   },
   textSign: {
     fontSize: 18,
@@ -715,7 +717,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     borderWidth: 0.6,
-    borderColor: "#79C2BE",
+    borderColor: "#7FA1C3",
     borderRadius: 5,
     paddingHorizontal: 10,
     marginTop: 20,
@@ -727,7 +729,7 @@ const styles = StyleSheet.create({
     width: 25, // Ajustez la largeur selon vos besoins
     height: 25,
     color: "#79C2BE",
-    tintColor: "#79C2BE",
+    tintColor: "#7FA1C3",
   },
   input: {
     flex: 1,

@@ -14,13 +14,13 @@ import { getClientData } from "../utils/AsyncStorageClient";
 import Toast from "react-native-toast-message";
 import { useFocusEffect } from '@react-navigation/native';
 const { width: WIDTH } = Dimensions.get('window');
-export default function ListAnimal({ navigation }) {
+export default function ListAnimal2({ navigation }) {
   const [data, setData] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const fetchData = async () => {
     const userData = await getClientData();
     const response = await fetch(
-      `http://192.168.148.216:3000/AnimalParFerme/${userData?.Data?._id}`
+      `http://192.168.148.216:3000/AnimalParFerme/${userData?.Data?.proprietaire}`
     );
     const jsonData = await response.json();
     setData(jsonData);
@@ -72,25 +72,20 @@ export default function ListAnimal({ navigation }) {
 
             <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate("OneAnimal", {
+                  navigation.navigate("OneAnimall", {
                     itemId: item._id,
                     getAnimal: item,
                     navigation: navigation,
                   });
                 }}
-                style={{marginLeft:50}}
+                style={{marginLeft:150}}
               >
                 <Image
                   source={require('../assets/yeux2-removebg-preview.png')}
                   style={styles.icon}
                 />
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => deleteAnimal(item._id)}>
-                <Image
-                  source={require('../assets/delete.png')}
-                  style={{tintColor:"#79C2BE", width:25, height:25, marginLeft:20}}
-                />
-              </TouchableOpacity>
+             
               
               
               </View>

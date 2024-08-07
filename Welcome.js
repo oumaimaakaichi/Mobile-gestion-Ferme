@@ -16,7 +16,7 @@ const Welcome = ({ navigation }) => {
   useEffect(() => {
     if (navigation) {
       const timer = setTimeout(() => {
-        navigation.navigate("LoginC");
+        navigation.navigate("home2");
       }, 3000);
 
       return () => clearTimeout(timer);
@@ -36,7 +36,7 @@ const Welcome = ({ navigation }) => {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate("LoginC")}
+        onPress={() => navigation.navigate("home2")}
       >
         <Text style={styles.buttonText}>Commencer</Text>
       </TouchableOpacity>
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     marginTop: 60,
     alignItems: "center",
-    backgroundColor: "#4A919E",
+    backgroundColor: "#B4D6CD",
   },
 
   buttonText: {
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   },
   highlight: {
     fontWeight: "bold",
-    color: "#4A919E",
+    color: "#B4D6CD",
     fontFamily: "Arial",
   },
 });

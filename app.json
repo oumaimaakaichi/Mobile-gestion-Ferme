@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "MyNewProject",
+    "name": "Ferme",
     "slug": "MyNewProject",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/fa.jpg",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/ferma-removebg-preview.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
