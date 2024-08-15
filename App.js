@@ -23,16 +23,14 @@ import Animalss from "./screens/animalE";
 import AnimalDétail2 from "./screens/detaiLAnimal";
 import ProfilEmpl from "./screens/profilEmpl";
 import StockEmplo from "./screens/stockEmpl";
+import Ouvrier from "./screens/ouvries";
+import EmploeDétail from "./screens/EmploeurDétaill";
+import TachesE from "./screens/tachesEmpl";
+import Taskss from "./screens/task";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
 
-
-
-
-
-
-  
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Welcome" screenOptions={{ headerShown: false }}>
@@ -57,6 +55,10 @@ export default function App() {
         <Stack.Screen name="animall" component={Animalss} />
         <Stack.Screen name="prof" component={ProfilEmpl} />
         <Stack.Screen name="stockE" component={StockEmplo} />
+        <Stack.Screen name="ouv" component={Ouvrier} />
+        <Stack.Screen name="détailEmplo" component={EmploeDétail} />
+        <Stack.Screen name="tacheEmpl" component={TachesE} />
+        <Stack.Screen name="mesTaches" component={Taskss} />
       </Stack.Navigator>
     </NavigationContainer>
   );

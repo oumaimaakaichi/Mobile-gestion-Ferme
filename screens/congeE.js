@@ -14,7 +14,7 @@ import profile from "../assets/prof.png";
 import { getClientData } from "../utils/AsyncStorageClient";
 import stock from "../assets/stocker.png"
 import home from "../assets/home.png";
-
+import task from "../assets/task_8089604.png"
 import logout from "../assets/logout.png";
 import cland from "../assets/clandr.png";
 import list from "../assets/hihi.png";
@@ -225,7 +225,44 @@ export default function CongeE({ navigation }) {
                     </Text>
                   </View>
                 </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("mesTaches");
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      paddingVertical: 8,
+                      backgroundColor: "transparent",
+                      paddingLeft: 5,
+                      paddingRight: 35,
+                      borderRadius: 8,
+                      marginTop: 20,
+                    }}
+                  >
+                    <Image
+                      source={task}
+                      style={{
+                        width: 25,
+                        height: 25,
+                        tintColor: "white",
+                      }}
+                    ></Image>
 
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        fontWeight: "bold",
+                        paddingLeft: 15,
+                        color: "white",
+                      }}
+                    >
+                      Taches
+                    </Text>
+                  </View>
+                </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate("demandeConge");
@@ -392,7 +429,7 @@ export default function CongeE({ navigation }) {
             paddingHorizontal: 10,
             paddingVertical: 20,
             borderRadius: showMenu ? 15 : 0,
-            // Transforming View...
+          
             transform: [{ scale: scaleValue }, { translateX: offsetValue }],
           }}
         >
@@ -472,13 +509,13 @@ export default function CongeE({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#B4D6CD",
+    backgroundColor: "#37B7C3",
     alignItems: "flex-start",
     justifyContent: "flex-start",
   },
   s: {
     color: "#rgb(97, 172, 243)",
-    backgroundColor: "#B4D6CD",
+    backgroundColor: "#37B7C3",
   },
   contactButtonImage: {
     width: 30,
@@ -495,6 +532,6 @@ const styles = StyleSheet.create({
 
     borderWidth: 0,
     overflow: "hidden",
-    marginTop: 50,
+    marginTop: 30,
   },
 });

@@ -31,7 +31,7 @@ import close from "../assets/close.png";
 import medicament from "../assets/med.png";
 
 import document from "../assets/doc.png";
-
+import ouv from "../assets/process_3516613.png"
 import { Alert } from "react-native";
 
 export default function Profil({ navigation }) {
@@ -90,7 +90,7 @@ export default function Profil({ navigation }) {
         console.log("ffffffffff" + response.assets[0].uri);
         setAvatar(response.assets[0].uri);
         FilesSystem.uploadAsync(
-          "http://192.168.148.216:3000/upload-image",
+          "http://192.168.195.216:3000/upload-image",
           response.assets[0].uri,
           {
             fieldName: "avatar",
@@ -112,7 +112,7 @@ export default function Profil({ navigation }) {
       formData.append("Num_tel", Num_tel);
       formData.append("avatar", avatarFile);
 
-      const response = await fetch(`http://192.168.148.216:3000/modifier/${user.Data._id}`, {
+      const response = await fetch(`http://192.168.195.216:3000/modifier/${user.Data._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "multipart/form-data",
@@ -123,7 +123,7 @@ export default function Profil({ navigation }) {
       const data = await response.json();
       if (data) {
         Alert.alert("Succès", "Profil mis à jour avec succès.");
-        navigation.navigate("Profil"); // Remplacez par la page appropriée
+        navigation.navigate("Profil"); 
       } else {
         Alert.alert("Erreur", "Échec de la mise à jour du profil.");
       }
@@ -252,6 +252,44 @@ export default function Profil({ navigation }) {
                       }}
                     >
                       Profile
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("ouv");
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      paddingVertical: 8,
+                      backgroundColor: "transparent",
+                      paddingLeft: 5,
+                      paddingRight: 35,
+                      borderRadius: 8,
+                      marginTop: 20,
+                    }}
+                  >
+                    <Image
+                      source={ouv}
+                      style={{
+                        width: 25,
+                        height: 25,
+                        tintColor: "white",
+                      }}
+                    ></Image>
+
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        fontWeight: "bold",
+                        paddingLeft: 15,
+                        color: "white",
+                      }}
+                    >
+                      Ouvriers
                     </Text>
                   </View>
                 </TouchableOpacity>
@@ -422,7 +460,7 @@ export default function Profil({ navigation }) {
             paddingHorizontal: 10,
             paddingVertical: 20,
             borderRadius: showMenu ? 15 : 0,
-            // Transforming View...
+      
             transform: [{ scale: scaleValue }, { translateX: offsetValue }],
           }}
         >

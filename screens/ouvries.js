@@ -7,45 +7,50 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Platform,
   ScrollView,
-  TextInput,
   ImageBackground,
 } from "react-native";
 import profile from "../assets/prof.png";
-import { LinearGradient } from "expo-linear-gradient";
 import { getClientData } from "../utils/AsyncStorageClient";
-import { useTheme } from "react-native-paper";
-import home from "../assets/home.png";
 import stock from "../assets/stocker.png"
-import * as ImagePicker from "expo-image-picker";
+import home from "../assets/home.png";
+import * as Notifications from "expo-notifications";
+import * as Device from "expo-device";
 import logout from "../assets/logout.png";
 import cland from "../assets/clandr.png";
 import list from "../assets/hihi.png";
-import Icon from "react-native-vector-icons/Feather";
+import axios from "axios";
 import Contact from "../assets/b.png";
 import menu from "../assets/menu.png";
-import animal from "../assets/betail.png"
 import enfant1 from "../assets/enfant.png";
 import close from "../assets/close.png";
 import medicament from "../assets/med.png";
-import task from "../assets/task_8089604.png"
+import animal from "../assets/betail.png"
 import document from "../assets/doc.png";
-
+import backg from "../assets//lopp-removebg-preview.png"
 import { Alert } from "react-native";
-
-export default function ProfilEmpl({ navigation }) {
+import EmployeurList from "./listeEmplo";
+import ouv from "../assets/process_3516613.png"
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+});
+export default function Ouvrier({ navigation }) {
   const [showMenu, setShowMenu] = useState(false);
   const [user, setUser] = useState("");
   const [userId, setUserId] = useState("");
+  const [hasNotification, setHasNotification] = useState(false);
   const [rendezVous, setRendezVous] = useState([]);
   const [selectedRendezVous, setSelectedRendezVous] = useState(null);
   const offsetValue = useRef(new Animated.Value(0)).current;
   const scaleValue = useRef(new Animated.Value(1)).current;
   const closeButtonOffset = useRef(new Animated.Value(0)).current;
-  const { colors } = useTheme();
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
  
-  const [Num_tel, setNum_tel] = useState("");
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -54,90 +59,19 @@ export default function ProfilEmpl({ navigation }) {
         setUserId(userData.Data._id);
         console.log("UserData:", userData);
         console.log("User ID:", userData.Data._id);
-       setEmail(userData.Data.email)
-        console.log(userData.Data.Num_tel)
-       setNum_tel(userData.Data.Num_tel)
-        console.log(userData.Data.avatar)
-        setAvatarr(userData.Data.avatar)
-
-        console.log(Num_tel)
       } catch (error) {
         console.error("Error fetching user dbata:", error);
       }
     };
 
     fetchData();
-  }, [Num_tel]);
-  const [email, setEmail] = useState(user?.Data?.email);
-  const [avatar, setAvatar] = useState("");
-  const [avatarr, setAvatarr] = useState("");
-  const [avatarFile, setAvatarFile] = useState();
-  const regEx = /[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,8}(.[a-z{2,8}])?/g;
-
-  const openImageLibrary = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-    if (status === "granted") {
-      const response = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-        base64: true,
-      });
-
-      if (!response.cancelled) {
-        console.log("ffffffffff" + response.assets[0].uri);
-        setAvatar(response.assets[0].uri);
-        FilesSystem.uploadAsync(
-          "http://192.168.195.216:3000/upload-image",
-          response.assets[0].uri,
-          {
-            fieldName: "avatar",
-            uploadType: FilesSystem.FileSystemUploadType.MULTIPART,
-          }
-        ).then((res) => setAvatarFile(res.body));
-      }
-    }
-  };
-
-
-
-  const Update = async () => {
-   
-
-    try {
-      const formData = new FormData();
-      formData.append("email", email);
-      formData.append("Num_tel", Num_tel);
-      formData.append("avatar", avatarFile);
-
-      const response = await fetch(`http://192.168.195.216:3000/modifier/${user.Data._id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        body: formData,
-      });
-
-      const data = await response.json();
-      if (data) {
-        Alert.alert("Succès", "Profil mis à jour avec succès.");
-        navigation.navigate("Profil"); 
-      } else {
-        Alert.alert("Erreur", "Échec de la mise à jour du profil.");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const logoutUser = async () => {
-    navigation.navigate("loginE");
-  };
-  useEffect(() => {
-    console.log("Num_tel in useEffect:", Num_tel);
-  }, [Num_tel]);
   
+  }, []);
+
+
+  const logoutUser = async () => {
+    navigation.navigate("LoginC");
+  };
 
   return (
     <>
@@ -181,7 +115,7 @@ export default function ProfilEmpl({ navigation }) {
               >
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("dashEmpl");
+                    navigation.navigate("dash");
                   }}
                 >
                   <View
@@ -227,7 +161,7 @@ export default function ProfilEmpl({ navigation }) {
                       flexDirection: "row",
                       alignItems: "center",
                       paddingVertical: 8,
-                      backgroundColor: "white",
+                      backgroundColor: "transparent",
                       paddingLeft: 5,
                       paddingRight: 35,
                       borderRadius: 8,
@@ -236,6 +170,44 @@ export default function ProfilEmpl({ navigation }) {
                   >
                     <Image
                       source={profile}
+                      style={{
+                        width: 25,
+                        height: 25,
+                        tintColor: "white",
+                      }}
+                    ></Image>
+
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        fontWeight: "bold",
+                        paddingLeft: 15,
+                        color: "white",
+                      }}
+                    >
+                      Profile
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("ouv");
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      paddingVertical: 8,
+                      backgroundColor: "white",
+                      paddingLeft: 5,
+                      paddingRight: 35,
+                      borderRadius: 8,
+                      marginTop: 20,
+                    }}
+                  >
+                    <Image
+                      source={ouv}
                       style={{
                         width: 25,
                         height: 25,
@@ -251,13 +223,13 @@ export default function ProfilEmpl({ navigation }) {
                         color: "#79C2BE",
                       }}
                     >
-                      Profile
+                      Ouvriers
                     </Text>
                   </View>
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("animall");
+                    navigation.navigate("animal");
                   }}
                 >
                   <View
@@ -293,47 +265,10 @@ export default function ProfilEmpl({ navigation }) {
                     </Text>
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate("mesTaches");
-                  }}
-                >
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      paddingVertical: 8,
-                      backgroundColor: "transparent",
-                      paddingLeft: 5,
-                      paddingRight: 35,
-                      borderRadius: 8,
-                      marginTop: 20,
-                    }}
-                  >
-                    <Image
-                      source={task}
-                      style={{
-                        width: 25,
-                        height: 25,
-                        tintColor: "white",
-                      }}
-                    ></Image>
 
-                    <Text
-                      style={{
-                        fontSize: 15,
-                        fontWeight: "bold",
-                        paddingLeft: 15,
-                        color: "white",
-                      }}
-                    >
-                      Taches
-                    </Text>
-                  </View>
-                </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("demandeConge");
+                    navigation.navigate("conge");
                   }}
                 >
                   <View
@@ -365,51 +300,14 @@ export default function ProfilEmpl({ navigation }) {
                         color: "white",
                       }}
                     >
-                      Demande Congé
+                      Congés
                     </Text>
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate("listeC");
-                  }}
-                >
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      paddingVertical: 8,
-                      backgroundColor: "transparent",
-                    
-                      paddingRight: 48,
-                      borderRadius: 8,
-                      marginTop: 20,
-                    }}
-                  >
-                    <Image
-                      source={cland}
-                      style={{
-                        width: 40,
-                        height: 40,
-                        tintColor: "white",
-                      }}
-                    ></Image>
 
-                    <Text
-                      style={{
-                        fontSize: 15,
-                        fontWeight: "bold",
-                        paddingLeft: 5,
-                        color: "white",
-                      }}
-                    >
-                     Mes demandes
-                    </Text>
-                  </View>
-                </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("stockE");
+                    navigation.navigate("stock");
                   }}
                 >
                   <View
@@ -452,7 +350,7 @@ export default function ProfilEmpl({ navigation }) {
                       alignItems: "center",
                       paddingVertical: 8,
                       backgroundColor: "transparent",
-                      paddingLeft: 5,
+                      paddingLeft: 8,
                       paddingRight: 30,
                       borderRadius: 8,
                       marginTop: 20,
@@ -496,7 +394,7 @@ export default function ProfilEmpl({ navigation }) {
             paddingHorizontal: 10,
             paddingVertical: 20,
             borderRadius: showMenu ? 15 : 0,
-        
+           
             transform: [{ scale: scaleValue }, { translateX: offsetValue }],
           }}
         >
@@ -544,160 +442,27 @@ export default function ProfilEmpl({ navigation }) {
                   style={{
                     width: 30,
                     height: 30,
-                    tintColor: "#37B7C3",
+                    tintColor: "#219C90",
                     marginTop: 40,
                     marginLeft: 20,
                   }}
                 ></Image>
               </TouchableOpacity>
-              
+             
+                
+            
              
               <ScrollView horizontal={true}></ScrollView>
+
+
+              
+              <ScrollView horizontal={true}>
+                <View style={{ marginBottom: 10 }}>
+                <EmployeurList proprietaireId={user?.Data?._id} navigation={navigation}/>
+                </View>
+              </ScrollView>
             </Animated.View>
            
-          
-            <View
-            style={{
-              justifyContent: "flex-start",
-              padding: 15,
-              alignItems: "center",
-              marginBottom: 20,
-            }}
-          >
-            <TouchableOpacity
-              onPress={openImageLibrary}
-              style={styles.uploadBtnContainer}
-            >
-              {avatar ? (
-                <Image
-                  source={{ uri: avatar }}
-                  style={{ width: "100%", height: "100%" }}
-                />
-              ) : (
-                <Image
-                source={{ uri: avatarr }}
-                style={{ width: "100%", height: "100%" }}
-              />
-              )}
-            </TouchableOpacity>
-            <Text
-              style={{
-                fontSize: 22,
-                fontWeight: "bold",
-                color: "black",
-                marginTop: 20,
-                marginRight: 70,
-              }}
-            >
-              &nbsp;&nbsp; &nbsp;&nbsp;{user?.Data?.nom} {user?.Data?.prenom}
-            </Text>
-
-          </View>
-
-
-
-          <Text
-            style={[
-              styles.text_footer,
-              {
-                color: colors.text,
-                fontSize: 15,
-                marginTop: 35,
-                marginBottom: 15,
-              },
-            ]}
-          >
-            Email
-          </Text>
-          <View style={styles.action}>
-            <Icon
-              name="mail"
-              color="#219C90"
-              size={20}
-              style={{
-                marginTop: -10,
-              }}
-            />
-            <TextInput
-              placeholder="Email"
-              placeholderTextColor="#666666"
-             
-              value={email}
-              style={[
-                styles.textInput,
-                {
-                  color: colors.text,
-                },
-              ]}
-              onChangeText={(val) => setEmail(val)}
-              
-            />
-          </View>
-
-          <Text
-            style={[
-              styles.text_footer,
-              {
-                color: colors.text,
-                fontSize: 15,
-                marginTop: 35,
-                marginBottom: 15,
-              },
-            ]}
-          >
-            Phone
-          </Text>
-          <View style={styles.action}>
-            <Icon
-              name="phone"
-              color="#219C90"
-              size={20}
-              style={{
-                marginTop: -10,
-              }}
-            />
-          <TextInput
-  placeholder="Phone"
-  placeholderTextColor="#666666"
-  value={Num_tel} 
-  onChangeText={(val) => setNum_tel(val)}
-  style={[
-    styles.textInput,
-    {
-      color: colors.text,
-    },
-  ]}
- 
-/>
-
-          </View>
-          
-          <View style={styles.button}>
-            <TouchableOpacity
-              style={styles.signIn}
-              onPress={() => {
-                Update();
-              }}
-            >
-              <LinearGradient
-                colors={["#79C2BE", "#79C2BE"]}
-                style={styles.signIn}
-              >
-                <Text
-                  style={[
-                    styles.textSign,
-                    {
-                      color: "#fff",
-                    },
-                  ]}
-                >
-                  S'Update
-                </Text>
-              </LinearGradient>
-            </TouchableOpacity>
-
-          
-          </View>
           </ScrollView>
         </Animated.View>
       </SafeAreaView>
@@ -708,13 +473,13 @@ export default function ProfilEmpl({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#37B7C3",
+    backgroundColor: "#79C2BE",
     alignItems: "flex-start",
     justifyContent: "flex-start",
   },
   s: {
     color: "#rgb(97, 172, 243)",
-    backgroundColor: "#37B7C3",
+    backgroundColor: "#79C2BE",
   },
 
   uploadBtnContainer: {
@@ -725,57 +490,6 @@ const styles = StyleSheet.create({
 
     borderWidth: 0,
     overflow: "hidden",
-    marginTop: 30,
-  },
-  uploadBtnContainers: {
-    height: 125,
-    width: 125,
-    borderRadius: 125 / 2,
-    justifyContent: "center",
-    alignItems: "center",
-    borderStyle: "dashed",
-    borderColor: "#01BACF",
-    borderWidth: 1,
-    alignSelf: "center",
-    overflow: "hidden",
-  },
-  uploadBtns: {
-    textAlign: "center",
-    fontSize: 16,
-    opacity: 0.3,
-    fontWeight: "bold",
-    color: "#219C90",
-  },
-  action: {
-    flexDirection: "row",
-    marginTop: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#4A919E",
-    paddingBottom: 5,
-  },
-  textInput: {
-    flex: 1,
-    marginTop: Platform.OS === "ios" ? 0 : -12,
-    paddingLeft: 10,
-    color: "#4A919E",
-  },
-  errorMsg: {
-    color: "#FF0000",
-    fontSize: 12,
-  },
-  button: {
-    alignItems: "center",
-    marginTop: 40,
-  },
-  signIn: {
-    width: "100%",
-    height: 50,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 15,
-  },
-  textSign: {
-    fontSize: 18,
-    fontWeight: "bold",
+    marginTop: 50,
   },
 });

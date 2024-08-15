@@ -47,7 +47,7 @@ export default function AddStock({ navigation }) {
 
   const [user, setUser] = useState("");
   const offsetValue = useRef(new Animated.Value(0)).current;
-  // Scale Intially must be One...
+
   const scaleValue = useRef(new Animated.Value(1)).current;
   const closeButtonOffset = useRef(new Animated.Value(0)).current;
   const [quantite, setQuantité] = useState("");
@@ -87,7 +87,7 @@ export default function AddStock({ navigation }) {
       });
 
       const response = await fetch(
-        "http://192.168.148.216:3000/add-stock",
+        "http://192.168.195.216:3000/add-stock",
         {
           method: "POST",
           headers: {
@@ -625,7 +625,7 @@ const styles = StyleSheet.create({
 
   icon: {
     marginRight: 11,
-    width: 25, // Ajustez la largeur selon vos besoins
+    width: 25, 
     height: 25,
     color: "#79C2BE",
     tintColor: "#7FA1C3",

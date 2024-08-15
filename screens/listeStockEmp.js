@@ -22,18 +22,18 @@ export default function ListStockEmpl({ navigation }) {
   const [editStock, setEditStock] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
 
-  // Initialize quantity based on editStock.quantite or default to 0
+
   const [quantity, setQuantity] = useState(editStock.quantite || 0);
 
   useEffect(() => {
-    // Update quantity when editStock changes
+  
     setQuantity(editStock.quantite || 0);
   }, [editStock]);
 
   const fetchData = async () => {
     const userData = await getClientData();
     const response = await fetch(
-      `http://192.168.148.216:3000/stocks-by-owner/${userData?.Data?.proprietaire}`
+      `http://192.168.195.216:3000/stocks-by-owner/${userData?.Data?.proprietaire}`
     );
     const jsonData = await response.json();
     setData(jsonData);
@@ -70,7 +70,7 @@ export default function ListStockEmpl({ navigation }) {
 
   const handleEdit = async () => {
     try {
-      const response = await axios.patch(`http://192.168.148.216:3000/update-stock/${editStock._id}`, editStock);
+      const response = await axios.patch(`http://192.168.195.216:3000/update-stock/${editStock._id}`, editStock);
       setData(prevData => prevData.map(item => item._id === editStock._id ? response.data : item));
       setModalVisible(false);
       fetchData();
@@ -172,7 +172,7 @@ export default function ListStockEmpl({ navigation }) {
             <TextInput
             
               value={quantity.toString()}
-              editable={false} // Rendre le champ non modifiable
+              editable={false}
               keyboardType="numeric"
             />
              <TouchableOpacity onPress={decrementQuantity} style={styles.decrementButton}>

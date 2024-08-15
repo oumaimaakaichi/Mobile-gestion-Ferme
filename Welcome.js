@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Text,
 } from "react-native";
-import h from "./assets/3da81dada38bc46f89f8afee05bdbf56-removebg-preview.png";
+import h from "./assets/hy-removebg-preview.png";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     marginTop: 60,
     alignItems: "center",
-    backgroundColor: "#B4D6CD",
+    backgroundColor: "#538392",
   },
 
   buttonText: {
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   },
   highlight: {
     fontWeight: "bold",
-    color: "#B4D6CD",
+    color: "#538392",
     fontFamily: "Arial",
   },
 });

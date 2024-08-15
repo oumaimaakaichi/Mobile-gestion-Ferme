@@ -34,7 +34,7 @@ export default function CongeDétail({ route, navigation }) {
   };
   const handleAccept = async () => {
     try {
-      const response = await axios.patch(`http://192.168.148.216:3000/conge/accepter/${getConge._id}`);
+      const response = await axios.patch(`http://192.168.195.216:3000/conge/accepter/${getConge._id}`);
       if (response.status === 200) {
    
         setConge(response.data.conge);
@@ -47,7 +47,7 @@ export default function CongeDétail({ route, navigation }) {
 
   const handleReject = async () => {
     try {
-      const response = await axios.patch(`http://192.168.148.216:3000/conge/refuser/${getConge._id}`);
+      const response = await axios.patch(`http://192.168.195.216:3000/conge/refuser/${getConge._id}`);
       if (response.status === 200) {
        
         setConge(response.data.conge);
@@ -93,7 +93,10 @@ export default function CongeDétail({ route, navigation }) {
               <Text style={styles.contactLabel}>Status:                 </Text>
               <Text style={getStatusStyle(conge.status)}>{conge.status}</Text>
             </View>
-
+            <View style={styles.contactRow}>
+              <Text style={styles.contactLabel}>Raison:                </Text>
+              <Text style={styles.value}>{getConge.raison}</Text>
+            </View>
             {getConge.status==="En attente" &&(
 
             

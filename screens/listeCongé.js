@@ -13,7 +13,7 @@ const CongesList = ({ proprietaireId, navigation }) => {
   useEffect(() => {
     const fetchConges = async () => {
       try {
-        const response = await axios.get(`http://192.168.148.216:3000/conges/${proprietaireId}`);
+        const response = await axios.get(`http://192.168.195.216:3000/conges/${proprietaireId}`);
         setConges(response.data);
       } catch (err) {
         setError(err.message);

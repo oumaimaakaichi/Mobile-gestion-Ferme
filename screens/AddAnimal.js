@@ -14,7 +14,7 @@ import {
 import profile from "../assets/prof.png";
 import { getClientData } from "../utils/AsyncStorageClient";
 import { LinearGradient } from "expo-linear-gradient";
-// Tab ICons...
+
 import animal from "../assets/betail.png";
 import animals from "../assets/caw-removebg-preview.png";
 import home from "../assets/home.png";
@@ -23,7 +23,7 @@ import * as ImagePicker from "expo-image-picker";
 import logout from "../assets/logout.png";
 import { AntDesign } from "@expo/vector-icons";
 const { width: WIDTH } = Dimensions.get("window");
-// Menu
+
 
 import menu from "../assets/menu.png";
 
@@ -45,7 +45,7 @@ export default function AddAnimal({ navigation }) {
 
   const [user, setUser] = useState("");
   const offsetValue = useRef(new Animated.Value(0)).current;
-  // Scale Intially must be One...
+
   const scaleValue = useRef(new Animated.Value(1)).current;
   const closeButtonOffset = useRef(new Animated.Value(0)).current;
   const [animal, setAnimal] = useState("");
@@ -122,9 +122,9 @@ export default function AddAnimal({ navigation }) {
           name: imageName,
         });
   
-        const response = await fetch("http://192.168.148.216:3000/ajouter-animal", {
+        const response = await fetch("http://192.168.195.216:3000/ajouter-animal", {
           method: "POST",
-          body: formData, // Envoyer le FormData directement
+          body: formData, 
         });
   
         if (response.ok) {
@@ -443,7 +443,7 @@ export default function AddAnimal({ navigation }) {
           }}
         >
           {
-            // Menu Button...
+           
           }
           <ScrollView style={{ marginVertical: 0 }}>
             <Animated.View
@@ -726,7 +726,7 @@ const styles = StyleSheet.create({
 
   icon: {
     marginRight: 11,
-    width: 25, // Ajustez la largeur selon vos besoins
+    width: 25, 
     height: 25,
     color: "#79C2BE",
     tintColor: "#7FA1C3",

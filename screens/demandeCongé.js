@@ -25,7 +25,7 @@ import logout from "../assets/logout.png";
 import { AntDesign } from "@expo/vector-icons";
 const { width: WIDTH } = Dimensions.get("window");
 // Menu
-
+import task from "../assets/task_8089604.png"
 import menu from "../assets/menu.png";
 
 import cland from "../assets/clandr.png";
@@ -47,12 +47,12 @@ export default function DemandeConge({ navigation }) {
   const [isDatePickerVisiblee, setDatePickerVisibilityy] = useState(false);
   const [user, setUser] = useState("");
   const offsetValue = useRef(new Animated.Value(0)).current;
-  // Scale Intially must be One...
+
   const scaleValue = useRef(new Animated.Value(1)).current;
   const closeButtonOffset = useRef(new Animated.Value(0)).current;
   const [dateD, setDateD] = useState("");
   const [dateFin, setDateF] = useState("");
- 
+  const [raison, setRaison] = useState(null);
   const [date, setDate] = useState(new Date());
   const [datee, setDatee] = useState(new Date());
   const regEx = /[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,8}(.[a-z{2,8}])?/g;
@@ -98,12 +98,12 @@ console.log(userData.Data._id)
         dateDébut: date,
         dateFin: datee,
   
-       
+       raison:raison,
         employeur: data.Data._id,
       });
 
       const response = await fetch(
-        "http://192.168.148.216:3000/add-conge",
+        "http://192.168.195.216:3000/add-conge",
         {
           method: "POST",
           headers: {
@@ -294,7 +294,44 @@ console.log(userData.Data._id)
                     </Text>
                   </View>
                 </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("mesTaches");
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      paddingVertical: 8,
+                      backgroundColor: "transparent",
+                      paddingLeft: 5,
+                      paddingRight: 35,
+                      borderRadius: 8,
+                      marginTop: 20,
+                    }}
+                  >
+                    <Image
+                      source={task}
+                      style={{
+                        width: 25,
+                        height: 25,
+                        tintColor: "white",
+                      }}
+                    ></Image>
 
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        fontWeight: "bold",
+                        paddingLeft: 15,
+                        color: "white",
+                      }}
+                    >
+                      Taches
+                    </Text>
+                  </View>
+                </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate("demandeConge");
@@ -512,7 +549,7 @@ console.log(userData.Data._id)
                   style={{
                     width: 30,
                     height: 30,
-                    tintColor: "#79C2BE",
+                    tintColor: "#37B7C3",
                     marginTop: 40,
                   }}
                 ></Image>
@@ -530,7 +567,8 @@ console.log(userData.Data._id)
                       marginTop: 5,
                     }}
                   />
-                
+              
+                 <Text style={styles.contactLabel}>Date début:            </Text>
                 <TouchableOpacity onPress={() => setDatePickerVisibility(true)}>
                   <View style={styles.inputContainer}>
                     <Image
@@ -543,7 +581,7 @@ console.log(userData.Data._id)
                   </View>
 </TouchableOpacity>
 
-
+<Text style={styles.contactLabel}>Date Fin:                   </Text>
 <TouchableOpacity onPress={() => setDatePickerVisibilityy(true)}>
                   <View style={styles.inputContainer} >
                     <Image
@@ -558,16 +596,30 @@ console.log(userData.Data._id)
                     />
                   </View>
 </TouchableOpacity>
-                 
+<Text style={styles.contactLabel}>Raison:                     </Text>
+
+                  <View style={styles.inputContainer} >
+                    <Image
+                      source={require("../assets/ask_14791674.png")}
+                      style={styles.iconn}
+                    />
+                    <TextInput
+                      placeholder="raison"
+                      style={{width:240}}
+                      onChangeText={(val) => setRaison(val)}
+           
+                    />
+                  </View>
+        
                   <DateTimePickerModal
         isVisible={isDatePickerVisible}
-        mode="date" // Utilisez "date" pour un sélecteur de date ou "time" pour un sélecteur d'heure
+        mode="date" 
         onConfirm={handleDateConfirm}
         onCancel={hideDatePicker}
       />
  <DateTimePickerModal
         isVisible={isDatePickerVisiblee}
-        mode="date" // Utilisez "date" pour un sélecteur de date ou "time" pour un sélecteur d'heure
+        mode="date" 
         onConfirm={handleDateConfirmm}
         onCancel={hideDatePickerr}
       />
@@ -599,14 +651,26 @@ console.log(userData.Data._id)
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#B4D6CD",
+    backgroundColor: "#37B7C3",
     alignItems: "flex-start",
     justifyContent: "flex-start",
   },
   s: {
     color: "#rgb(97, 172, 243)",
-    backgroundColor: "#B4D6CD",
+    backgroundColor: "#37B7C3",
     marginTop: -100,
+  },
+  contactRow: {
+    flexDirection: 'row',
+    marginBottom: 10,
+  },
+  contactLabel: {
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 16,
+    marginRight:150,
+  
+    marginTop:10
   },
   button: {
     alignItems: "center",
@@ -624,7 +688,7 @@ const styles = StyleSheet.create({
 
     borderWidth: 0,
     overflow: "hidden",
-    marginTop: 50,
+    marginTop: 30,
     marginBottom:40
   },
   imageContainer: {
@@ -697,7 +761,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     alignItems: "center",
     width: "90%",
-    marginTop: "30%",
+    marginTop: "10%",
     alignSelf: "center",
     marginBottom:20
   },
@@ -714,10 +778,17 @@ const styles = StyleSheet.create({
 
   icon: {
     marginRight: 11,
-    width: 25, // Ajustez la largeur selon vos besoins
+    width: 25, 
     height: 25,
     color: "#79C2BE",
     tintColor: "#7FA1C3",
+  },
+  iconn: {
+    marginRight: 11,
+    width: 25, 
+    height: 25,
+    color: "#79C2BE",
+    
   },
   input: {
     flex: 1,

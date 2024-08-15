@@ -28,6 +28,7 @@ import medicament from "../assets/med.png";
 import animal from "../assets/betail.png"
 import document from "../assets/doc.png";
 import backg from "../assets/fermer.jpg"
+import task from "../assets/task_8089604.png"
 import { Alert } from "react-native";
 
 Notifications.setNotificationHandler({
@@ -233,7 +234,44 @@ export default function DashboardEmployeur({ navigation }) {
                     </Text>
                   </View>
                 </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("mesTaches");
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      paddingVertical: 8,
+                      backgroundColor: "transparent",
+                      paddingLeft: 5,
+                      paddingRight: 35,
+                      borderRadius: 8,
+                      marginTop: 20,
+                    }}
+                  >
+                    <Image
+                      source={task}
+                      style={{
+                        width: 25,
+                        height: 25,
+                        tintColor: "white",
+                      }}
+                    ></Image>
 
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        fontWeight: "bold",
+                        paddingLeft: 15,
+                        color: "white",
+                      }}
+                    >
+                      Taches
+                    </Text>
+                  </View>
+                </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate("demandeConge");
@@ -399,7 +437,7 @@ export default function DashboardEmployeur({ navigation }) {
             paddingHorizontal: 10,
             paddingVertical: 20,
             borderRadius: showMenu ? 15 : 0,
-            // Transforming View...
+       
             transform: [{ scale: scaleValue }, { translateX: offsetValue }],
           }}
         >
@@ -447,7 +485,7 @@ export default function DashboardEmployeur({ navigation }) {
                   style={{
                     width: 30,
                     height: 30,
-                    tintColor: "#219C90",
+                    tintColor: "#37B7C3",
                     marginTop: 40,
                     marginLeft: 20,
                   }}
@@ -507,13 +545,13 @@ export default function DashboardEmployeur({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#B4D6CD",
+    backgroundColor: "#37B7C3",
     alignItems: "flex-start",
     justifyContent: "flex-start",
   },
   s: {
     color: "#rgb(97, 172, 243)",
-    backgroundColor: "#B4D6CD",
+    backgroundColor: "#37B7C3",
   },
 
   uploadBtnContainer: {
@@ -524,6 +562,6 @@ const styles = StyleSheet.create({
 
     borderWidth: 0,
     overflow: "hidden",
-    marginTop: 50,
+    marginTop: 30,
   },
 });

@@ -14,7 +14,7 @@ const ListeC = ({ proprietaireId, navigation }) => {
     const fetchConges = async () => {
         const userData = await getClientData();
       try {
-        const response = await axios.get(`http://192.168.148.216:3000/conges/${userData.Data.proprietaire}`);
+        const response = await axios.get(`http://192.168.195.216:3000/conges/${userData.Data.proprietaire}`);
         setConges(response.data);
       } catch (err) {
         setError(err.message);

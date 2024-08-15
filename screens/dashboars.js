@@ -27,9 +27,9 @@ import close from "../assets/close.png";
 import medicament from "../assets/med.png";
 import animal from "../assets/betail.png"
 import document from "../assets/doc.png";
-import backg from "../assets//lopp-removebg-preview.png"
+import backg from "../assets/lopp-removebg-preview.png"
 import { Alert } from "react-native";
-
+import ouv from "../assets/process_3516613.png"
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -106,7 +106,7 @@ export default function Dashboard({ navigation }) {
       const clientData = await getClientData();
       setIsLoading(true);
       const response = await axios.get(
-        `http://192.168.148.216:3000/conges/${clientData?.Data?._id}`
+        `http://192.168.195.216:3000/conges/${clientData?.Data?._id}`
       );
       setData(response.data);
       setIsLoading(false);
@@ -306,6 +306,44 @@ export default function Dashboard({ navigation }) {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
+                    navigation.navigate("ouv");
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      paddingVertical: 8,
+                      backgroundColor: "transparent",
+                      paddingLeft: 5,
+                      paddingRight: 35,
+                      borderRadius: 8,
+                      marginTop: 20,
+                    }}
+                  >
+                    <Image
+                      source={ouv}
+                      style={{
+                        width: 25,
+                        height: 25,
+                        tintColor: "white",
+                      }}
+                    ></Image>
+
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        fontWeight: "bold",
+                        paddingLeft: 15,
+                        color: "white",
+                      }}
+                    >
+                      Ouvriers
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
                     navigation.navigate("animal");
                   }}
                 >
@@ -471,7 +509,7 @@ export default function Dashboard({ navigation }) {
             paddingHorizontal: 10,
             paddingVertical: 20,
             borderRadius: showMenu ? 15 : 0,
-            // Transforming View...
+            
             transform: [{ scale: scaleValue }, { translateX: offsetValue }],
           }}
         >

@@ -103,7 +103,7 @@ const LoginC = ({ navigation }) => {
       return;
     }
 
-    fetch("http://192.168.148.216:3000/login", {
+    fetch("http://192.168.195.216:3000/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -158,7 +158,7 @@ if(res.Data.role==="Ferme"){
   const [modalVisible, setModalVisible] = useState(false);
   const [email, setEmail] = useState("");
   const sendPasswordReset = () => {
-    fetch("http://192.168.148.216:3000/emailyni", {
+    fetch("http://192.168.195.216:3000/emailyni", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -433,7 +433,7 @@ if(res.Data.role==="Ferme"){
                   borderRadius: 5,
                   width: 100,
                   alignItems: "center",
-                  marginLeft: 10, // Ajoutez une marge à gauche pour créer un espace
+                  marginLeft: 10,
                 }}
                 onPress={() => setModalVisible(false)}
               >

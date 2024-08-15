@@ -55,7 +55,7 @@ const animation = (toValue) => {
     fontSize: 25,
     fontWeight: 'bold',
     marginBottom: '30%',
-   // fontFamily: 'MMA Champ',
+  
    fontWeight: "bold",
             }
   

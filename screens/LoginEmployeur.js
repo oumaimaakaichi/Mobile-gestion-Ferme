@@ -103,7 +103,7 @@ const LoginEmployeur = ({ navigation }) => {
       return;
     }
 
-    fetch("http://192.168.148.216:3000/login", {
+    fetch("http://192.168.195.216:3000/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -158,7 +158,7 @@ const LoginEmployeur = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [email, setEmail] = useState("");
   const sendPasswordReset = () => {
-    fetch("http://192.168.148.216:3000/emailyni", {
+    fetch("http://192.168.195.216:3000/emailyni", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -345,7 +345,7 @@ const LoginEmployeur = ({ navigation }) => {
               }}
             >
               <LinearGradient
-                colors={["#79C2BE", "#79C2BE"]}
+                colors={["#37B7C3", "#37B7C3"]}
                 style={styles.signIn}
               >
                 <Text
@@ -430,7 +430,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
 
-    backgroundColor: "#B4D6CD",
+    backgroundColor: "#37B7C3",
   },
   header: {
     flex: 1,

@@ -68,7 +68,7 @@ const InscriC = ({ navigation }) => {
         console.log("ffffffffff" + response.assets[0].uri);
         setAvatar(response.assets[0].uri);
         FilesSystem.uploadAsync(
-          "http://192.168.148.216:3000/upload-image",
+          "http://192.168.195.216:3000/upload-image",
           response.assets[0].uri,
           {
             fieldName: "avatar",
@@ -107,7 +107,7 @@ const InscriC = ({ navigation }) => {
       formData.append("cin", cin);
 formData.append("role" , "Ferme");
       formData.append("avatar", avatarFile);
-      const response = await fetch("http://192.168.148.216:3000/add-user", {
+      const response = await fetch("http://192.168.195.216:3000/add-user", {
         method: "POST",
         headers: {
           "Content-Type": "multipart/form-data",
