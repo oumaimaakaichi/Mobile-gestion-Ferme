@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 0.6,
-    borderColor: '#79C2BE',
+    borderColor: '#37B7C3',
     borderRadius: 5,
     paddingHorizontal: 10,
     marginTop: 20,
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     marginRight: 10,
-    tintColor: "#79C2BE"
+    tintColor: "#37B7C3"
   },
   input: {
     flex: 1,
@@ -294,7 +294,7 @@ const styles = StyleSheet.create({
     width: 35,
     height: 35,
     marginStart: 20,
-    tintColor: "#50B498"
+    tintColor: "#37B7C3"
   },
   separator: {
     height: 1,

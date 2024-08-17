@@ -27,6 +27,11 @@ import Ouvrier from "./screens/ouvries";
 import EmploeDétail from "./screens/EmploeurDétaill";
 import TachesE from "./screens/tachesEmpl";
 import Taskss from "./screens/task";
+import DashboardVét from "./screens/dashVéte";
+import AnimalVét from "./screens/AnimalVét";
+import AnimalDétailV from "./screens/AnimalDétailsV";
+import VaccinationsScreen from "./screens/listeVaccinationAnimal";
+import VaccinationsScreenP from "./screens/listeVaccProp";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -44,6 +49,7 @@ export default function App() {
         <Stack.Screen name="addAnimal" component={AddAnimal} />
         <Stack.Screen name="OneAnimal" component={AnimalDétail} />
         <Stack.Screen name="OneAnimall" component={AnimalDétail2} />
+        <Stack.Screen name="OneAnimalV" component={AnimalDétailV} />
         <Stack.Screen name="stock" component={Stocks} />
         <Stack.Screen name="addStock" component={AddStock} />
         <Stack.Screen name="conge" component={Conge} />
@@ -59,6 +65,10 @@ export default function App() {
         <Stack.Screen name="détailEmplo" component={EmploeDétail} />
         <Stack.Screen name="tacheEmpl" component={TachesE} />
         <Stack.Screen name="mesTaches" component={Taskss} />
+        <Stack.Screen name="dashV" component={DashboardVét} />
+        <Stack.Screen name="animalVé" component={AnimalVét} />
+        <Stack.Screen name="VaccinationsScreen" component={VaccinationsScreen} />
+        <Stack.Screen name="VaccinationsScreenP" component={VaccinationsScreenP} />
       </Stack.Navigator>
     </NavigationContainer>
   );

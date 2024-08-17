@@ -12,9 +12,11 @@ import {
 import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { getClientData } from "../utils/AsyncStorageClient";
 import Toast from "react-native-toast-message";
+
 import { useFocusEffect } from '@react-navigation/native';
+
 const { width: WIDTH } = Dimensions.get('window');
-export default function ListAnimal2({ navigation }) {
+export default function ListAnimalV({ navigation }) {
   const [data, setData] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const fetchData = async () => {
@@ -50,7 +52,7 @@ export default function ListAnimal2({ navigation }) {
       <>
         <View style={styles.itemContainer} >
           <TouchableOpacity  onPress={() => {
-                  navigation.navigate("OneAnimall", {
+                  navigation.navigate("OneAnimalV", {
                     itemId: item._id,
                     getAnimal: item,
                     navigation: navigation,
@@ -62,7 +64,7 @@ export default function ListAnimal2({ navigation }) {
 
             <TouchableOpacity
                 onPress={() => {
-                  navigation.navigate("OneAnimall", {
+                  navigation.navigate("OneAnimalV", {
                     itemId: item._id,
                     getAnimal: item,
                     navigation: navigation,
@@ -94,7 +96,11 @@ export default function ListAnimal2({ navigation }) {
     </View>
           </View></TouchableOpacity>
         </View>
-        <View style={styles.separator}></View>
+        <View style={styles.separator}>
+
+
+       
+        </View>
       </>
     );
   };
@@ -124,7 +130,7 @@ return (
     </View>
     <View style={styles.listContainer}>
       {data == null ? (
-        <Text>Loading</Text>
+        <Text>Loadingg</Text>
       ) : (
         <FlatList
           data={filteredData}
@@ -151,7 +157,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 0.6,
-    borderColor: '#79C2BE',
+    borderColor: '#37B7C3',
     borderRadius: 5,
     paddingHorizontal: 10,
     marginTop: 20,
@@ -164,7 +170,7 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     marginRight: 10,
-    tintColor:"#79C2BE"
+    tintColor:"#37B7C3"
   },
   input: {
     flex: 1,
@@ -202,7 +208,7 @@ const styles = StyleSheet.create({
     fontSize: 19,
     fontWeight: "bold",
  
-     color:"#7FA1C3"
+     color:"#37B7C3"
   },
   row: {
     flexDirection: "row",

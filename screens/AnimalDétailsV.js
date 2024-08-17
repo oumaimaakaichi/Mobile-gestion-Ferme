@@ -7,7 +7,7 @@ const { height: HEIGHT } = Dimensions.get('window');
 
 import conta from '../assets/fermer.jpg';
 import task from "../assets/covid-vaccination-fb-removebg-preview.png"
-export default function AnimalDétail({ route, navigation }) {
+export default function AnimalDétailV({ route, navigation }) {
   const { itemId, getAnimal } = route.params;
   const [animal, setAnimal] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
@@ -21,18 +21,7 @@ export default function AnimalDétail({ route, navigation }) {
     }
   }, [getAnimal]);
 
-  const handleEdit = async () => {
-    try {
-      const response = await axios.patch(`http://192.168.195.216:3000/api/updateAn/${animal._id}`, editAnimal);
-      setMessage(response.data.message);
-      setAnimal(response.data);
-      setEditAnimal(response.data);
-      setModalVisible(false);
-    } catch (error) {
-      setMessage('Error updating contact');
-      console.error(error);
-    }
-  };
+
 
   return (
     <SafeAreaView style={{ height: HEIGHT, backgroundColor: 'white' }}>
@@ -79,18 +68,12 @@ export default function AnimalDétail({ route, navigation }) {
               <Text style={styles.contactLabel}>Numéro de puce: </Text>
               <Text style={styles.contactValue}>{animal.numeroPuce}</Text>
             </View>
-
           </View>
-          <TouchableOpacity onPress={() => setModalVisible(true)}>
-            <Image
-              source={require('../assets/update.png')}
-              style={{ width: 40, height: 40 }}
-            />
-          </TouchableOpacity>
+       
         </View>
- <TouchableOpacity  
+        <TouchableOpacity  
                   onPress={() => {
-                    navigation.navigate("VaccinationsScreenP", {
+                    navigation.navigate("VaccinationsScreen", {
                       itemId: animal._id,
                      
                       navigation: navigation,
@@ -103,7 +86,7 @@ export default function AnimalDétail({ route, navigation }) {
                       alignItems: "center",
                       paddingVertical: 8,
                       backgroundColor: "transparent",
-                      paddingLeft: 5,
+                      paddingLeft: 45,
                       paddingRight: 35,
                       borderRadius: 8,
                     marginBottom:30
@@ -124,54 +107,13 @@ export default function AnimalDétail({ route, navigation }) {
                         fontWeight: "bold",
                         paddingLeft: 10,
                         color: "#179BAE",
-                        fontFamily:"italic"
                       }}
                     >
-                      Historique des vaccinations
+                      Vaccinations
                     </Text>
                   </View>
                 </TouchableOpacity>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => setModalVisible(false)}
-        >
-          <View style={styles.modalView}>
-            <Text style={styles.modalTitle}>Modifier les informations de l'animal</Text>
-            <Text style={styles.modalTitlee}>Age:</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Age"
-              keyboardType="numeric"
-              defaultValue={editAnimal.age?.toString()} 
-              onChangeText={(text) => setEditAnimal({ ...editAnimal, age: parseInt(text) })}
-            />
-            <Text style={styles.modalTitlee}>Poid:</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Poid"
-              keyboardType="numeric"
-              defaultValue={editAnimal.poids?.toString()} 
-              onChangeText={(text) => setEditAnimal({ ...editAnimal, poids: parseFloat(text) })}
-            />
-            <Text style={styles.modalTitleee}>Numéro du puce: </Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Numéro du puce"
-              defaultValue={editAnimal.numeroPuce} 
-              onChangeText={(text) => setEditAnimal({ ...editAnimal, numeroPuce: text })}
-            />
-            <View style={styles.modalButtons}>
-              <TouchableOpacity onPress={handleEdit} style={styles.saveButton}>
-                <Text style={styles.buttonText}>Enregistrer</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.cancelButton}>
-                <Text style={styles.buttonText}>Annuler</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
+       
       </ScrollView>
     </SafeAreaView>
   );
@@ -182,7 +124,7 @@ const styles = StyleSheet.create({
     width: '80%',
     height: 241,
     alignSelf: 'center',
-    
+   
   },
   title: {
     color: 'black',

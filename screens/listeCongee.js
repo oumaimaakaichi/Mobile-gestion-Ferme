@@ -74,7 +74,7 @@ const ListeC = ({ proprietaireId, navigation }) => {
               </View>
               <View style={styles.imageContainer}>
                 <Image
-                  source={require('../assets/cc-removebg-preview (1).png')}
+                  source={require('../assets/dema-removebg-preview.png')}
                   style={styles.image}
                 />
               </View>

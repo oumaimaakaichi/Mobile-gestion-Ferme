@@ -83,7 +83,7 @@ export default function EmploeDétail({ route, navigation }) {
         setNewTaskName('');
         setNewTaskDescription('');
         setIsAddTaskModalVisible(false);
-        // Optionally fetch tasks again
+      
         axios.get(`http://192.168.195.216:3000/taches-by-proprietaire/${proprietaireId}`)
           .then(response => {
             setTasks(response.data);
@@ -144,15 +144,15 @@ export default function EmploeDétail({ route, navigation }) {
           <TouchableOpacity style={styles.rejectButton} onPress={() => setIsModalVisible(true)}>
             <Text style={styles.buttonText}>Affecter une tâche</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.rejectButton} onPress={() => {
+          
+        </View>
+        <TouchableOpacity style={styles.rejectButtons} onPress={() => {
             navigation.navigate("tacheEmpl", {
               itemId: conge._id,
               navigation: navigation,
             }) }} >
             <Text style={styles.buttonText}>Voir Taches</Text>
           </TouchableOpacity>
-        </View>
-
         {/* Modal for Assigning Tasks */}
         <Modal
           transparent={true}
@@ -220,9 +220,9 @@ export default function EmploeDétail({ route, navigation }) {
 const styles = StyleSheet.create({
   image: {
     width: '100%',
-    height: 241,
+    height: 221,
     alignSelf: 'center',
-    marginTop: 46,
+    marginTop: 36,
     backgroundColor: "transparent",
   },
   title: {
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
     fontSize: 19,
     alignSelf: 'center',
     marginTop: 11,
-    marginBottom: 35,
+    marginBottom: 25,
   },
   contactCard: {
     flexDirection: 'row',
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   acceptButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#B4D6CD',
     borderRadius: 5,
     padding: 10,
     flex: 1,
@@ -265,9 +265,22 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   rejectButton: {
-    backgroundColor: '#538392',
+    backgroundColor: '#B4D6CD',
     borderRadius: 5,
     marginRight: 10,
+    marginLeft:10,
+ 
+    padding: 10,
+    flex: 1,
+    alignItems: 'center',
+  },
+
+  rejectButtons: {
+    backgroundColor: '#B4D6CD',
+    borderRadius: 5,
+    marginRight: 10,
+    marginLeft:10,
+    marginBottom:40,
     padding: 10,
     flex: 1,
     alignItems: 'center',
@@ -320,7 +333,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   assignButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#5B99C2',
     borderRadius: 5,
     padding: 10,
     marginBottom: 10,
@@ -328,7 +341,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   closeButton: {
-    backgroundColor: '#F44336',
+    backgroundColor: '#BC9F8B',
     borderRadius: 5,
     padding: 10,
     alignItems: 'center',

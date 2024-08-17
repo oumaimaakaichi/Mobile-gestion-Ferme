@@ -56,7 +56,7 @@ export default function ListTaskkk({ route, navigation , proprietaireId }) {
         
         
         {item.status !=="Terminé" &&(<TouchableOpacity style={styles.acceptButton}      onPress={() => handleMarkAsDone(item.tache._id)}>
-                <Text style={styles.buttonText}>Marquer comme Terminé</Text>
+                <Text style={styles.buttonText}>Marquer  comme Terminé</Text>
               </TouchableOpacity>)}
       </View>
       <View style={styles.taskImage}>
@@ -70,7 +70,7 @@ export default function ListTaskkk({ route, navigation , proprietaireId }) {
   );
 
   return (
-    <SafeAreaView style={{ height: HEIGHT, backgroundColor: 'white' }}>
+    <SafeAreaView style={{ height: HEIGHT, backgroundColor: 'white' ,marginTop:20 }}>
       <ScrollView>
        
         
@@ -88,8 +88,8 @@ const styles = StyleSheet.create({
     contactCard: {
         flexDirection: 'row',
         backgroundColor: '#CDE8E5',
-        marginBottom: 20,
-        marginTop: 40,
+        
+        marginTop: 10,
         borderRadius: 11,
         shadowColor: '#000',
         width:"160px",
@@ -112,10 +112,9 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   taskImage: {
-    width: 120,
+    width: 100,
     height: 100, 
-    justifyContent: 'center',
-    alignItems: 'center',
+    
   },
   image: {
     width: '100%',
@@ -141,7 +140,7 @@ const styles = StyleSheet.create({
     flex: 1,
    
     alignItems: 'center',
-    marginLeft: 10,
+    
   },
   rejectButton: {
     backgroundColor: '#538392',

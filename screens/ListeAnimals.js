@@ -66,29 +66,22 @@ export default function ListAnimal({ navigation }) {
     return (
       <>
         <View style={styles.itemContainer}>
-          <View style={styles.itemContent}>
-          <View style={{ flexDirection: "row" }}>
-            <Text style={styles.contactText}>Animal:</Text>
-
-            <TouchableOpacity
-                onPress={() => {
+        <TouchableOpacity onPress={() => {
                   navigation.navigate("OneAnimal", {
                     itemId: item._id,
                     getAnimal: item,
                     navigation: navigation,
                   });
-                }}
-                style={{marginLeft:50}}
-              >
-                <Image
-                  source={require('../assets/yeux2-removebg-preview.png')}
-                  style={styles.icon}
-                />
-              </TouchableOpacity>
+                }}>
+          <View style={styles.itemContent}>
+          <View style={{ flexDirection: "row" }}>
+            <Text style={styles.contactText}>Animal:</Text>
+
+           
               <TouchableOpacity onPress={() => deleteAnimal(item._id)}>
                 <Image
                   source={require('../assets/delete.png')}
-                  style={{tintColor:"#79C2BE", width:25, height:25, marginLeft:20}}
+                  style={{tintColor:"red", width:25, height:25, marginLeft:190}}
                 />
               </TouchableOpacity>
               
@@ -107,7 +100,7 @@ export default function ListAnimal({ navigation }) {
                 
       <Text style={styles.marginText}>Date entrée: {formatDate(item.createdAt)}</Text>
     </View>
-          </View>
+          </View></TouchableOpacity>
         </View>
         <View style={styles.separator}></View>
       </>
@@ -166,7 +159,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 0.6,
-    borderColor: '#79C2BE',
+    borderColor: '#B692C2',
     borderRadius: 5,
     paddingHorizontal: 10,
     marginTop: 20,
@@ -179,7 +172,7 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     marginRight: 10,
-    tintColor:"#79C2BE"
+    tintColor:"#B692C2"
   },
   input: {
     flex: 1,
@@ -217,7 +210,7 @@ const styles = StyleSheet.create({
     fontSize: 19,
     fontWeight: "bold",
     marginBottom: 10,
-     color:"#7FA1C3"
+     color:"black"
   },
   row: {
     flexDirection: "row",

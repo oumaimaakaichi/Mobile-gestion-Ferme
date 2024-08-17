@@ -657,20 +657,23 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 10,
-    backgroundColor: "#e0f0ff",
+    backgroundColor: "white",
+    borderWidth: 1,
+    borderColor: "#7FA1C3",
   },
   uploadIcon: {
     width: 40,
     height: 40,
+    tintColor: "#7FA1C3",
   },
   cameraIcon: {
     width: 37,
     height: 37,
-    tintColor: "blue",
+    tintColor: "#7FA1C3",
   },
   uploadText: {
     fontSize: 16,
-    fontWeight: "500",
+   
     marginLeft: 10,
   },
   signIn: {

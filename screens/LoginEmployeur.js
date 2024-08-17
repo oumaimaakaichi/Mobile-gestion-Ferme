@@ -148,6 +148,25 @@ const LoginEmployeur = ({ navigation }) => {
           },
           onShow: () => {},
         });}
+
+        else if(res.Data.role=="vétérinaire")
+        {
+          Toast.show({
+            position: "top",
+            type: "success",
+  
+            text1: "Connexion",
+            text2: "Connexion réussie",
+  
+            autoHide: true,
+            visibilityTime: 1000,
+            autoHide: true,
+            onHide: () => { 
+              navigation.navigate("dashV");
+            },
+            onShow: () => {},
+          })
+        }
       })
       .catch((error) => {
         setError(true);
