@@ -1,6 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity, Modal, TextInput, Button } from 'react-native';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Modal,
+  TextInput,
+  Button,
+} from "react-native";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import task from "../assets/add.png";
 
 const VaccinationsScreen = ({ route, navigation }) => {
@@ -9,13 +19,15 @@ const VaccinationsScreen = ({ route, navigation }) => {
   const [loading, setLoading] = useState(true);
 
   const [modalVisible, setModalVisible] = useState(false);
-  const [newVaccination, setNewVaccination] = useState({ nom: '', date: '' });
+  const [newVaccination, setNewVaccination] = useState({ nom: "", date: "" });
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
   useEffect(() => {
     const fetchVaccinations = async () => {
       try {
-        const response = await fetch(`http://192.168.195.216:3000/getAllVaccinations/${itemId}`);
+        const response = await fetch(
+          `http://192.168.195.216:3000/getAllVaccinations/${itemId}`
+        );
         const data = await response.json();
         if (response.ok) {
           setVaccinations(data.vaccinations);
@@ -34,19 +46,22 @@ const VaccinationsScreen = ({ route, navigation }) => {
 
   const handleAddVaccination = async () => {
     try {
-      const response = await fetch(`http://192.168.195.216:3000/addVaccination/${itemId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newVaccination),
-      });
+      const response = await fetch(
+        `http://192.168.195.216:3000/addVaccination/${itemId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newVaccination),
+        }
+      );
 
       const data = await response.json();
       if (response.ok) {
         setVaccinations([...vaccinations, newVaccination]);
         setModalVisible(false);
-        setNewVaccination({ nom: '', date: '' });
+        setNewVaccination({ nom: "", date: "" });
       } else {
         console.error(data.message);
       }
@@ -76,7 +91,7 @@ const VaccinationsScreen = ({ route, navigation }) => {
     <View style={styles.container}>
       <TouchableOpacity onPress={() => navigation.goBack()}>
         <Image
-          source={require('../assets/back.png')}
+          source={require("../assets/back.png")}
           style={{ width: 40, height: 40, marginTop: 20, marginBottom: 30 }}
         />
       </TouchableOpacity>
@@ -84,7 +99,6 @@ const VaccinationsScreen = ({ route, navigation }) => {
       <TouchableOpacity onPress={() => setModalVisible(true)}>
         <View style={styles.addButton}>
           <Image source={task} style={styles.addIcon} />
-          
         </View>
       </TouchableOpacity>
 
@@ -95,53 +109,63 @@ const VaccinationsScreen = ({ route, navigation }) => {
           <View style={styles.card}>
             <View style={styles.infoContainer}>
               <Text style={styles.title}>Vaccination: {item.nom}</Text>
-              <Text style={styles.date}>Date: {new Date(item.date).toLocaleDateString()}</Text>
+              <Text style={styles.date}>
+                Date: {new Date(item.date).toLocaleDateString()}
+              </Text>
             </View>
             <View style={styles.imageContainer}>
-              <Image source={require('../assets/covid-vaccination-fb-removebg-preview.png')} style={styles.image} />
+              <Image
+                source={require("../assets/covid-vaccination-fb-removebg-preview.png")}
+                style={styles.image}
+              />
             </View>
           </View>
         )}
       />
 
-<Modal
-  visible={modalVisible}
-  transparent={true}
-  animationType="slide"
-  onRequestClose={() => setModalVisible(false)}
->
-  <View style={styles.modalContainer}>
-    <View style={styles.modalContent}>
-      <TextInput
-        placeholder="Vaccination Name"
-        value={newVaccination.nom}
-        onChangeText={(text) => setNewVaccination({ ...newVaccination, nom: text })}
-        style={styles.input}
-      />
-      <TouchableOpacity onPress={showDatePicker} style={styles.dateButton}>
-        <Text style={styles.dateButtonText}>
-          {newVaccination.date ? new Date(newVaccination.date).toLocaleDateString() : 'Select Date'}
-        </Text>
-      </TouchableOpacity>
-      <DateTimePickerModal
-        isVisible={isDatePickerVisible}
-        mode="date"
-        onConfirm={handleConfirm}
-        onCancel={hideDatePicker}
-      />
-      
-      <View style={styles.buttonContainer}>
-        <Button title="Add Vaccination" onPress={handleAddVaccination} />
-      </View>
+      <Modal
+        visible={modalVisible}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <TextInput
+              placeholder="Vaccination Name"
+              value={newVaccination.nom}
+              onChangeText={(text) =>
+                setNewVaccination({ ...newVaccination, nom: text })
+              }
+              style={styles.input}
+            />
+            <TouchableOpacity
+              onPress={showDatePicker}
+              style={styles.dateButton}
+            >
+              <Text style={styles.dateButtonText}>
+                {newVaccination.date
+                  ? new Date(newVaccination.date).toLocaleDateString()
+                  : "Select Date"}
+              </Text>
+            </TouchableOpacity>
+            <DateTimePickerModal
+              isVisible={isDatePickerVisible}
+              mode="date"
+              onConfirm={handleConfirm}
+              onCancel={hideDatePicker}
+            />
 
-      <View style={styles.buttonContainer}>
-        <Button title="Fermer" onPress={() => setModalVisible(false)} />
-      </View>
-      
-    </View>
-  </View>
-</Modal>
+            <View style={styles.buttonContainer}>
+              <Button title="Add Vaccination" onPress={handleAddVaccination} />
+            </View>
 
+            <View style={styles.buttonContainer}>
+              <Button title="Fermer" onPress={() => setModalVisible(false)} />
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -150,7 +174,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: "#f5f5f5",
   },
   addButton: {
     flexDirection: "row",
@@ -160,12 +184,12 @@ const styles = StyleSheet.create({
     paddingLeft: 250,
     paddingRight: 35,
     borderRadius: 8,
-    marginBottom: 10
+    marginBottom: 10,
   },
   addIcon: {
     width: 30,
     height: 30,
-    tintColor: "#674188"
+    tintColor: "#674188",
   },
   addText: {
     fontSize: 16,
@@ -174,12 +198,12 @@ const styles = StyleSheet.create({
     color: "#674188",
   },
   card: {
-    flexDirection: 'row',
-    backgroundColor: '#fff',
+    flexDirection: "row",
+    backgroundColor: "#fff",
     borderRadius: 8,
     padding: 16,
     marginVertical: 8,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
@@ -187,58 +211,58 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     flex: 2,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   imageContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   title: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   buttonContainer: {
-    marginBottom: 10, 
+    marginBottom: 10,
   },
   date: {
     fontSize: 14,
-    color: '#666',
+    color: "#666",
     marginTop: 4,
   },
   image: {
     width: 70,
     height: 70,
-    tintColor: "#674188"
+    tintColor: "#674188",
   },
   modalContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
   },
   modalContent: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     padding: 20,
     borderRadius: 8,
-    width: '80%',
+    width: "80%",
   },
   input: {
     borderBottomWidth: 1,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     marginBottom: 20,
     paddingVertical: 8,
   },
   dateButton: {
     paddingVertical: 8,
     paddingHorizontal: 10,
-    backgroundColor: '#179BAE',
+    backgroundColor: "#179BAE",
     borderRadius: 8,
     marginBottom: 20,
-    alignItems: 'center',
+    alignItems: "center",
   },
   dateButtonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
   },
 });

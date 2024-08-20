@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import profile from "../assets/prof.png";
 import { getClientData } from "../utils/AsyncStorageClient";
-import stock from "../assets/stocker.png"
+import stock from "../assets/stocker.png";
 import home from "../assets/home.png";
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
@@ -25,11 +25,11 @@ import menu from "../assets/menu.png";
 import enfant1 from "../assets/enfant.png";
 import close from "../assets/close.png";
 import medicament from "../assets/med.png";
-import animal from "../assets/betail.png"
+import animal from "../assets/betail.png";
 import document from "../assets/doc.png";
-import backg from "../assets/v-removebg-preview.png"
+import backg from "../assets/v-removebg-preview.png";
 import { Alert } from "react-native";
-import ouv from "../assets/process_3516613.png"
+import ouv from "../assets/process_3516613.png";
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -97,7 +97,6 @@ export default function DashboardVét({ navigation }) {
     registerForPushNotificationsAsync()
       .then((token) => {
         console.log("token: ", token);
-       
       })
       .catch((err) => console.log(err));
   }, []);
@@ -146,14 +145,13 @@ export default function DashboardVét({ navigation }) {
               sound: "default",
             },
             trigger: {
-              hour: 20, 
+              hour: 20,
               minute: 53,
-              repeats: true, 
+              repeats: true,
             },
           });
-          
-      
-          setRendezVous(prevRendezVous => [...prevRendezVous, item]);
+
+          setRendezVous((prevRendezVous) => [...prevRendezVous, item]);
         }
       }
       setHasNotification(true);
@@ -168,10 +166,18 @@ export default function DashboardVét({ navigation }) {
       return;
     }
 
-
-    const details = rendezVous.map(item => 
-      `demande: \nDate Début: ${new Date(item.dateDébut).toLocaleDateString()}\nDate Fin: ${new Date(item.dateFin).toLocaleDateString()}\nNom de l'employeur: ${item.employeur.nom} ${item.employeur.prenom}`
-    ).join("\n\n");
+    const details = rendezVous
+      .map(
+        (item) =>
+          `demande: \nDate Début: ${new Date(
+            item.dateDébut
+          ).toLocaleDateString()}\nDate Fin: ${new Date(
+            item.dateFin
+          ).toLocaleDateString()}\nNom de l'employeur: ${item.employeur.nom} ${
+            item.employeur.prenom
+          }`
+      )
+      .join("\n\n");
 
     Alert.alert(
       "Détails des Congés",
@@ -240,7 +246,7 @@ export default function DashboardVét({ navigation }) {
                       paddingVertical: 8,
                       backgroundColor: "white",
                       paddingLeft: 5,
-             borderRadius: 8,
+                      borderRadius: 8,
                       marginTop: 30,
                     }}
                   >
@@ -303,8 +309,7 @@ export default function DashboardVét({ navigation }) {
                     </Text>
                   </View>
                 </TouchableOpacity>
-               
-                
+
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate("animalVé");
@@ -317,7 +322,7 @@ export default function DashboardVét({ navigation }) {
                       paddingVertical: 8,
                       backgroundColor: "transparent",
                       paddingLeft: 5,
-             borderRadius: 8,
+                      borderRadius: 8,
                       marginTop: 30,
                     }}
                   >
@@ -343,7 +348,6 @@ export default function DashboardVét({ navigation }) {
                   </View>
                 </TouchableOpacity>
 
-               
                 <TouchableOpacity onPress={logoutUser}>
                   <View
                     style={{
@@ -395,7 +399,7 @@ export default function DashboardVét({ navigation }) {
             paddingHorizontal: 10,
             paddingVertical: 20,
             borderRadius: showMenu ? 15 : 0,
-            
+
             transform: [{ scale: scaleValue }, { translateX: offsetValue }],
           }}
         >
@@ -450,10 +454,8 @@ export default function DashboardVét({ navigation }) {
                 ></Image>
               </TouchableOpacity>
               <View style={styles.content}>
-                {hasNotification? (
-                  <TouchableOpacity
-                   onPress={handleImageClick}
-                  >
+                {hasNotification ? (
+                  <TouchableOpacity onPress={handleImageClick}>
                     <Image
                       source={require("../assets/rouge.png")}
                       style={{ width: 70, height: 70, marginLeft: 250 }}
@@ -465,20 +467,21 @@ export default function DashboardVét({ navigation }) {
                     style={{ width: 70, height: 70, marginLeft: 250 }}
                   />
                 )}
-
-                
               </View>
-             
+
               <ScrollView horizontal={true}></ScrollView>
             </Animated.View>
-          
-            <Image source={backg} style={{
-                    width: 300,
-                    height: 330,
-                    
-                    marginTop: 40,
-                    marginLeft: 20,
-                  }}></Image>
+
+            <Image
+              source={backg}
+              style={{
+                width: 300,
+                height: 330,
+
+                marginTop: 40,
+                marginLeft: 20,
+              }}
+            ></Image>
             <Text
               style={{
                 fontSize: 20,
@@ -495,7 +498,7 @@ export default function DashboardVét({ navigation }) {
             >
               Bienvenue,
             </Text>
-           
+
             <Text
               style={{
                 fontSize: 20,
@@ -513,7 +516,6 @@ export default function DashboardVét({ navigation }) {
             >
               Nous sommes à votre service
             </Text>
-           
           </ScrollView>
         </Animated.View>
       </SafeAreaView>

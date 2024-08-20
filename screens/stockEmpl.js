@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import profile from "../assets/prof.png";
 import { getClientData } from "../utils/AsyncStorageClient";
-import stock from "../assets/stocker.png"
+import stock from "../assets/stocker.png";
 import home from "../assets/home.png";
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
@@ -21,12 +21,12 @@ import cland from "../assets/clandr.png";
 import list from "../assets/hihi.png";
 import axios from "axios";
 import Contact from "../assets/b.png";
-import task from "../assets/task_8089604.png"
+import task from "../assets/task_8089604.png";
 import menu from "../assets/menu.png";
 import enfant1 from "../assets/enfant.png";
 import close from "../assets/close.png";
 import medicament from "../assets/med.png";
-import animal from "../assets/betail.png"
+import animal from "../assets/betail.png";
 import document from "../assets/doc.png";
 import ListStockEmpl from "./listeStockEmp";
 import { Alert } from "react-native";
@@ -50,11 +50,7 @@ export default function StockEmplo({ navigation }) {
   const closeButtonOffset = useRef(new Animated.Value(0)).current;
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  
- 
 
-  
- 
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -69,13 +65,8 @@ export default function StockEmplo({ navigation }) {
     };
 
     fetchData();
-  
-    
   }, []);
-  
 
-
-    
   const logoutUser = async () => {
     navigation.navigate("loginE");
   };
@@ -283,7 +274,7 @@ export default function StockEmplo({ navigation }) {
                       alignItems: "center",
                       paddingVertical: 8,
                       backgroundColor: "transparent",
-                    
+
                       paddingRight: 48,
                       borderRadius: 8,
                       marginTop: 20,
@@ -321,7 +312,7 @@ export default function StockEmplo({ navigation }) {
                       alignItems: "center",
                       paddingVertical: 8,
                       backgroundColor: "transparent",
-                    
+
                       paddingRight: 48,
                       borderRadius: 8,
                       marginTop: 20,
@@ -344,7 +335,7 @@ export default function StockEmplo({ navigation }) {
                         color: "white",
                       }}
                     >
-                     Mes demandes
+                      Mes demandes
                     </Text>
                   </View>
                 </TouchableOpacity>
@@ -359,7 +350,7 @@ export default function StockEmplo({ navigation }) {
                       alignItems: "center",
                       paddingVertical: 8,
                       backgroundColor: "white",
-                    marginLeft:5,
+                      marginLeft: 5,
                       paddingRight: 48,
                       borderRadius: 8,
                       marginTop: 20,
@@ -437,7 +428,7 @@ export default function StockEmplo({ navigation }) {
             paddingHorizontal: 10,
             paddingVertical: 20,
             borderRadius: showMenu ? 15 : 0,
-           
+
             transform: [{ scale: scaleValue }, { translateX: offsetValue }],
           }}
         >
@@ -491,11 +482,7 @@ export default function StockEmplo({ navigation }) {
                   }}
                 ></Image>
               </TouchableOpacity>
-              <View style={styles.content}>
-                
-
-                
-              </View>
+              <View style={styles.content}></View>
               <Text
                 style={{
                   fontSize: 18,
@@ -508,8 +495,8 @@ export default function StockEmplo({ navigation }) {
               ></Text>
               <ScrollView horizontal={true}></ScrollView>
             </Animated.View>
-           
-           <ListStockEmpl></ListStockEmpl>
+
+            <ListStockEmpl></ListStockEmpl>
           </ScrollView>
         </Animated.View>
       </SafeAreaView>

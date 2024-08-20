@@ -13,9 +13,9 @@ import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { getClientData } from "../utils/AsyncStorageClient";
 import Toast from "react-native-toast-message";
 
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect } from "@react-navigation/native";
 
-const { width: WIDTH } = Dimensions.get('window');
+const { width: WIDTH } = Dimensions.get("window");
 export default function ListAnimalV({ navigation }) {
   const [data, setData] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -29,7 +29,6 @@ export default function ListAnimalV({ navigation }) {
   };
 
   useEffect(() => {
-    
     fetchData();
   }, []);
 
@@ -38,11 +37,11 @@ export default function ListAnimalV({ navigation }) {
       fetchData();
     }, [])
   );
- 
+
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
   };
@@ -50,99 +49,93 @@ export default function ListAnimalV({ navigation }) {
   const renderItem = ({ item }) => {
     return (
       <>
-        <View style={styles.itemContainer} >
-          <TouchableOpacity  onPress={() => {
-                  navigation.navigate("OneAnimalV", {
-                    itemId: item._id,
-                    getAnimal: item,
-                    navigation: navigation,
-                  });
-                }}>
-          <View style={styles.itemContent} >
-          <View style={{ flexDirection: "row" }} >
-            <Text style={styles.contactText}>Animal:</Text>
+        <View style={styles.itemContainer}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("OneAnimalV", {
+                itemId: item._id,
+                getAnimal: item,
+                navigation: navigation,
+              });
+            }}
+          >
+            <View style={styles.itemContent}>
+              <View style={{ flexDirection: "row" }}>
+                <Text style={styles.contactText}>Animal:</Text>
 
-            <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate("OneAnimalV", {
-                    itemId: item._id,
-                    getAnimal: item,
-                    navigation: navigation,
-                  });
-                }}
-                style={{marginLeft:120}}
-              >
-                <Image
-                  source={require('../assets/hy-removebg-preview.png')}
-                  style={styles.icon}
-                />
-              </TouchableOpacity>
-             
-              
-              
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("OneAnimalV", {
+                      itemId: item._id,
+                      getAnimal: item,
+                      navigation: navigation,
+                    });
+                  }}
+                  style={{ marginLeft: 120 }}
+                >
+                  <Image
+                    source={require("../assets/hy-removebg-preview.png")}
+                    style={styles.icon}
+                  />
+                </TouchableOpacity>
               </View>
-            <View style={{ flexDirection: "row" }}>
-              <Text style={{ fontWeight: "bold", marginStart: 10  }}>Animal: </Text>
-              <Text style={styles.WrapText}>{item.animal} </Text>
-   
+              <View style={{ flexDirection: "row" }}>
+                <Text style={{ fontWeight: "bold", marginStart: 10 }}>
+                  Animal:{" "}
+                </Text>
+                <Text style={styles.WrapText}>{item.animal} </Text>
+              </View>
+              <View style={styles.row}>
+                <Text style={styles.marginText}>Race: {item.race}</Text>
+              </View>
+              <View style={styles.row}>
+                <Text style={styles.marginText}>
+                  Date entrée: {formatDate(item.createdAt)}
+                </Text>
+              </View>
             </View>
-            <View style={styles.row}>
-              <Text style={styles.marginText}>Race: {item.race}</Text>
-              
-            </View>
-            <View style={styles.row}>
-                
-      <Text style={styles.marginText}>Date entrée: {formatDate(item.createdAt)}</Text>
-    </View>
-          </View></TouchableOpacity>
+          </TouchableOpacity>
         </View>
-        <View style={styles.separator}>
-
-
-       
-        </View>
+        <View style={styles.separator}></View>
       </>
     );
   };
 
   const filteredData = data
-  ? data.filter(
-      (item) =>
-        item.animal.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.race.toLowerCase().includes(searchQuery.toLowerCase()) 
-    
-    )
-  : [];
+    ? data.filter(
+        (item) =>
+          item.animal.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          item.race.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : [];
 
-return (
-  <View style={styles.container}>
-    <View style={styles.inputContainer}>
-      <Image
-        source={require('../assets/search.png')}
-        style={styles.searchIcon}
-      />
-      <TextInput
-        style={styles.input}
-        onChangeText={(text) => setSearchQuery(text)}
-        value={searchQuery}
-        placeholder="Rechercher"
-      />
-    </View>
-    <View style={styles.listContainer}>
-      {data == null ? (
-        <Text>Loadingg</Text>
-      ) : (
-        <FlatList
-          data={filteredData}
-          renderItem={renderItem}
-          keyExtractor={(item) => item._id.toString()}
+  return (
+    <View style={styles.container}>
+      <View style={styles.inputContainer}>
+        <Image
+          source={require("../assets/search.png")}
+          style={styles.searchIcon}
         />
-      )}
+        <TextInput
+          style={styles.input}
+          onChangeText={(text) => setSearchQuery(text)}
+          value={searchQuery}
+          placeholder="Rechercher"
+        />
+      </View>
+      <View style={styles.listContainer}>
+        {data == null ? (
+          <Text>Loadingg</Text>
+        ) : (
+          <FlatList
+            data={filteredData}
+            renderItem={renderItem}
+            keyExtractor={(item) => item._id.toString()}
+          />
+        )}
+      </View>
     </View>
-  </View>
-);
-
-  
+  );
 }
 
 const styles = StyleSheet.create({
@@ -150,27 +143,27 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "rgb(237, 243, 247)",
     width: WIDTH - 30,
-    alignSelf: 'center',
-    borderRadius:7
+    alignSelf: "center",
+    borderRadius: 7,
   },
   inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     borderWidth: 0.6,
-    borderColor: '#37B7C3',
+    borderColor: "#37B7C3",
     borderRadius: 5,
     paddingHorizontal: 10,
     marginTop: 20,
     height: 50,
-    marginLeft:5,
-    width:"95%",
-    padding:10
+    marginLeft: 5,
+    width: "95%",
+    padding: 10,
   },
   searchIcon: {
     width: 20,
     height: 20,
     marginRight: 10,
-    tintColor:"#37B7C3"
+    tintColor: "#37B7C3",
   },
   input: {
     flex: 1,
@@ -207,8 +200,8 @@ const styles = StyleSheet.create({
   contactText: {
     fontSize: 19,
     fontWeight: "bold",
- 
-     color:"#37B7C3"
+
+    color: "#37B7C3",
   },
   row: {
     flexDirection: "row",
@@ -220,7 +213,7 @@ const styles = StyleSheet.create({
   },
   marginText: {
     marginStart: 10,
-    marginTop:7
+    marginTop: 7,
   },
   WrapText: {
     marginStart: 2,
@@ -230,7 +223,6 @@ const styles = StyleSheet.create({
   icon: {
     width: 55,
     height: 55,
-   
   },
   separator: {
     height: 1,

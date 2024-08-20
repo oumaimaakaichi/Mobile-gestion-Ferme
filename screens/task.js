@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import profile from "../assets/prof.png";
 import { getClientData } from "../utils/AsyncStorageClient";
-import stock from "../assets/stocker.png"
+import stock from "../assets/stocker.png";
 import home from "../assets/home.png";
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
@@ -25,10 +25,10 @@ import menu from "../assets/menu.png";
 import enfant1 from "../assets/enfant.png";
 import close from "../assets/close.png";
 import medicament from "../assets/med.png";
-import animal from "../assets/betail.png"
+import animal from "../assets/betail.png";
 import document from "../assets/doc.png";
-import backg from "../assets/fermer.jpg"
-import task from "../assets/task_8089604.png"
+import backg from "../assets/fermer.jpg";
+import task from "../assets/task_8089604.png";
 import { Alert } from "react-native";
 import ListTaskkk from "./listeTask";
 Notifications.setNotificationHandler({
@@ -50,11 +50,7 @@ export default function Taskss({ navigation }) {
   const closeButtonOffset = useRef(new Animated.Value(0)).current;
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  
- 
 
-  
- 
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -69,13 +65,8 @@ export default function Taskss({ navigation }) {
     };
 
     fetchData();
-  
-    
   }, []);
-  
 
-
-    
   const logoutUser = async () => {
     navigation.navigate("loginE");
   };
@@ -283,7 +274,7 @@ export default function Taskss({ navigation }) {
                       alignItems: "center",
                       paddingVertical: 8,
                       backgroundColor: "transparent",
-                    
+
                       paddingRight: 48,
                       borderRadius: 8,
                       marginTop: 20,
@@ -321,7 +312,7 @@ export default function Taskss({ navigation }) {
                       alignItems: "center",
                       paddingVertical: 8,
                       backgroundColor: "transparent",
-                    
+
                       paddingRight: 48,
                       borderRadius: 8,
                       marginTop: 20,
@@ -344,7 +335,7 @@ export default function Taskss({ navigation }) {
                         color: "white",
                       }}
                     >
-                     Mes demandes
+                      Mes demandes
                     </Text>
                   </View>
                 </TouchableOpacity>
@@ -359,7 +350,7 @@ export default function Taskss({ navigation }) {
                       alignItems: "center",
                       paddingVertical: 8,
                       backgroundColor: "transparent",
-                    marginLeft:5,
+                      marginLeft: 5,
                       paddingRight: 48,
                       borderRadius: 8,
                       marginTop: 20,
@@ -437,7 +428,7 @@ export default function Taskss({ navigation }) {
             paddingHorizontal: 10,
             paddingVertical: 20,
             borderRadius: showMenu ? 15 : 0,
-        
+
             transform: [{ scale: scaleValue }, { translateX: offsetValue }],
           }}
         >
@@ -491,15 +482,17 @@ export default function Taskss({ navigation }) {
                   }}
                 ></Image>
               </TouchableOpacity>
-              
+
               <ScrollView horizontal={true}></ScrollView>
               <ScrollView horizontal={true}>
                 <View style={{ marginBottom: 10 }}>
-                <ListTaskkk proprietaireId={user?.Data?._id} navigation={navigation}/>
+                  <ListTaskkk
+                    proprietaireId={user?.Data?._id}
+                    navigation={navigation}
+                  />
                 </View>
               </ScrollView>
             </Animated.View>
-         
           </ScrollView>
         </Animated.View>
       </SafeAreaView>

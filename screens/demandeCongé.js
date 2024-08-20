@@ -15,7 +15,7 @@ import profile from "../assets/prof.png";
 import { getClientData } from "../utils/AsyncStorageClient";
 import { LinearGradient } from "expo-linear-gradient";
 // Tab ICons...
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import animal from "../assets/betail.png";
 import conge from "../assets/dema-removebg-preview.png";
 import home from "../assets/home.png";
@@ -25,7 +25,7 @@ import logout from "../assets/logout.png";
 import { AntDesign } from "@expo/vector-icons";
 const { width: WIDTH } = Dimensions.get("window");
 // Menu
-import task from "../assets/task_8089604.png"
+import task from "../assets/task_8089604.png";
 import menu from "../assets/menu.png";
 
 import cland from "../assets/clandr.png";
@@ -57,61 +57,51 @@ export default function DemandeConge({ navigation }) {
   const [datee, setDatee] = useState(new Date());
   const regEx = /[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,8}(.[a-z{2,8}])?/g;
   useEffect(() => {
-   
     const fetchUserData = async () => {
       const userData = await getClientData();
-console.log(userData.Data._id)
+      console.log(userData.Data._id);
       setUser(userData);
     };
 
     fetchUserData();
   }, []);
   const [selectedImage, setSelectedImage] = useState(null);
- 
 
   const showDatePicker = () => setDatePickerVisibility(true);
   const hideDatePicker = () => setDatePickerVisibility(false);
   const handleDateConfirm = (date) => {
     setDate(date);
     hideDatePicker();
-    setDateD(dateFin)
+    setDateD(dateFin);
   };
-
-
-
 
   const showDatePickerr = () => setDatePickerVisibilityy(true);
   const hideDatePickerr = () => setDatePickerVisibilityy(false);
   const handleDateConfirmm = (date) => {
-    setDatee(date)
-    setDateF(date)
+    setDatee(date);
+    setDateF(date);
     hideDatePicker();
   };
 
-  
   const addConge = async () => {
     const data = await getClientData();
-    
+
     try {
-    
       const requestBody = JSON.stringify({
         dateDébut: date,
         dateFin: datee,
-  
-       raison:raison,
+
+        raison: raison,
         employeur: data.Data._id,
       });
 
-      const response = await fetch(
-        "http://192.168.195.216:3000/add-conge",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: requestBody,
-        }
-      );
+      const response = await fetch("http://192.168.195.216:3000/add-conge", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: requestBody,
+      });
 
       if (response.ok) {
         Toast.show({
@@ -120,7 +110,6 @@ console.log(userData.Data._id)
 
           text1: "Ajouter un demande de congé",
           text2: "demande ajouté avec succès",
-          
 
           autoHide: true,
           visibilityTime: 3000,
@@ -130,9 +119,7 @@ console.log(userData.Data._id)
           },
           onShow: () => {},
         });
-       
       } else {
-      
         console.error("Échec de l'ajout du demande");
       }
     } catch (error) {
@@ -502,7 +489,7 @@ console.log(userData.Data._id)
             paddingHorizontal: 15,
             paddingVertical: 20,
             borderRadius: showMenu ? 15 : 0,
-           
+
             transform: [{ scale: scaleValue }, { translateX: offsetValue }],
           }}
         >
@@ -528,14 +515,12 @@ console.log(userData.Data._id)
                   }).start();
 
                   Animated.timing(offsetValue, {
-                   
                     toValue: showMenu ? 0 : 230,
                     duration: 300,
                     useNativeDriver: true,
                   }).start();
 
                   Animated.timing(closeButtonOffset, {
-                  
                     toValue: !showMenu ? -30 : 0,
                     duration: 300,
                     useNativeDriver: true,
@@ -567,64 +552,68 @@ console.log(userData.Data._id)
                       marginTop: 5,
                     }}
                   />
-              
-                 <Text style={styles.contactLabel}>Date début:            </Text>
-                <TouchableOpacity onPress={() => setDatePickerVisibility(true)}>
+
+                  <Text style={styles.contactLabel}>Date début: </Text>
+                  <TouchableOpacity
+                    onPress={() => setDatePickerVisibility(true)}
+                  >
+                    <View style={styles.inputContainer}>
+                      <Image
+                        source={require("../assets/calendrier.png")}
+                        style={styles.icon}
+                      />
+                      <TextInput
+                        placeholder="Date début"
+                        style={{ width: 240 }}
+                        value={date.toDateString()}
+                        editable={false}
+                      />
+                    </View>
+                  </TouchableOpacity>
+
+                  <Text style={styles.contactLabel}>Date Fin: </Text>
+                  <TouchableOpacity
+                    onPress={() => setDatePickerVisibilityy(true)}
+                  >
+                    <View style={styles.inputContainer}>
+                      <Image
+                        source={require("../assets/calendrier.png")}
+                        style={styles.icon}
+                      />
+                      <TextInput
+                        placeholder="Date Fin"
+                        style={{ width: 240 }}
+                        value={datee.toDateString()}
+                        editable={false}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                  <Text style={styles.contactLabel}>Raison: </Text>
+
                   <View style={styles.inputContainer}>
-                    <Image
-                      source={require("../assets/calendrier.png")}
-                      style={styles.icon}
-                    />
-                    <TextInput placeholder="Date début"    style={{width:240}}
-            value={date.toDateString()}
-            editable={false}/>
-                  </View>
-</TouchableOpacity>
-
-<Text style={styles.contactLabel}>Date Fin:                   </Text>
-<TouchableOpacity onPress={() => setDatePickerVisibilityy(true)}>
-                  <View style={styles.inputContainer} >
-                    <Image
-                      source={require("../assets/calendrier.png")}
-                      style={styles.icon}
-                    />
-                    <TextInput
-                      placeholder="Date Fin"
-                      style={{width:240}}
-            value={datee.toDateString()}
-            editable={false}
-                    />
-                  </View>
-</TouchableOpacity>
-<Text style={styles.contactLabel}>Raison:                     </Text>
-
-                  <View style={styles.inputContainer} >
                     <Image
                       source={require("../assets/ask_14791674.png")}
                       style={styles.iconn}
                     />
                     <TextInput
                       placeholder="raison"
-                      style={{width:240}}
+                      style={{ width: 240 }}
                       onChangeText={(val) => setRaison(val)}
-           
                     />
                   </View>
-        
+
                   <DateTimePickerModal
-        isVisible={isDatePickerVisible}
-        mode="date" 
-        onConfirm={handleDateConfirm}
-        onCancel={hideDatePicker}
-      />
- <DateTimePickerModal
-        isVisible={isDatePickerVisiblee}
-        mode="date" 
-        onConfirm={handleDateConfirmm}
-        onCancel={hideDatePickerr}
-      />
-                 
-                 
+                    isVisible={isDatePickerVisible}
+                    mode="date"
+                    onConfirm={handleDateConfirm}
+                    onCancel={hideDatePicker}
+                  />
+                  <DateTimePickerModal
+                    isVisible={isDatePickerVisiblee}
+                    mode="date"
+                    onConfirm={handleDateConfirmm}
+                    onCancel={hideDatePickerr}
+                  />
 
                   <View style={styles.button}>
                     <TouchableOpacity style={styles.signIn} onPress={addConge}>
@@ -661,16 +650,16 @@ const styles = StyleSheet.create({
     marginTop: -100,
   },
   contactRow: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginBottom: 10,
   },
   contactLabel: {
-    color: 'black',
-    fontWeight: 'bold',
+    color: "black",
+    fontWeight: "bold",
     fontSize: 16,
-    marginRight:150,
-  
-    marginTop:10
+    marginRight: 150,
+
+    marginTop: 10,
   },
   button: {
     alignItems: "center",
@@ -689,7 +678,7 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     overflow: "hidden",
     marginTop: 30,
-    marginBottom:40
+    marginBottom: 40,
   },
   imageContainer: {
     marginTop: 20,
@@ -763,7 +752,7 @@ const styles = StyleSheet.create({
     width: "90%",
     marginTop: "10%",
     alignSelf: "center",
-    marginBottom:20
+    marginBottom: 20,
   },
   inputContainer: {
     flexDirection: "row",
@@ -778,17 +767,16 @@ const styles = StyleSheet.create({
 
   icon: {
     marginRight: 11,
-    width: 25, 
+    width: 25,
     height: 25,
     color: "#79C2BE",
     tintColor: "#7FA1C3",
   },
   iconn: {
     marginRight: 11,
-    width: 25, 
+    width: 25,
     height: 25,
     color: "#79C2BE",
-    
   },
   input: {
     flex: 1,

@@ -6,192 +6,108 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  TextInput,
   View,
   ScrollView,
-  ImageBackground,
+  Dimensions,
 } from "react-native";
 import profile from "../assets/prof.png";
 import { getClientData } from "../utils/AsyncStorageClient";
-import stock from "../assets/stocker.png";
-import home from "../assets/home.png";
-import * as Notifications from "expo-notifications";
-import * as Device from "expo-device";
-import logout from "../assets/logout.png";
-import cland from "../assets/clandr.png";
-import list from "../assets/hihi.png";
-import axios from "axios";
-import Contact from "../assets/b.png";
-import menu from "../assets/menu.png";
-import enfant1 from "../assets/enfant.png";
-import close from "../assets/close.png";
-import medicament from "../assets/med.png";
+import { LinearGradient } from "expo-linear-gradient";
+import Icon from "react-native-vector-icons/Feather";
 import animal from "../assets/betail.png";
-import document from "../assets/doc.png";
-import backg from "../assets/lopp-removebg-preview.png";
-import { Alert } from "react-native";
-import ouv from "../assets/process_3516613.png";
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-  }),
-});
-export default function Dashboard({ navigation }) {
+import animals from "../assets/caw-removebg-preview.png";
+import home from "../assets/home.png";
+import stock from "../assets/stocker.png";
+import * as ImagePicker from "expo-image-picker";
+import logout from "../assets/logout.png";
+import { AntDesign } from "@expo/vector-icons";
+const { width: WIDTH } = Dimensions.get("window");
+
+import menu from "../assets/menu.png";
+
+import cland from "../assets/clandr.png";
+
+import close from "../assets/close.png";
+
+import { useIsFocused } from "@react-navigation/native";
+
+import { Button } from "react-native-paper";
+import Toast from "react-native-toast-message";
+export default function AddOuv({ navigation }) {
+  const [currentTab, setCurrentTab] = useState("Home");
+
+  const [showPopup, setShowPopup] = useState(false);
+  const [isButtonVisible, setIsButtonVisible] = useState(true);
+
   const [showMenu, setShowMenu] = useState(false);
+
   const [user, setUser] = useState("");
-  const [userId, setUserId] = useState("");
-  const [hasNotification, setHasNotification] = useState(false);
-  const [rendezVous, setRendezVous] = useState([]);
-  const [selectedRendezVous, setSelectedRendezVous] = useState(null);
   const offsetValue = useRef(new Animated.Value(0)).current;
+
   const scaleValue = useRef(new Animated.Value(1)).current;
   const closeButtonOffset = useRef(new Animated.Value(0)).current;
-  const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  async function registerForPushNotificationsAsync() {
-    let token;
-    if (Platform.OS === "android") {
-      await Notifications.setNotificationChannelAsync("default", {
-        name: "default",
-        importance: Notifications.AndroidImportance.MAX,
-        vibrationPattern: [0, 250, 250, 250],
-        lightColor: "#FF231F7C",
-        sound: "default",
-      });
-    }
-
-    if (Platform.OS === "ios") {
-      await Notifications.setNotificationChannelAsync("default", {
-        name: "default",
-        importance: Notifications.AndroidImportance.MAX,
-        vibrationPattern: [0, 250, 250, 250],
-        sound: "default",
-      });
-
-      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-      if (status !== "granted") {
-        alert("Failed to get permission for push notifications!");
-        return;
-      }
-    }
-
-    token = (await Notifications.getExpoPushTokenAsync()).data;
-    console.log(token);
-
-    return token;
-  }
-  const getNotificationPermission = async () => {
-    const { status: existingStatus } = await Permissions.getAsync(
-      Permissions.NOTIFICATIONS
-    );
-    let finalStatus = existingStatus;
-    if (existingStatus !== "granted") {
-      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-      finalStatus = status;
-    }
-    return finalStatus === "granted";
-  };
-
+  const [nom, setNom] = useState("");
+  const [prenom, setPrenom] = useState("");
+  const [email, setEmail] = useState("");
+  const [Num_tel, setNum_tel] = useState(null);
+  const [cin, setCin] = useState(null);
+  const [adresse, setAdresse] = useState("");
+  const [error, setError] = useState(false);
+  const regEx = /[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,8}(.[a-z{2,8}])?/g;
   useEffect(() => {
-    registerForPushNotificationsAsync()
-      .then((token) => {
-        console.log("token: ", token);
-      })
-      .catch((err) => console.log(err));
-  }, []);
-  const fetchDataa = async () => {
-    try {
-      const clientData = await getClientData();
-      setIsLoading(true);
-      const response = await axios.get(
-        `http://192.168.195.216:3000/conges/${clientData?.Data?._id}`
-      );
-      setData(response.data);
-      setIsLoading(false);
-      scheduleNotifications(response.data);
-    } catch (error) {
-      console.error("Error fetching rendez-vous data: ", error);
-      setIsLoading(false);
-    }
-  };
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const userData = await getClientData();
-        setUser(userData);
-        setUserId(userData.Data._id);
-        console.log("UserData:", userData);
-        console.log("User ID:", userData.Data._id);
-      } catch (error) {
-        console.error("Error fetching user dbata:", error);
-      }
+    const fetchUserData = async () => {
+      const userData = await getClientData();
+
+      setUser(userData);
     };
 
-    fetchData();
-    fetchDataa();
-    getNotificationPermission();
+    fetchUserData();
   }, []);
-  const scheduleNotifications = async (conges) => {
+
+
+  const addOuvrier = async () => {
+    const data = await getClientData();
+
     try {
-      for (const item of conges) {
-        const congeS = item.status;
-        if (congeS === "En attente") {
-          await Notifications.scheduleNotificationAsync({
-            content: {
-              title: "Rappel de Congé",
-              body: `Vous avez une demande de congé en attente de l'employé ${item.employeur.nom} ${item.employeur.prenom}`,
-              data: { item },
-              sound: "default",
-            },
-            trigger: {
-              hour: 20,
-              minute: 53,
-              repeats: true,
-            },
-          });
+    
+      const requestBody = {
+        nom,
+        prenom,
+        email,
+        cin,
+        Num_tel,
+        adresse,
+        proprietaire: data.Data._id,
+      };
 
-          setRendezVous((prevRendezVous) => [...prevRendezVous, item]);
-        }
+     
+      const response = await fetch("http://192.168.195.216:3000/add-Compte", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", 
+        },
+        body: JSON.stringify(requestBody), 
+      });
+
+      if (response.ok) {
+        Toast.show({
+          position: "top",
+          type: "success",
+          text1: "Ajouter un Ouvrier",
+          text2: "Ouvrier ajouté avec succès",
+          autoHide: true,
+          visibilityTime: 3000,
+          onHide: () => {
+            navigation.navigate("ouv");
+          },
+        });
+      } else {
+        console.error("Échec de l'ajout de l'ouvrier");
       }
-      setHasNotification(true);
     } catch (error) {
-      console.error("Error scheduling notifications: ", error);
+      console.error("Erreur lors de l'ajout de l'ouvrier:", error);
     }
-  };
-
-  const handleImageClick = () => {
-    if (rendezVous.length === 0) {
-      Alert.alert("Pas de notifications", "Aucun rendez-vous disponible.");
-      return;
-    }
-
-    const details = rendezVous
-      .map(
-        (item) =>
-          `demande: \nDate Début: ${new Date(
-            item.dateDébut
-          ).toLocaleDateString()}\nDate Fin: ${new Date(
-            item.dateFin
-          ).toLocaleDateString()}\nNom de l'employeur: ${item.employeur.nom} ${
-            item.employeur.prenom
-          }`
-      )
-      .join("\n\n");
-
-    Alert.alert(
-      "Détails des Congés",
-      details,
-      [{ text: "OK", onPress: () => console.log("OK Pressed") }],
-      { cancelable: false, titleStyle: { color: "red" } }
-    );
-
-    setHasNotification(false);
-    setRendezVous([]);
-  };
-
-  const logoutUser = async () => {
-    navigation.navigate("LoginC");
   };
 
   return (
@@ -201,9 +117,10 @@ export default function Dashboard({ navigation }) {
           <View
             style={{
               justifyContent: "flex-start",
-              padding: 15,
+              padding: 14,
               alignItems: "center",
-              marginBottom: 20,
+              marginBottom: 21,
+              marginTop: 100,
             }}
           >
             <TouchableOpacity style={styles.uploadBtnContainer}>
@@ -225,7 +142,7 @@ export default function Dashboard({ navigation }) {
               {user?.Data?.nom} {user?.Data?.prenom}
             </Text>
 
-            <View style={{ flexGrow: 1, marginTop: 20, marginRight: 48 }}>
+            <View style={{ flexGrow: 1, marginRight: 40 }}>
               <TouchableOpacity
                 onPress={() => {
                   if (title == "LogOut") {
@@ -244,9 +161,9 @@ export default function Dashboard({ navigation }) {
                       flexDirection: "row",
                       alignItems: "center",
                       paddingVertical: 8,
-                      backgroundColor: "white",
-                      paddingLeft: 5,
-
+                      backgroundColor: "transparent",
+                      paddingLeft: 13,
+                      paddingRight: 35,
                       borderRadius: 8,
                       marginTop: 30,
                     }}
@@ -256,7 +173,7 @@ export default function Dashboard({ navigation }) {
                       style={{
                         width: 25,
                         height: 25,
-                        tintColor: "#79C2BE",
+                        tintColor: "white",
                       }}
                     ></Image>
 
@@ -265,7 +182,7 @@ export default function Dashboard({ navigation }) {
                         fontSize: 15,
                         fontWeight: "bold",
                         paddingLeft: 15,
-                        color: "#79C2BE",
+                        color: "white",
                       }}
                     >
                       Acceuil
@@ -312,44 +229,6 @@ export default function Dashboard({ navigation }) {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("ouv");
-                  }}
-                >
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      paddingVertical: 8,
-                      backgroundColor: "transparent",
-                      paddingLeft: 5,
-                      paddingRight: 35,
-                      borderRadius: 8,
-                      marginTop: 20,
-                    }}
-                  >
-                    <Image
-                      source={ouv}
-                      style={{
-                        width: 25,
-                        height: 25,
-                        tintColor: "white",
-                      }}
-                    ></Image>
-
-                    <Text
-                      style={{
-                        fontSize: 15,
-                        fontWeight: "bold",
-                        paddingLeft: 15,
-                        color: "white",
-                      }}
-                    >
-                      Ouvriers
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
                     navigation.navigate("animal");
                   }}
                 >
@@ -358,7 +237,7 @@ export default function Dashboard({ navigation }) {
                       flexDirection: "row",
                       alignItems: "center",
                       paddingVertical: 8,
-                      backgroundColor: "transparent",
+                      backgroundColor: "white",
                       paddingLeft: 5,
                       paddingRight: 35,
                       borderRadius: 8,
@@ -370,7 +249,7 @@ export default function Dashboard({ navigation }) {
                       style={{
                         width: 25,
                         height: 25,
-                        tintColor: "white",
+                        tintColor: "#79C2BE",
                       }}
                     ></Image>
 
@@ -379,7 +258,7 @@ export default function Dashboard({ navigation }) {
                         fontSize: 15,
                         fontWeight: "bold",
                         paddingLeft: 15,
-                        color: "white",
+                        color: "#79C2BE",
                       }}
                     >
                       Animal
@@ -464,14 +343,19 @@ export default function Dashboard({ navigation }) {
                     </Text>
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={logoutUser}>
+
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("LoginC");
+                  }}
+                >
                   <View
                     style={{
                       flexDirection: "row",
                       alignItems: "center",
                       paddingVertical: 8,
                       backgroundColor: "transparent",
-                      paddingLeft: 8,
+                      paddingLeft: 13,
                       paddingRight: 30,
                       borderRadius: 8,
                       marginTop: 20,
@@ -512,17 +396,14 @@ export default function Dashboard({ navigation }) {
             bottom: 0,
             left: 0,
             right: 0,
-            paddingHorizontal: 10,
+            paddingHorizontal: 15,
             paddingVertical: 20,
             borderRadius: showMenu ? 15 : 0,
 
             transform: [{ scale: scaleValue }, { translateX: offsetValue }],
           }}
         >
-          {
-            // Menu Button...
-          }
-
+          {}
           <ScrollView style={{ marginVertical: 0 }}>
             <Animated.View
               style={{
@@ -532,7 +413,6 @@ export default function Dashboard({ navigation }) {
                   },
                 ],
               }}
-              source={require("../assets/4.jpg")}
             >
               <TouchableOpacity
                 onPress={() => {
@@ -556,80 +436,145 @@ export default function Dashboard({ navigation }) {
 
                   setShowMenu(!showMenu);
                 }}
-                source={require("../assets/4.jpg")}
               >
                 <Image
                   source={showMenu ? close : menu}
                   style={{
                     width: 30,
                     height: 30,
-                    tintColor: "#219C90",
+                    tintColor: "#79C2BE",
                     marginTop: 40,
-                    marginLeft: 20,
                   }}
                 ></Image>
               </TouchableOpacity>
-              <View style={styles.content}>
-                {hasNotification ? (
-                  <TouchableOpacity onPress={handleImageClick}>
-                    <Image
-                      source={require("../assets/rouge.png")}
-                      style={{ width: 70, height: 70, marginLeft: 250 }}
-                    />
-                  </TouchableOpacity>
-                ) : (
+
+              <ScrollView horizontal={true}>
+                <Toast />
+                <View style={styles.popupContainer}>
                   <Image
-                    source={require("../assets/blanc.png")}
-                    style={{ width: 70, height: 70, marginLeft: 250 }}
+                    source={animals}
+                    style={{
+                      width: 210,
+                      height: 140,
+                      alignSelf: "center",
+                      marginTop: 5,
+                    }}
                   />
-                )}
-              </View>
 
-              <ScrollView horizontal={true}></ScrollView>
+                  <View style={styles.inputContainer}>
+                    <Icon
+                      name="user"
+                      color="#01BACF"
+                      size={20}
+                      style={{
+                        marginTop: -10,
+                      }}
+                    />
+                    <TextInput
+                      placeholder="Nom"
+                      style={styles.input}
+                      onChangeText={(val) => setNom(val)}
+                    />
+                  </View>
+
+                  <View style={styles.inputContainer}>
+                    <Icon
+                      name="user"
+                      color="#01BACF"
+                      size={20}
+                      style={{
+                        marginTop: -10,
+                      }}
+                    />
+                    <TextInput
+                      placeholder="Prenom"
+                      style={styles.input}
+                      onChangeText={(val) => setPrenom(val)}
+                    />
+                  </View>
+
+                  <View style={styles.inputContainer}>
+                    <Icon
+                      name="mail"
+                      color="#01BACF"
+                      size={20}
+                      style={{
+                        marginTop: -10,
+                      }}
+                    />
+                    <TextInput
+                      placeholder="Email"
+                      style={styles.input}
+                      onChangeText={(val) => setEmail(val)}
+                    />
+                  </View>
+
+                  <View style={styles.inputContainer}>
+                    <Icon
+                      name="phone"
+                      color="#01BACF"
+                      size={20}
+                      style={{
+                        marginTop: -10,
+                      }}
+                    />
+                    <TextInput
+                      placeholder="Téléphone"
+                      style={styles.input}
+                      onChangeText={(val) => setNum_tel(val)}
+                    />
+                  </View>
+
+                  <View style={styles.inputContainer}>
+                    <Icon
+                      name="home"
+                      color="#01BACF"
+                      size={20}
+                      style={{
+                        marginTop: -10,
+                      }}
+                    />
+                    <TextInput
+                      placeholder="adresse"
+                      style={styles.input}
+                      onChangeText={(val) => setAdresse(val)}
+                    />
+                  </View>
+
+                  <View style={styles.inputContainer}>
+                    <Icon
+                      name="user"
+                      color="#01BACF"
+                      size={20}
+                      style={{
+                        marginTop: -10,
+                      }}
+                    />
+                    <TextInput
+                      placeholder="cin"
+                      style={styles.input}
+                      onChangeText={(val) => setCin(val)}
+                    />
+                  </View>
+
+                  <View style={styles.button}>
+                    <TouchableOpacity
+                      style={styles.signIn}
+                      onPress={addOuvrier}
+                    >
+                      <LinearGradient
+                        colors={["#7FA1C3", "#7FA1C3"]}
+                        style={styles.linearGradient}
+                      >
+                        <Text style={[styles.textSign, { color: "#fff" }]}>
+                          Ajouter
+                        </Text>
+                      </LinearGradient>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </ScrollView>
             </Animated.View>
-            <Image
-              source={backg}
-              style={{
-                width: 300,
-                height: 330,
-
-                marginTop: 40,
-                marginLeft: 20,
-              }}
-            ></Image>
-            <Text
-              style={{
-                fontSize: 20,
-                fontWeight: "bold",
-                alignSelf: "center",
-                color: "#427CA2",
-                marginTop: 70,
-                textShadowOffset: { width: -1, height: 1 },
-                textShadowRadius: 10,
-                padding: 10,
-                backgroundColor: "rgba(255, 255, 255, 0.8)",
-                borderRadius: 10,
-              }}
-            >
-              Bienvenue,
-            </Text>
-            <Text
-              style={{
-                fontSize: 20,
-                fontWeight: "bold",
-                alignSelf: "center",
-
-                color: "#427CA2",
-
-                textShadowOffset: { width: -1, height: 1 },
-                textShadowRadius: 10,
-                padding: 10,
-                backgroundColor: "rgba(255, 255, 255, 0.8)",
-                borderRadius: 10,
-              }}
-            >
-              Nous sommes à votre service
-            </Text>
           </ScrollView>
         </Animated.View>
       </SafeAreaView>
@@ -647,6 +592,14 @@ const styles = StyleSheet.create({
   s: {
     color: "#rgb(97, 172, 243)",
     backgroundColor: "#79C2BE",
+    marginTop: -100,
+  },
+  button: {
+    alignItems: "center",
+    marginTop: 70,
+    borderRadius: 8,
+    padding: 5,
+    paddingHorizontal: 10,
   },
 
   uploadBtnContainer: {
@@ -658,5 +611,118 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     overflow: "hidden",
     marginTop: 50,
+  },
+  imageContainer: {
+    marginTop: 20,
+    alignItems: "center",
+  },
+  image: {
+    width: WIDTH - 40,
+    height: 200,
+    borderRadius: 10,
+    resizeMode: "cover",
+  },
+  uploadButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    backgroundColor: "white",
+    borderWidth: 1,
+    borderColor: "#7FA1C3",
+  },
+  uploadIcon: {
+    width: 40,
+    height: 40,
+    tintColor: "#7FA1C3",
+  },
+  cameraIcon: {
+    width: 37,
+    height: 37,
+    tintColor: "#7FA1C3",
+  },
+  uploadText: {
+    fontSize: 16,
+
+    marginLeft: 10,
+  },
+  signIn: {
+    backgroundColor: "#7FA1C3",
+    width: WIDTH - 60,
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 8,
+    marginBottom: 30,
+    marginTop: -50,
+    paddingHorizontal: 20,
+  },
+  textSign: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  loginFormTextInput: {
+    width: WIDTH - 55,
+    height: 45,
+    borderBottomWidth: 1,
+    borderColor: "#rgb(97, 172, 243)",
+    fontSize: 16,
+    paddingLeft: 45,
+    marginHorizontal: 25,
+    marginTop: 25,
+  },
+  popupContainer: {
+    backgroundColor: "white",
+    padding: 10,
+    marginLeft: 10,
+    borderRadius: 10,
+    elevation: 5,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    alignItems: "center",
+    width: "90%",
+    marginTop: "30%",
+    alignSelf: "center",
+  },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 0.6,
+    borderColor: "#7FA1C3",
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    marginTop: 20,
+    height: 50,
+  },
+
+  icon: {
+    marginRight: 11,
+    width: 25,
+    height: 25,
+    color: "#79C2BE",
+    tintColor: "#7FA1C3",
+  },
+  input: {
+    flex: 1,
+    height: 70,
+    marginLeft: 10,
+    borderWidth: 0,
+    borderColor: "rgb(70, 143, 183)",
+    borderRadius: 8,
+    paddingHorizontal: 0,
+  },
+  buttons: {
+    backgroundColor: "#0147A6",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "white",
+    fontWeight: "bold",
   },
 });

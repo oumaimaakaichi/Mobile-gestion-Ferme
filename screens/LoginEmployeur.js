@@ -114,9 +114,9 @@ const LoginEmployeur = ({ navigation }) => {
       }),
     })
       .then((response) => {
-        console.log(response.data)
-        console.log(data.role)
-        if (!response.ok ) {
+        console.log(response.data);
+        console.log(data.role);
+        if (!response.ok) {
           Toast.show({
             type: "error",
             text1: "Connexion éroner",
@@ -129,43 +129,40 @@ const LoginEmployeur = ({ navigation }) => {
         return response.json();
       })
       .then((res) => {
-    
         console.log("Réponse de l'API :", res);
         storeClientData(res);
-        if(res.Data.role==="Employeur"){
-        Toast.show({
-          position: "top",
-          type: "success",
-
-          text1: "Connexion",
-          text2: "Connexion réussie",
-
-          autoHide: true,
-          visibilityTime: 1000,
-          autoHide: true,
-          onHide: () => { 
-            navigation.navigate("dashEmpl");
-          },
-          onShow: () => {},
-        });}
-
-        else if(res.Data.role=="vétérinaire")
-        {
+        if (res.Data.role === "Employeur") {
           Toast.show({
             position: "top",
             type: "success",
-  
+
             text1: "Connexion",
             text2: "Connexion réussie",
-  
+
             autoHide: true,
             visibilityTime: 1000,
             autoHide: true,
-            onHide: () => { 
+            onHide: () => {
+              navigation.navigate("dashEmpl");
+            },
+            onShow: () => {},
+          });
+        } else if (res.Data.role == "vétérinaire") {
+          Toast.show({
+            position: "top",
+            type: "success",
+
+            text1: "Connexion",
+            text2: "Connexion réussie",
+
+            autoHide: true,
+            visibilityTime: 1000,
+            autoHide: true,
+            onHide: () => {
               navigation.navigate("dashV");
             },
             onShow: () => {},
-          })
+          });
         }
       })
       .catch((error) => {
@@ -380,7 +377,6 @@ const LoginEmployeur = ({ navigation }) => {
               </LinearGradient>
             </TouchableOpacity>
 
-           
             <TouchableOpacity onPress={() => setModalVisible(true)}>
               <Text style={{ color: "#79C2BE", marginTop: 40 }}>
                 Mot de passe oublié?
@@ -430,7 +426,7 @@ const LoginEmployeur = ({ navigation }) => {
                   borderRadius: 5,
                   width: 100,
                   alignItems: "center",
-                  marginLeft: 10, 
+                  marginLeft: 10,
                 }}
                 onPress={() => setModalVisible(false)}
               >

@@ -32,6 +32,7 @@ import AnimalVét from "./screens/AnimalVét";
 import AnimalDétailV from "./screens/AnimalDétailsV";
 import VaccinationsScreen from "./screens/listeVaccinationAnimal";
 import VaccinationsScreenP from "./screens/listeVaccProp";
+import AddOuv from "./screens/addOuvrier";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -69,6 +70,7 @@ export default function App() {
         <Stack.Screen name="animalVé" component={AnimalVét} />
         <Stack.Screen name="VaccinationsScreen" component={VaccinationsScreen} />
         <Stack.Screen name="VaccinationsScreenP" component={VaccinationsScreenP} />
+        <Stack.Screen name="addOuv" component={AddOuv} />
       </Stack.Navigator>
     </NavigationContainer>
   );

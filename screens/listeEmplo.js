@@ -1,19 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { View, Text, StyleSheet, ScrollView, Image } from 'react-native'; 
-import { Card } from 'react-native-paper'; 
-import { Picker } from '@react-native-picker/picker';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { View, Text, StyleSheet, ScrollView, Image } from "react-native";
+import { Card } from "react-native-paper";
+import { Picker } from "@react-native-picker/picker";
 
 const EmployeurList = ({ proprietaireId, navigation }) => {
   const [conges, setConges] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [statusFilter, setStatusFilter] = useState('All');
+  const [statusFilter, setStatusFilter] = useState("All");
 
   useEffect(() => {
     const fetchConges = async () => {
       try {
-        const response = await axios.get(`http://192.168.195.216:3000/users-by-owner/${proprietaireId}`);
+        const response = await axios.get(
+          `http://192.168.195.216:3000/users-by-owner/${proprietaireId}`
+        );
         setConges(response.data);
       } catch (err) {
         setError(err.message);
@@ -28,34 +30,36 @@ const EmployeurList = ({ proprietaireId, navigation }) => {
   return (
     <ScrollView style={styles.container}>
       {conges.map((conge) => (
-        <Card key={conge._id} style={styles.card} onPress={() => {
+        <Card
+          key={conge._id}
+          style={styles.card}
+          onPress={() => {
             navigation.navigate("détailEmplo", {
               itemId: conge._id,
               getConge: conge,
-              proprietaireId:proprietaireId,
+              proprietaireId: proprietaireId,
               navigation: navigation,
             });
-          }} >
-             <Text style={styles.title}>
-                Employé: {conge.nom} {conge.prenom}
-              </Text>
+          }}
+        >
+          <Text style={styles.title}>
+            Employé: {conge.nom} {conge.prenom}
+          </Text>
           <Card.Content style={styles.cardContent}>
             <View style={styles.infoContainer}>
-             
-
               <View style={styles.statusContainer}>
-                <Text style={{fontWeight:'bold'}}>Téléphone: </Text>
+                <Text style={{ fontWeight: "bold" }}>Téléphone: </Text>
                 <Text> {conge.Num_tel}</Text>
               </View>
               <View style={styles.statusContainer}>
-                <Text style={{fontWeight:'bold'}}>Cin: </Text>
+                <Text style={{ fontWeight: "bold" }}>Cin: </Text>
                 <Text> {conge.cin}</Text>
               </View>
             </View>
 
             <View style={styles.imageContainer}>
               <Image
-                source={require('../assets/so-removebg-preview.png')}
+                source={require("../assets/so-removebg-preview.png")}
                 style={styles.image}
               />
             </View>
@@ -74,45 +78,43 @@ const styles = StyleSheet.create({
   card: {
     marginBottom: 10,
     backgroundColor: "whitesmoke",
-    
-
   },
   row: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   cardContent: {
-    flexDirection: 'row', 
-    alignItems: 'center',
-    justifyContent: 'space-between', 
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   infoContainer: {
     flex: 1,
   },
   imageContainer: {
-    width: 100, 
+    width: 100,
     height: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginLeft: 10,
   },
   title: {
     fontSize: 16,
     marginBottom: 10,
-    marginTop:10,
-    marginLeft:10,
-    marginRight:110,
+    marginTop: 10,
+    marginLeft: 10,
+    marginRight: 110,
     color: "black",
     fontWeight: "bold",
   },
   image: {
-    width: '120%',
-    height: '120%',       
-    resizeMode: 'cover',
+    width: "120%",
+    height: "120%",
+    resizeMode: "cover",
   },
   statusContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginTop: 10,
   },
 });

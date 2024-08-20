@@ -114,9 +114,9 @@ const LoginC = ({ navigation }) => {
       }),
     })
       .then((response) => {
-        console.log(response.data)
-        console.log(data.role)
-        if (!response.ok ) {
+        console.log(response.data);
+        console.log(data.role);
+        if (!response.ok) {
           Toast.show({
             type: "error",
             text1: "Connexion éroner",
@@ -129,25 +129,25 @@ const LoginC = ({ navigation }) => {
         return response.json();
       })
       .then((res) => {
-    
         console.log("Réponse de l'API :", res);
         storeClientData(res);
-if(res.Data.role==="Ferme"){
-        Toast.show({
-          position: "top",
-          type: "success",
+        if (res.Data.role === "Ferme") {
+          Toast.show({
+            position: "top",
+            type: "success",
 
-          text1: "Connexion",
-          text2: "Connexion réussie",
+            text1: "Connexion",
+            text2: "Connexion réussie",
 
-          autoHide: true,
-          visibilityTime: 1000,
-          autoHide: true,
-          onHide: () => { 
-            navigation.navigate("dash");
-          },
-          onShow: () => {},
-        });}
+            autoHide: true,
+            visibilityTime: 1000,
+            autoHide: true,
+            onHide: () => {
+              navigation.navigate("dash");
+            },
+            onShow: () => {},
+          });
+        }
       })
       .catch((error) => {
         setError(true);

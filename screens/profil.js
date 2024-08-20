@@ -17,7 +17,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { getClientData } from "../utils/AsyncStorageClient";
 import { useTheme } from "react-native-paper";
 import home from "../assets/home.png";
-import stock from "../assets/stocker.png"
+import stock from "../assets/stocker.png";
 import * as ImagePicker from "expo-image-picker";
 import logout from "../assets/logout.png";
 import cland from "../assets/clandr.png";
@@ -25,13 +25,13 @@ import list from "../assets/hihi.png";
 import Icon from "react-native-vector-icons/Feather";
 import Contact from "../assets/b.png";
 import menu from "../assets/menu.png";
-import animal from "../assets/betail.png"
+import animal from "../assets/betail.png";
 import enfant1 from "../assets/enfant.png";
 import close from "../assets/close.png";
 import medicament from "../assets/med.png";
 
 import document from "../assets/doc.png";
-import ouv from "../assets/process_3516613.png"
+import ouv from "../assets/process_3516613.png";
 import { Alert } from "react-native";
 
 export default function Profil({ navigation }) {
@@ -44,7 +44,7 @@ export default function Profil({ navigation }) {
   const scaleValue = useRef(new Animated.Value(1)).current;
   const closeButtonOffset = useRef(new Animated.Value(0)).current;
   const { colors } = useTheme();
- 
+
   const [Num_tel, setNum_tel] = useState("");
   useEffect(() => {
     const fetchData = async () => {
@@ -54,13 +54,13 @@ export default function Profil({ navigation }) {
         setUserId(userData.Data._id);
         console.log("UserData:", userData);
         console.log("User ID:", userData.Data._id);
-       setEmail(userData.Data.email)
-        console.log(userData.Data.Num_tel)
-       setNum_tel(userData.Data.Num_tel)
-        console.log(userData.Data.avatar)
-        setAvatarr(userData.Data.avatar)
+        setEmail(userData.Data.email);
+        console.log(userData.Data.Num_tel);
+        setNum_tel(userData.Data.Num_tel);
+        console.log(userData.Data.avatar);
+        setAvatarr(userData.Data.avatar);
 
-        console.log(Num_tel)
+        console.log(Num_tel);
       } catch (error) {
         console.error("Error fetching user dbata:", error);
       }
@@ -101,29 +101,28 @@ export default function Profil({ navigation }) {
     }
   };
 
-
-
   const Update = async () => {
-   
-
     try {
       const formData = new FormData();
       formData.append("email", email);
       formData.append("Num_tel", Num_tel);
       formData.append("avatar", avatarFile);
 
-      const response = await fetch(`http://192.168.195.216:3000/modifier/${user.Data._id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        body: formData,
-      });
+      const response = await fetch(
+        `http://192.168.195.216:3000/modifier/${user.Data._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          body: formData,
+        }
+      );
 
       const data = await response.json();
       if (data) {
         Alert.alert("Succès", "Profil mis à jour avec succès.");
-        navigation.navigate("Profil"); 
+        navigation.navigate("Profil");
       } else {
         Alert.alert("Erreur", "Échec de la mise à jour du profil.");
       }
@@ -137,7 +136,6 @@ export default function Profil({ navigation }) {
   useEffect(() => {
     console.log("Num_tel in useEffect:", Num_tel);
   }, [Num_tel]);
-  
 
   return (
     <>
@@ -343,7 +341,7 @@ export default function Profil({ navigation }) {
                       alignItems: "center",
                       paddingVertical: 8,
                       backgroundColor: "transparent",
-                    
+
                       paddingRight: 48,
                       borderRadius: 8,
                       marginTop: 20,
@@ -382,7 +380,7 @@ export default function Profil({ navigation }) {
                       alignItems: "center",
                       paddingVertical: 8,
                       backgroundColor: "transparent",
-                    marginLeft:5,
+                      marginLeft: 5,
                       paddingRight: 48,
                       borderRadius: 8,
                       marginTop: 20,
@@ -460,7 +458,7 @@ export default function Profil({ navigation }) {
             paddingHorizontal: 10,
             paddingVertical: 20,
             borderRadius: showMenu ? 15 : 0,
-      
+
             transform: [{ scale: scaleValue }, { translateX: offsetValue }],
           }}
         >
@@ -514,154 +512,143 @@ export default function Profil({ navigation }) {
                   }}
                 ></Image>
               </TouchableOpacity>
-              
-             
+
               <ScrollView horizontal={true}></ScrollView>
             </Animated.View>
-           
-          
+
             <View
-            style={{
-              justifyContent: "flex-start",
-              padding: 15,
-              alignItems: "center",
-              marginBottom: 20,
-            }}
-          >
-            <TouchableOpacity
-              onPress={openImageLibrary}
-              style={styles.uploadBtnContainer}
+              style={{
+                justifyContent: "flex-start",
+                padding: 15,
+                alignItems: "center",
+                marginBottom: 20,
+              }}
             >
-              {avatar ? (
-                <Image
-                  source={{ uri: avatar }}
-                  style={{ width: "100%", height: "100%" }}
-                />
-              ) : (
-                <Image
-                source={{ uri: avatarr }}
-                style={{ width: "100%", height: "100%" }}
-              />
-              )}
-            </TouchableOpacity>
+              <TouchableOpacity
+                onPress={openImageLibrary}
+                style={styles.uploadBtnContainer}
+              >
+                {avatar ? (
+                  <Image
+                    source={{ uri: avatar }}
+                    style={{ width: "100%", height: "100%" }}
+                  />
+                ) : (
+                  <Image
+                    source={{ uri: avatarr }}
+                    style={{ width: "100%", height: "100%" }}
+                  />
+                )}
+              </TouchableOpacity>
+              <Text
+                style={{
+                  fontSize: 22,
+                  fontWeight: "bold",
+                  color: "black",
+                  marginTop: 20,
+                  marginRight: 70,
+                }}
+              >
+                &nbsp;&nbsp; &nbsp;&nbsp;{user?.Data?.nom} {user?.Data?.prenom}
+              </Text>
+            </View>
+
             <Text
-              style={{
-                fontSize: 22,
-                fontWeight: "bold",
-                color: "black",
-                marginTop: 20,
-                marginRight: 70,
-              }}
-            >
-              &nbsp;&nbsp; &nbsp;&nbsp;{user?.Data?.nom} {user?.Data?.prenom}
-            </Text>
-
-          </View>
-
-
-
-          <Text
-            style={[
-              styles.text_footer,
-              {
-                color: colors.text,
-                fontSize: 15,
-                marginTop: 35,
-                marginBottom: 15,
-              },
-            ]}
-          >
-            Email
-          </Text>
-          <View style={styles.action}>
-            <Icon
-              name="mail"
-              color="#219C90"
-              size={20}
-              style={{
-                marginTop: -10,
-              }}
-            />
-            <TextInput
-              placeholder="Email"
-              placeholderTextColor="#666666"
-             
-              value={email}
               style={[
-                styles.textInput,
+                styles.text_footer,
                 {
                   color: colors.text,
+                  fontSize: 15,
+                  marginTop: 35,
+                  marginBottom: 15,
                 },
               ]}
-              onChangeText={(val) => setEmail(val)}
-              
-            />
-          </View>
-
-          <Text
-            style={[
-              styles.text_footer,
-              {
-                color: colors.text,
-                fontSize: 15,
-                marginTop: 35,
-                marginBottom: 15,
-              },
-            ]}
-          >
-            Phone
-          </Text>
-          <View style={styles.action}>
-            <Icon
-              name="phone"
-              color="#219C90"
-              size={20}
-              style={{
-                marginTop: -10,
-              }}
-            />
-          <TextInput
-  placeholder="Phone"
-  placeholderTextColor="#666666"
-  value={Num_tel} 
-  onChangeText={(val) => setNum_tel(val)}
-  style={[
-    styles.textInput,
-    {
-      color: colors.text,
-    },
-  ]}
- 
-/>
-
-          </View>
-          
-          <View style={styles.button}>
-            <TouchableOpacity
-              style={styles.signIn}
-              onPress={() => {
-                Update();
-              }}
             >
-              <LinearGradient
-                colors={["#79C2BE", "#79C2BE"]}
-                style={styles.signIn}
-              >
-                <Text
-                  style={[
-                    styles.textSign,
-                    {
-                      color: "#fff",
-                    },
-                  ]}
-                >
-                  S'Update
-                </Text>
-              </LinearGradient>
-            </TouchableOpacity>
+              Email
+            </Text>
+            <View style={styles.action}>
+              <Icon
+                name="mail"
+                color="#219C90"
+                size={20}
+                style={{
+                  marginTop: -10,
+                }}
+              />
+              <TextInput
+                placeholder="Email"
+                placeholderTextColor="#666666"
+                value={email}
+                style={[
+                  styles.textInput,
+                  {
+                    color: colors.text,
+                  },
+                ]}
+                onChangeText={(val) => setEmail(val)}
+              />
+            </View>
 
-          
-          </View>
+            <Text
+              style={[
+                styles.text_footer,
+                {
+                  color: colors.text,
+                  fontSize: 15,
+                  marginTop: 35,
+                  marginBottom: 15,
+                },
+              ]}
+            >
+              Phone
+            </Text>
+            <View style={styles.action}>
+              <Icon
+                name="phone"
+                color="#219C90"
+                size={20}
+                style={{
+                  marginTop: -10,
+                }}
+              />
+              <TextInput
+                placeholder="Phone"
+                placeholderTextColor="#666666"
+                value={Num_tel}
+                onChangeText={(val) => setNum_tel(val)}
+                style={[
+                  styles.textInput,
+                  {
+                    color: colors.text,
+                  },
+                ]}
+              />
+            </View>
+
+            <View style={styles.button}>
+              <TouchableOpacity
+                style={styles.signIn}
+                onPress={() => {
+                  Update();
+                }}
+              >
+                <LinearGradient
+                  colors={["#79C2BE", "#79C2BE"]}
+                  style={styles.signIn}
+                >
+                  <Text
+                    style={[
+                      styles.textSign,
+                      {
+                        color: "#fff",
+                      },
+                    ]}
+                  >
+                    S'Update
+                  </Text>
+                </LinearGradient>
+              </TouchableOpacity>
+            </View>
           </ScrollView>
         </Animated.View>
       </SafeAreaView>

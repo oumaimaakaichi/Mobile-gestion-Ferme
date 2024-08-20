@@ -105,7 +105,7 @@ const InscriC = ({ navigation }) => {
       formData.append("email", email);
       formData.append("password", password);
       formData.append("cin", cin);
-formData.append("role" , "Ferme");
+      formData.append("role", "Ferme");
       formData.append("avatar", avatarFile);
       const response = await fetch("http://192.168.195.216:3000/add-user", {
         method: "POST",

@@ -15,19 +15,17 @@ import profile from "../assets/prof.png";
 import { getClientData } from "../utils/AsyncStorageClient";
 import { LinearGradient } from "expo-linear-gradient";
 
-// Tab ICons...
 import animal from "../assets/betail.png";
 import animals from "../assets/kl.jpg";
 import home from "../assets/home.png";
 import stock from "../assets/stocker.png";
-import DatePicker from 'react-native-date-picker';
+import DatePicker from "react-native-date-picker";
 import logout from "../assets/logout.png";
 import { AntDesign } from "@expo/vector-icons";
 const { width: WIDTH } = Dimensions.get("window");
-// Menu
 
 import menu from "../assets/menu.png";
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import cland from "../assets/clandr.png";
 
 import close from "../assets/close.png";
@@ -57,14 +55,13 @@ export default function AddStock({ navigation }) {
   const hideDatePicker = () => setDatePickerVisibility(false);
   const handleDateConfirm = (date) => {
     setDatePremption(date);
-    setDate(date)
+    setDate(date);
     hideDatePicker();
   };
 
   const [error, setError] = useState(false);
   const regEx = /[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,8}(.[a-z{2,8}])?/g;
   useEffect(() => {
-   
     const fetchUserData = async () => {
       const userData = await getClientData();
 
@@ -75,27 +72,23 @@ export default function AddStock({ navigation }) {
   }, []);
   const addStock = async () => {
     const data = await getClientData();
-    console.log("lllllll"+animal)
+    console.log("lllllll" + animal);
     try {
-    
       const requestBody = JSON.stringify({
         nomProduit: produit,
         quantite: quantite,
         date_peremption: date_peremption,
-       
+
         proprietaire: data.Data._id,
       });
 
-      const response = await fetch(
-        "http://192.168.195.216:3000/add-stock",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: requestBody,
-        }
-      );
+      const response = await fetch("http://192.168.195.216:3000/add-stock", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: requestBody,
+      });
 
       if (response.ok) {
         Toast.show({
@@ -104,7 +97,6 @@ export default function AddStock({ navigation }) {
 
           text1: "Ajouter un stock",
           text2: "Stock ajouté avec succès",
-          
 
           autoHide: true,
           visibilityTime: 3000,
@@ -114,9 +106,7 @@ export default function AddStock({ navigation }) {
           },
           onShow: () => {},
         });
-       
       } else {
-      
         console.error("Échec de l'ajout du médicament");
       }
     } catch (error) {
@@ -412,7 +402,7 @@ export default function AddStock({ navigation }) {
             paddingHorizontal: 15,
             paddingVertical: 20,
             borderRadius: showMenu ? 15 : 0,
-           
+
             transform: [{ scale: scaleValue }, { translateX: offsetValue }],
           }}
         >
@@ -438,14 +428,12 @@ export default function AddStock({ navigation }) {
                   }).start();
 
                   Animated.timing(offsetValue, {
-                   
                     toValue: showMenu ? 0 : 230,
                     duration: 300,
                     useNativeDriver: true,
                   }).start();
 
                   Animated.timing(closeButtonOffset, {
-                  
                     toValue: !showMenu ? -30 : 0,
                     duration: 300,
                     useNativeDriver: true,
@@ -468,71 +456,76 @@ export default function AddStock({ navigation }) {
               <ScrollView horizontal={true}>
                 <Toast />
                 <View style={styles.popupContainer}>
-      <Image
-        source={require('../assets/stocker.png')}
-        style={{
-          width: 110,
-          height: 100,
-          alignSelf: 'center',
-          marginTop: 5,
-          tintColor: '#7FA1C3',
-        }}
-      />
-      <Text style={[styles.textSign, { color: 'grey' }]}>Nouveau Stock</Text>
-      <View style={styles.inputContainer}>
-        <Image
-          source={require('../assets/stocker.png')}
-          style={styles.icon}
-        />
-        <TextInput
-          placeholder="Produit"
-          style={styles.input}
-          onChangeText={(val) => setProduitName(val)}
-        />
-      </View>
-      <View style={styles.inputContainer}>
-        <Image
-          source={require('../assets/des-boites.png')}
-          style={styles.icon}
-        />
-        <TextInput
-          placeholder="Quantité"
-          style={styles.input}
-          onChangeText={(val) => setQuantité(val)}
-        />
-      </View>
-      <View style={styles.inputContainer}>
-        <Image
-          source={require('../assets/calendrier.png')}
-          style={styles.icon}
-        />
-        <TouchableOpacity onPress={() => setDatePickerVisibility(true)}>
-          <TextInput
-            placeholder="Date Peremption"
-          style={{width:240}}
-            value={date.toDateString()}
-            editable={false}
-          />
-        </TouchableOpacity>
-      </View>
-      <View style={styles.button}>
-        <TouchableOpacity style={styles.signIn} onPress={addStock}>
-          <LinearGradient
-            colors={['#7FA1C3', '#7FA1C3']}
-            style={styles.linearGradient}
-          >
-            <Text style={[styles.textSign, { color: '#fff' }]}>Ajouter</Text>
-          </LinearGradient>
-        </TouchableOpacity>
-      </View>
-      <DateTimePickerModal
-        isVisible={isDatePickerVisible}
-        mode="date" 
-        onConfirm={handleDateConfirm}
-        onCancel={hideDatePicker}
-      />
-    </View>
-
+                  <Image
+                    source={require("../assets/stocker.png")}
+                    style={{
+                      width: 110,
+                      height: 100,
+                      alignSelf: "center",
+                      marginTop: 5,
+                      tintColor: "#7FA1C3",
+                    }}
+                  />
+                  <Text style={[styles.textSign, { color: "grey" }]}>
+                    Nouveau Stock
+                  </Text>
+                  <View style={styles.inputContainer}>
+                    <Image
+                      source={require("../assets/stocker.png")}
+                      style={styles.icon}
+                    />
+                    <TextInput
+                      placeholder="Produit"
+                      style={styles.input}
+                      onChangeText={(val) => setProduitName(val)}
+                    />
+                  </View>
+                  <View style={styles.inputContainer}>
+                    <Image
+                      source={require("../assets/des-boites.png")}
+                      style={styles.icon}
+                    />
+                    <TextInput
+                      placeholder="Quantité"
+                      style={styles.input}
+                      onChangeText={(val) => setQuantité(val)}
+                    />
+                  </View>
+                  <View style={styles.inputContainer}>
+                    <Image
+                      source={require("../assets/calendrier.png")}
+                      style={styles.icon}
+                    />
+                    <TouchableOpacity
+                      onPress={() => setDatePickerVisibility(true)}
+                    >
+                      <TextInput
+                        placeholder="Date Peremption"
+                        style={{ width: 240 }}
+                        value={date.toDateString()}
+                        editable={false}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.button}>
+                    <TouchableOpacity style={styles.signIn} onPress={addStock}>
+                      <LinearGradient
+                        colors={["#7FA1C3", "#7FA1C3"]}
+                        style={styles.linearGradient}
+                      >
+                        <Text style={[styles.textSign, { color: "#fff" }]}>
+                          Ajouter
+                        </Text>
+                      </LinearGradient>
+                    </TouchableOpacity>
+                  </View>
+                  <DateTimePickerModal
+                    isVisible={isDatePickerVisible}
+                    mode="date"
+                    onConfirm={handleDateConfirm}
+                    onCancel={hideDatePicker}
+                  />
+                </View>
               </ScrollView>
             </Animated.View>
           </ScrollView>
@@ -601,7 +594,7 @@ const styles = StyleSheet.create({
     padding: 10,
     marginLeft: 10,
     borderRadius: 10,
-    marginBottom:20,
+    marginBottom: 20,
     elevation: 5,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
@@ -625,7 +618,7 @@ const styles = StyleSheet.create({
 
   icon: {
     marginRight: 11,
-    width: 25, 
+    width: 25,
     height: 25,
     color: "#79C2BE",
     tintColor: "#7FA1C3",

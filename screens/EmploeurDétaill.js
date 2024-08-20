@@ -1,17 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Image, ScrollView, SafeAreaView, Dimensions, TouchableOpacity, Modal, TextInput } from 'react-native';
-import axios from 'axios';
-import { Picker } from '@react-native-picker/picker';
+import React, { useState, useEffect } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  ScrollView,
+  SafeAreaView,
+  Dimensions,
+  TouchableOpacity,
+  Modal,
+  TextInput,
+} from "react-native";
+import axios from "axios";
+import { Picker } from "@react-native-picker/picker";
 
-const { width: WIDTH, height: HEIGHT } = Dimensions.get('window');
+const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
 
 export default function EmploeDétail({ route, navigation }) {
   const { itemId, getConge, proprietaireId } = route.params;
   const [conge, setConge] = useState({});
   const [tasks, setTasks] = useState([]);
-  const [selectedTask, setSelectedTask] = useState('');
-  const [newTaskName, setNewTaskName] = useState('');
-  const [newTaskDescription, setNewTaskDescription] = useState('');
+  const [selectedTask, setSelectedTask] = useState("");
+  const [newTaskName, setNewTaskName] = useState("");
+  const [newTaskDescription, setNewTaskDescription] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isAddTaskModalVisible, setIsAddTaskModalVisible] = useState(false);
 
@@ -23,11 +34,14 @@ export default function EmploeDétail({ route, navigation }) {
 
   useEffect(() => {
     if (proprietaireId) {
-      axios.get(`http://192.168.195.216:3000/taches-by-proprietaire/${proprietaireId}`)
-        .then(response => {
+      axios
+        .get(
+          `http://192.168.195.216:3000/taches-by-proprietaire/${proprietaireId}`
+        )
+        .then((response) => {
           setTasks(response.data);
         })
-        .catch(error => {
+        .catch((error) => {
           console.error(error);
         });
     }
@@ -35,88 +49,100 @@ export default function EmploeDétail({ route, navigation }) {
 
   const handleAssignTask = () => {
     if (selectedTask) {
-      axios.post('http://192.168.195.216:3000/assign-task', {
-        userId: conge._id,
-        taskId: selectedTask,
-      })
-      .then(response => {
-        alert('Task assigned successfully');
-        setIsModalVisible(false);
-      })
-      .catch(error => {
-        console.error(error);
-      });
+      axios
+        .post("http://192.168.195.216:3000/assign-task", {
+          userId: conge._id,
+          taskId: selectedTask,
+        })
+        .then((response) => {
+          alert("Task assigned successfully");
+          setIsModalVisible(false);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     } else {
-      alert('Please select a task');
+      alert("Please select a task");
     }
   };
 
   const handleAssignTasks = (taskId) => {
     if (taskId) {
-      axios.post('http://192.168.195.216:3000/assign-task', {
-        userId: conge._id,
-        taskId: taskId,
-      })
-      .then(response => {
-        alert('Task assigned successfully');
-        setIsModalVisible(false);
-      })
-      .catch(error => {
-        console.error(error);
-      });
+      axios
+        .post("http://192.168.195.216:3000/assign-task", {
+          userId: conge._id,
+          taskId: taskId,
+        })
+        .then((response) => {
+          alert("Task assigned successfully");
+          setIsModalVisible(false);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     } else {
-      alert('Please select a task');
+      alert("Please select a task");
     }
   };
 
   const handleAddTask = () => {
     if (newTaskName && newTaskDescription) {
-      axios.post('http://192.168.195.216:3000/add-tache', {
-        tache: newTaskName,
-        description: newTaskDescription,
-        proprietaire: proprietaireId
-      })
-      .then(response => {
-        alert('Task added successfully');
-       console.log(response.data.Tache._id)
-       handleAssignTasks(response.data.Tache._id)
-        setNewTaskName('');
-        setNewTaskDescription('');
-        setIsAddTaskModalVisible(false);
-      
-        axios.get(`http://192.168.195.216:3000/taches-by-proprietaire/${proprietaireId}`)
-          .then(response => {
-            setTasks(response.data);
-          })
-          .catch(error => {
-            console.error(error);
-          });
-      })
-      .catch(error => {
-        console.error(error);
-      });
+      axios
+        .post("http://192.168.195.216:3000/add-tache", {
+          tache: newTaskName,
+          description: newTaskDescription,
+          proprietaire: proprietaireId,
+        })
+        .then((response) => {
+          alert("Task added successfully");
+          console.log(response.data.Tache._id);
+          handleAssignTasks(response.data.Tache._id);
+          setNewTaskName("");
+          setNewTaskDescription("");
+          setIsAddTaskModalVisible(false);
+
+          axios
+            .get(
+              `http://192.168.195.216:3000/taches-by-proprietaire/${proprietaireId}`
+            )
+            .then((response) => {
+              setTasks(response.data);
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     } else {
-      alert('Please enter task name and description');
+      alert("Please enter task name and description");
     }
   };
 
   return (
-    <SafeAreaView style={{ height: HEIGHT, backgroundColor: 'white' }}>
+    <SafeAreaView style={{ height: HEIGHT, backgroundColor: "white" }}>
       <ScrollView>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image
-            source={require('../assets/back.png')}
+            source={require("../assets/back.png")}
             style={{ width: 40, height: 40 }}
           />
         </TouchableOpacity>
-        <Image source={{ uri: getConge.avatar }} style={styles.image} resizeMode="contain" />
+        <Image
+          source={{ uri: getConge.avatar }}
+          style={styles.image}
+          resizeMode="contain"
+        />
         <Text style={styles.title}>Informations l'ouvrier</Text>
 
         <View style={styles.contactCard}>
           <View style={styles.contactInfo}>
             <View style={styles.contactRow}>
               <Text style={styles.contactLabel}>Ouvrier: </Text>
-              <Text style={styles.contactValue}>{getConge.nom} {getConge.prenom}</Text>
+              <Text style={styles.contactValue}>
+                {getConge.nom} {getConge.prenom}
+              </Text>
             </View>
             <View style={styles.contactRow}>
               <Text style={styles.contactLabel}>Cin: </Text>
@@ -138,21 +164,30 @@ export default function EmploeDétail({ route, navigation }) {
         </View>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.acceptButton} onPress={() => setIsAddTaskModalVisible(true)}>
+          <TouchableOpacity
+            style={styles.acceptButton}
+            onPress={() => setIsAddTaskModalVisible(true)}
+          >
             <Text style={styles.buttonText}>Ajouter une tâche</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.rejectButton} onPress={() => setIsModalVisible(true)}>
+          <TouchableOpacity
+            style={styles.rejectButton}
+            onPress={() => setIsModalVisible(true)}
+          >
             <Text style={styles.buttonText}>Affecter une tâche</Text>
           </TouchableOpacity>
-          
         </View>
-        <TouchableOpacity style={styles.rejectButtons} onPress={() => {
+        <TouchableOpacity
+          style={styles.rejectButtons}
+          onPress={() => {
             navigation.navigate("tacheEmpl", {
               itemId: conge._id,
               navigation: navigation,
-            }) }} >
-            <Text style={styles.buttonText}>Voir Taches</Text>
-          </TouchableOpacity>
+            });
+          }}
+        >
+          <Text style={styles.buttonText}>Voir Taches</Text>
+        </TouchableOpacity>
         {/* Modal for Assigning Tasks */}
         <Modal
           transparent={true}
@@ -168,14 +203,24 @@ export default function EmploeDétail({ route, navigation }) {
                 onValueChange={(itemValue) => setSelectedTask(itemValue)}
               >
                 <Picker.Item label="Select a task" value="" />
-                {tasks.map(task => (
-                  <Picker.Item key={task._id} label={task.tache} value={task._id} />
+                {tasks.map((task) => (
+                  <Picker.Item
+                    key={task._id}
+                    label={task.tache}
+                    value={task._id}
+                  />
                 ))}
               </Picker>
-              <TouchableOpacity style={styles.assignButton} onPress={handleAssignTask}>
+              <TouchableOpacity
+                style={styles.assignButton}
+                onPress={handleAssignTask}
+              >
                 <Text style={styles.buttonText}>Affecter</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.closeButton} onPress={() => setIsModalVisible(false)}>
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={() => setIsModalVisible(false)}
+              >
                 <Text style={styles.buttonText}>Fermer</Text>
               </TouchableOpacity>
             </View>
@@ -203,10 +248,16 @@ export default function EmploeDétail({ route, navigation }) {
                 value={newTaskDescription}
                 onChangeText={setNewTaskDescription}
               />
-              <TouchableOpacity style={styles.assignButton} onPress={handleAddTask}>
+              <TouchableOpacity
+                style={styles.assignButton}
+                onPress={handleAddTask}
+              >
                 <Text style={styles.buttonText}>Ajouter</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.closeButton} onPress={() => setIsAddTaskModalVisible(false)}>
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={() => setIsAddTaskModalVisible(false)}
+              >
                 <Text style={styles.buttonText}>Fermer</Text>
               </TouchableOpacity>
             </View>
@@ -219,27 +270,27 @@ export default function EmploeDétail({ route, navigation }) {
 
 const styles = StyleSheet.create({
   image: {
-    width: '100%',
+    width: "100%",
     height: 221,
-    alignSelf: 'center',
+    alignSelf: "center",
     marginTop: 36,
     backgroundColor: "transparent",
   },
   title: {
-    color: 'black',
-    fontWeight: 'bold',
+    color: "black",
+    fontWeight: "bold",
     fontSize: 19,
-    alignSelf: 'center',
+    alignSelf: "center",
     marginTop: 11,
     marginBottom: 25,
   },
   contactCard: {
-    flexDirection: 'row',
-    backgroundColor: '#CDE8E5',
+    flexDirection: "row",
+    backgroundColor: "#CDE8E5",
     marginBottom: 40,
     marginTop: 10,
     borderRadius: 11,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 11,
@@ -251,105 +302,105 @@ const styles = StyleSheet.create({
     marginEnd: 8,
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginBottom: 20,
   },
   acceptButton: {
-    backgroundColor: '#B4D6CD',
+    backgroundColor: "#B4D6CD",
     borderRadius: 5,
     padding: 10,
     flex: 1,
     marginRight: 10,
-    alignItems: 'center',
+    alignItems: "center",
     marginLeft: 10,
   },
   rejectButton: {
-    backgroundColor: '#B4D6CD',
+    backgroundColor: "#B4D6CD",
     borderRadius: 5,
     marginRight: 10,
-    marginLeft:10,
- 
+    marginLeft: 10,
+
     padding: 10,
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
   },
 
   rejectButtons: {
-    backgroundColor: '#B4D6CD',
+    backgroundColor: "#B4D6CD",
     borderRadius: 5,
     marginRight: 10,
-    marginLeft:10,
-    marginBottom:40,
+    marginLeft: 10,
+    marginBottom: 40,
     padding: 10,
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
   },
   buttonText: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: "white",
+    fontWeight: "bold",
   },
   contactInfo: {
     flex: 1,
-    flexDirection: 'column',
+    flexDirection: "column",
     padding: 10,
-    width: '81%',
+    width: "81%",
   },
   contactRow: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginBottom: 10,
   },
   contactLabel: {
-    color: 'black',
-    fontWeight: 'bold',
+    color: "black",
+    fontWeight: "bold",
     fontSize: 16,
-    color: '#5C88C4',
+    color: "#5C88C4",
   },
   contactValue: {
     fontSize: 16,
-    color: 'black',
+    color: "black",
   },
   modalOverlay: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
   },
   modalContent: {
     width: WIDTH * 0.8,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 10,
     padding: 20,
-    alignItems: 'center',
+    alignItems: "center",
   },
   modalTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 15,
   },
   picker: {
-    width: '100%',
+    width: "100%",
     height: 50,
     marginBottom: 15,
   },
   assignButton: {
-    backgroundColor: '#5B99C2',
+    backgroundColor: "#5B99C2",
     borderRadius: 5,
     padding: 10,
     marginBottom: 10,
-    alignItems: 'center',
-    width: '100%',
+    alignItems: "center",
+    width: "100%",
   },
   closeButton: {
-    backgroundColor: '#BC9F8B',
+    backgroundColor: "#BC9F8B",
     borderRadius: 5,
     padding: 10,
-    alignItems: 'center',
-    width: '100%',
+    alignItems: "center",
+    width: "100%",
   },
   input: {
-    width: '100%',
-    borderColor: '#ccc',
+    width: "100%",
+    borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 5,
     padding: 10,

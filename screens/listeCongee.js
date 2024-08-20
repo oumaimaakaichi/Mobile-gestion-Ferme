@@ -1,20 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { View, Text, StyleSheet, ScrollView, Image } from 'react-native'; 
-import { Card } from 'react-native-paper'; 
-import { Picker } from '@react-native-picker/picker';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { View, Text, StyleSheet, ScrollView, Image } from "react-native";
+import { Card } from "react-native-paper";
+import { Picker } from "@react-native-picker/picker";
 import { getClientData } from "../utils/AsyncStorageClient";
 const ListeC = ({ proprietaireId, navigation }) => {
   const [conges, setConges] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [statusFilter, setStatusFilter] = useState('All');
+  const [statusFilter, setStatusFilter] = useState("All");
 
   useEffect(() => {
     const fetchConges = async () => {
-        const userData = await getClientData();
+      const userData = await getClientData();
       try {
-        const response = await axios.get(`http://192.168.195.216:3000/conges/${userData.Data.proprietaire}`);
+        const response = await axios.get(
+          `http://192.168.195.216:3000/conge/${userData.Data._id}`
+        );
         setConges(response.data);
       } catch (err) {
         setError(err.message);
@@ -26,30 +28,28 @@ const ListeC = ({ proprietaireId, navigation }) => {
     fetchConges();
   }, [proprietaireId]);
 
-  const filteredConges = statusFilter === 'All' 
-  ? conges 
-  : conges.filter((conge) => conge.status === statusFilter);
-
+  const filteredConges =
+    statusFilter === "All"
+      ? conges
+      : conges.filter((conge) => conge.status === statusFilter);
 
   const getStatusStyle = (status) => {
     switch (status) {
-      case 'En attente':
-        return styles.pending; 
-      case 'Accepter':
-        return styles.accepted; 
-      case 'Refuser':
-        return styles.rejected; 
+      case "En attente":
+        return styles.pending;
+      case "Accepter":
+        return styles.accepted;
+      case "Refuser":
+        return styles.rejected;
       default:
-        return styles.default; 
+        return styles.default;
     }
   };
 
   return (
     <ScrollView style={styles.container}>
-     
-
       {conges.map((conge) => (
-        <Card key={conge._id} style={styles.card} >
+        <Card key={conge._id} style={styles.card}>
           <Card.Content>
             <View style={styles.row}>
               <View style={styles.infoContainer}>
@@ -58,23 +58,29 @@ const ListeC = ({ proprietaireId, navigation }) => {
                 </Text>
 
                 <View style={styles.statusContainer}>
-                  <Text style={{fontWeight:'bold'}}>Date Début: </Text>
+                  <Text style={{ fontWeight: "bold" }}>Date Début: </Text>
                   <Text> {new Date(conge.dateDébut).toLocaleDateString()}</Text>
                 </View>
 
                 <View style={styles.statusContainer}>
                   <Text style={styles.label}>Date Fin: </Text>
-                  <Text style={styles.value}>{conge.dateFin ? new Date(conge.dateFin).toLocaleDateString() : 'Non spécifiée'}</Text>
+                  <Text style={styles.value}>
+                    {conge.dateFin
+                      ? new Date(conge.dateFin).toLocaleDateString()
+                      : "Non spécifiée"}
+                  </Text>
                 </View>
 
                 <View style={styles.statusContainer}>
-                  <Text style={{fontWeight:'bold'}}>Status: </Text>
-                  <Text style={getStatusStyle(conge.status)}>{conge.status}</Text>
+                  <Text style={{ fontWeight: "bold" }}>Status: </Text>
+                  <Text style={getStatusStyle(conge.status)}>
+                    {conge.status}
+                  </Text>
                 </View>
               </View>
               <View style={styles.imageContainer}>
                 <Image
-                  source={require('../assets/dema-removebg-preview.png')}
+                  source={require("../assets/dema-removebg-preview.png")}
                   style={styles.image}
                 />
               </View>
@@ -94,41 +100,40 @@ const styles = StyleSheet.create({
   filterContainer: {
     marginVertical: 10,
     paddingHorizontal: 10,
-    backgroundColor: 'whitesmoke',
+    backgroundColor: "whitesmoke",
     borderRadius: 10,
-    width:320,
-  
+    width: 320,
   },
   filterLabel: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: 'black',
+    fontWeight: "bold",
+    color: "black",
     marginBottom: 1,
   },
   picker: {
     height: 50,
-    width: '100%',
+    width: "100%",
   },
   card: {
     marginBottom: 10,
     backgroundColor: "whitesmoke",
   },
   row: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   infoContainer: {
     flex: 1,
   },
   imageContainer: {
-    width: 85, 
-    height: 100, 
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: 85,
+    height: 100,
+    justifyContent: "center",
+    alignItems: "center",
   },
   label: {
-    fontWeight: 'bold',
-    marginRight: 5, 
+    fontWeight: "bold",
+    marginRight: 5,
   },
   title: {
     fontSize: 16,
@@ -137,29 +142,29 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   image: {
-    width: '100%',
-    height: '100%',       
-    resizeMode: 'cover',
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
   },
   statusContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginTop: 10,
   },
   pending: {
-    color: '#009FBD',
-    fontWeight: 'bold',
+    color: "#009FBD",
+    fontWeight: "bold",
   },
   accepted: {
-    color: 'green',
-    fontWeight: 'bold',
+    color: "green",
+    fontWeight: "bold",
   },
   rejected: {
-    color: 'red',
-    fontWeight: 'bold',
+    color: "red",
+    fontWeight: "bold",
   },
   default: {
-    color: 'black',
+    color: "black",
   },
 });
 

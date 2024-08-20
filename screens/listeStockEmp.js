@@ -8,13 +8,13 @@ import {
   Dimensions,
   TextInput,
   Image,
-  Modal
+  Modal,
 } from "react-native";
 import { getClientData } from "../utils/AsyncStorageClient";
 import axios from "axios";
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect } from "@react-navigation/native";
 
-const { width: WIDTH } = Dimensions.get('window');
+const { width: WIDTH } = Dimensions.get("window");
 
 export default function ListStockEmpl({ navigation }) {
   const [data, setData] = useState(null);
@@ -22,11 +22,9 @@ export default function ListStockEmpl({ navigation }) {
   const [editStock, setEditStock] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
 
-
   const [quantity, setQuantity] = useState(editStock.quantite || 0);
 
   useEffect(() => {
-  
     setQuantity(editStock.quantite || 0);
   }, [editStock]);
 
@@ -50,7 +48,7 @@ export default function ListStockEmpl({ navigation }) {
   );
 
   const incrementQuantity = () => {
-    setQuantity(prevQuantity => {
+    setQuantity((prevQuantity) => {
       const newQuantity = prevQuantity + 1;
       setEditStock({ ...editStock, quantite: newQuantity });
       return newQuantity;
@@ -58,7 +56,7 @@ export default function ListStockEmpl({ navigation }) {
   };
 
   const decrementQuantity = () => {
-    setQuantity(prevQuantity => {
+    setQuantity((prevQuantity) => {
       if (prevQuantity > 0) {
         const newQuantity = prevQuantity - 1;
         setEditStock({ ...editStock, quantite: newQuantity });
@@ -70,8 +68,15 @@ export default function ListStockEmpl({ navigation }) {
 
   const handleEdit = async () => {
     try {
-      const response = await axios.patch(`http://192.168.195.216:3000/update-stock/${editStock._id}`, editStock);
-      setData(prevData => prevData.map(item => item._id === editStock._id ? response.data : item));
+      const response = await axios.patch(
+        `http://192.168.195.216:3000/update-stock/${editStock._id}`,
+        editStock
+      );
+      setData((prevData) =>
+        prevData.map((item) =>
+          item._id === editStock._id ? response.data : item
+        )
+      );
       setModalVisible(false);
       fetchData();
     } catch (error) {
@@ -81,8 +86,8 @@ export default function ListStockEmpl({ navigation }) {
 
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
   };
@@ -102,23 +107,34 @@ export default function ListStockEmpl({ navigation }) {
                 style={{ marginLeft: 180 }}
               >
                 <Image
-                  source={require('../assets/settings_reload_update_icon_188616.png')}
+                  source={require("../assets/settings_reload_update_icon_188616.png")}
                   style={styles.icon}
                 />
               </TouchableOpacity>
             </View>
             <View style={{ flexDirection: "row" }}>
-              <Text style={{ fontWeight: "bold", marginStart: 10 }}>Produit: </Text>
+              <Text style={{ fontWeight: "bold", marginStart: 10 }}>
+                Produit:{" "}
+              </Text>
               <Text style={styles.WrapText}>{item.nomProduit} </Text>
             </View>
             <View style={styles.row}>
               <Text style={styles.marginText}>Stock: </Text>
-              <Text style={{ color: item.quantite <= 20 ? 'red' : 'green', marginTop: 7, fontWeight: "bold", fontSize: 18 }}>
+              <Text
+                style={{
+                  color: item.quantite <= 20 ? "red" : "green",
+                  marginTop: 7,
+                  fontWeight: "bold",
+                  fontSize: 18,
+                }}
+              >
                 {item.quantite}
               </Text>
             </View>
             <View style={styles.row}>
-              <Text style={styles.marginText}>Date Peremption: {formatDate(item.date_peremption)}</Text>
+              <Text style={styles.marginText}>
+                Date Peremption: {formatDate(item.date_peremption)}
+              </Text>
             </View>
           </View>
         </View>
@@ -129,7 +145,9 @@ export default function ListStockEmpl({ navigation }) {
 
   const filteredData = data
     ? data.filter(
-        (item) => item.nomProduit && item.nomProduit.toLowerCase().includes(searchQuery.toLowerCase())
+        (item) =>
+          item.nomProduit &&
+          item.nomProduit.toLowerCase().includes(searchQuery.toLowerCase())
       )
     : [];
 
@@ -137,7 +155,7 @@ export default function ListStockEmpl({ navigation }) {
     <View style={styles.container}>
       <View style={styles.inputContainer}>
         <Image
-          source={require('../assets/search.png')}
+          source={require("../assets/search.png")}
           style={styles.searchIcon}
         />
         <TextInput
@@ -165,28 +183,31 @@ export default function ListStockEmpl({ navigation }) {
         onRequestClose={() => setModalVisible(false)}
       >
         <View style={styles.modalView}>
-          <Text style={styles.modalTitle}>Modifier les informations de produit</Text>
+          <Text style={styles.modalTitle}>
+            Modifier les informations de produit
+          </Text>
           <Text style={styles.modalTitlee}>Quantité:</Text>
           <View style={styles.inputContainer}>
-           
             <TextInput
-            
               value={quantity.toString()}
               editable={false}
               keyboardType="numeric"
             />
-             <TouchableOpacity onPress={decrementQuantity} style={styles.decrementButton}>
-             <Image
-                  source={require('../assets/vcsremoved_93492.png')}
-                 
-                />
+            <TouchableOpacity
+              onPress={decrementQuantity}
+              style={styles.decrementButton}
+            >
+              <Image source={require("../assets/vcsremoved_93492.png")} />
             </TouchableOpacity>
           </View>
           <View style={styles.modalButtons}>
             <TouchableOpacity onPress={handleEdit} style={styles.saveButton}>
               <Text style={styles.buttonText}>Enregistrer</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.cancelButton}>
+            <TouchableOpacity
+              onPress={() => setModalVisible(false)}
+              style={styles.cancelButton}
+            >
               <Text style={styles.buttonText}>Annuler</Text>
             </TouchableOpacity>
           </View>
@@ -201,39 +222,38 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "rgb(237, 243, 247)",
     width: WIDTH - 30,
-    alignSelf: 'center',
-    borderRadius: 7
+    alignSelf: "center",
+    borderRadius: 7,
   },
   decrementButton: {
-    
     padding: 10,
     borderRadius: 4,
     marginLeft: 162,
   },
   incrementButton: {
-    backgroundColor: '#ddd',
+    backgroundColor: "#ddd",
     padding: 10,
     borderRadius: 4,
     marginLeft: 10,
   },
   inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     borderWidth: 0.6,
-    borderColor: '#37B7C3',
+    borderColor: "#37B7C3",
     borderRadius: 5,
     paddingHorizontal: 10,
     marginTop: 20,
     height: 50,
     marginLeft: 5,
     width: "95%",
-    padding: 10
+    padding: 10,
   },
   searchIcon: {
     width: 20,
     height: 20,
     marginRight: 10,
-    tintColor: "#37B7C3"
+    tintColor: "#37B7C3",
   },
   input: {
     flex: 1,
@@ -271,7 +291,7 @@ const styles = StyleSheet.create({
     fontSize: 19,
     fontWeight: "bold",
     marginBottom: 10,
-    color: "#7FA1C3"
+    color: "#7FA1C3",
   },
   row: {
     flexDirection: "row",
@@ -283,7 +303,7 @@ const styles = StyleSheet.create({
   },
   marginText: {
     marginStart: 10,
-    marginTop: 7
+    marginTop: 7,
   },
   WrapText: {
     marginStart: 2,
@@ -294,7 +314,7 @@ const styles = StyleSheet.create({
     width: 35,
     height: 35,
     marginStart: 20,
-    tintColor: "#37B7C3"
+    tintColor: "#37B7C3",
   },
   separator: {
     height: 1,
@@ -303,11 +323,11 @@ const styles = StyleSheet.create({
   modalView: {
     margin: 20,
     marginTop: 80,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
+    alignItems: "center",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -319,53 +339,53 @@ const styles = StyleSheet.create({
   modalTitle: {
     marginTop: 20,
     fontSize: 24,
-    fontWeight: 'bold',
-    color: '#3AA6B9',
+    fontWeight: "bold",
+    color: "#3AA6B9",
     marginBottom: 50,
   },
   modalTitlee: {
     marginRight: 130,
     fontSize: 16,
-    fontWeight: 'bold',
-    color: 'black',
+    fontWeight: "bold",
+    color: "black",
     marginBottom: 10,
   },
   modalTitleee: {
     marginRight: 70,
     fontSize: 16,
-    fontWeight: 'bold',
-    color: 'black',
+    fontWeight: "bold",
+    color: "black",
     marginBottom: 10,
   },
   inputs: {
-    width: '80%',
+    width: "80%",
     height: 40,
-    borderColor: 'gray',
+    borderColor: "gray",
     borderWidth: 1,
     borderRadius: 5,
     marginBottom: 15,
     paddingLeft: 10,
   },
   modalButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "100%",
     marginTop: 20,
     marginBottom: 20,
   },
   saveButton: {
-    backgroundColor: '#0147A6',
+    backgroundColor: "#0147A6",
     borderRadius: 5,
     padding: 10,
     marginRight: 10,
   },
   cancelButton: {
-    backgroundColor: '#3AA6B9',
+    backgroundColor: "#3AA6B9",
     borderRadius: 5,
     padding: 10,
   },
   buttonText: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: "white",
+    fontWeight: "bold",
   },
 });

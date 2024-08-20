@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import profile from "../assets/prof.png";
 import { getClientData } from "../utils/AsyncStorageClient";
-import stock from "../assets/stocker.png"
+import stock from "../assets/stocker.png";
 import home from "../assets/home.png";
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
@@ -25,12 +25,12 @@ import menu from "../assets/menu.png";
 import enfant1 from "../assets/enfant.png";
 import close from "../assets/close.png";
 import medicament from "../assets/med.png";
-import animal from "../assets/betail.png"
+import animal from "../assets/betail.png";
 import document from "../assets/doc.png";
-import backg from "../assets//lopp-removebg-preview.png"
+import backg from "../assets//lopp-removebg-preview.png";
 import { Alert } from "react-native";
 import EmployeurList from "./listeEmplo";
-import ouv from "../assets/process_3516613.png"
+import ouv from "../assets/process_3516613.png";
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -50,7 +50,7 @@ export default function Ouvrier({ navigation }) {
   const closeButtonOffset = useRef(new Animated.Value(0)).current;
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
- 
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -65,9 +65,7 @@ export default function Ouvrier({ navigation }) {
     };
 
     fetchData();
-  
   }, []);
-
 
   const logoutUser = async () => {
     navigation.navigate("LoginC");
@@ -277,7 +275,7 @@ export default function Ouvrier({ navigation }) {
                       alignItems: "center",
                       paddingVertical: 8,
                       backgroundColor: "transparent",
-                    
+
                       paddingRight: 48,
                       borderRadius: 8,
                       marginTop: 20,
@@ -316,7 +314,7 @@ export default function Ouvrier({ navigation }) {
                       alignItems: "center",
                       paddingVertical: 8,
                       backgroundColor: "transparent",
-                    marginLeft:5,
+                      marginLeft: 5,
                       paddingRight: 48,
                       borderRadius: 8,
                       marginTop: 20,
@@ -394,7 +392,7 @@ export default function Ouvrier({ navigation }) {
             paddingHorizontal: 10,
             paddingVertical: 20,
             borderRadius: showMenu ? 15 : 0,
-           
+
             transform: [{ scale: scaleValue }, { translateX: offsetValue }],
           }}
         >
@@ -448,21 +446,30 @@ export default function Ouvrier({ navigation }) {
                   }}
                 ></Image>
               </TouchableOpacity>
-             
-                
-            
-             
+
+              <TouchableOpacity
+                style={styles.contactButton}
+                onPress={() => {
+                  navigation.navigate("addOuv");
+                }}
+              >
+                <Image
+                  source={require("../assets/add.png")}
+                  style={styles.contactButtonImage}
+                />
+              </TouchableOpacity>
+
               <ScrollView horizontal={true}></ScrollView>
 
-
-              
               <ScrollView horizontal={true}>
                 <View style={{ marginBottom: 10 }}>
-                <EmployeurList proprietaireId={user?.Data?._id} navigation={navigation}/>
+                  <EmployeurList
+                    proprietaireId={user?.Data?._id}
+                    navigation={navigation}
+                  />
                 </View>
               </ScrollView>
             </Animated.View>
-           
           </ScrollView>
         </Animated.View>
       </SafeAreaView>
@@ -491,5 +498,11 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     overflow: "hidden",
     marginTop: 50,
+  },
+  contactButtonImage: {
+    width: 35,
+    height: 35,
+    tintColor: "#79C2BE",
+    marginLeft: 290,
   },
 });

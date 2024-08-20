@@ -12,9 +12,9 @@ import {
 } from "react-native";
 import profile from "../assets/prof.png";
 import { getClientData } from "../utils/AsyncStorageClient";
-import stock from "../assets/stocker.png"
+import stock from "../assets/stocker.png";
 import home from "../assets/home.png";
-import ouv from "../assets/process_3516613.png"
+import ouv from "../assets/process_3516613.png";
 import logout from "../assets/logout.png";
 import cland from "../assets/clandr.png";
 import list from "../assets/hihi.png";
@@ -24,7 +24,7 @@ import menu from "../assets/menu.png";
 import enfant1 from "../assets/enfant.png";
 import close from "../assets/close.png";
 import medicament from "../assets/med.png";
-import animal from "../assets/betail.png"
+import animal from "../assets/betail.png";
 import document from "../assets/doc.png";
 import { useIsFocused } from "@react-navigation/native";
 import { Alert } from "react-native";
@@ -33,13 +33,13 @@ export default function Conge({ navigation }) {
   const [showMenu, setShowMenu] = useState(false);
   const [user, setUser] = useState("");
   const [userId, setUserId] = useState("");
- 
+
   const offsetValue = useRef(new Animated.Value(0)).current;
   const scaleValue = useRef(new Animated.Value(1)).current;
   const closeButtonOffset = useRef(new Animated.Value(0)).current;
   const isFocused = useIsFocused();
   let data = "";
-  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -275,7 +275,7 @@ export default function Conge({ navigation }) {
                       alignItems: "center",
                       paddingVertical: 8,
                       backgroundColor: "white",
-                    
+
                       paddingRight: 48,
                       borderRadius: 8,
                       marginTop: 20,
@@ -314,7 +314,7 @@ export default function Conge({ navigation }) {
                       alignItems: "center",
                       paddingVertical: 8,
                       backgroundColor: "transparent",
-                    marginLeft:5,
+                      marginLeft: 5,
                       paddingRight: 48,
                       borderRadius: 8,
                       marginTop: 20,
@@ -392,7 +392,7 @@ export default function Conge({ navigation }) {
             paddingHorizontal: 10,
             paddingVertical: 20,
             borderRadius: showMenu ? 15 : 0,
-      
+
             transform: [{ scale: scaleValue }, { translateX: offsetValue }],
           }}
         >
@@ -446,22 +446,18 @@ export default function Conge({ navigation }) {
                   }}
                 ></Image>
               </TouchableOpacity>
-              
-             
+
               <ScrollView horizontal={true}></ScrollView>
             </Animated.View>
-          
 
-              <ScrollView horizontal={true}>
-                <View style={{ marginBottom: 10 }}>
-                <CongesList proprietaireId={user?.Data?._id} navigation={navigation}/>
-                </View>
-              </ScrollView>
-
-
-
-
-
+            <ScrollView horizontal={true}>
+              <View style={{ marginBottom: 10 }}>
+                <CongesList
+                  proprietaireId={user?.Data?._id}
+                  navigation={navigation}
+                />
+              </View>
+            </ScrollView>
           </ScrollView>
         </Animated.View>
       </SafeAreaView>
@@ -485,7 +481,7 @@ const styles = StyleSheet.create({
     height: 30,
     tintColor: "#79C2BE",
     marginLeft: 290,
-    marginBottom:20
+    marginBottom: 20,
   },
   uploadBtnContainer: {
     height: 120,
