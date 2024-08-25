@@ -12,29 +12,28 @@ import {
   TextInput,
   ImageBackground,
 } from "react-native";
-import profile from "../assets/prof.png";
+import profile from "../../assets/prof.png";
+import vet from "../../assets/veterinaire (1).png"
 import { LinearGradient } from "expo-linear-gradient";
-import { getClientData } from "../utils/AsyncStorageClient";
+import { getClientData } from "../../utils/AsyncStorageClient";
 import { useTheme } from "react-native-paper";
-import home from "../assets/home.png";
-import stock from "../assets/stocker.png";
+import home from "../../assets/home.png";
+import stock from "../../assets/stocker.png";
 import * as ImagePicker from "expo-image-picker";
-import logout from "../assets/logout.png";
-import cland from "../assets/clandr.png";
-import list from "../assets/hihi.png";
+import logout from "../../assets/logout.png";
+import cland from "../../assets/clandr.png";
+
 import Icon from "react-native-vector-icons/Feather";
-import Contact from "../assets/b.png";
-import menu from "../assets/menu.png";
-import animal from "../assets/betail.png";
-import enfant1 from "../assets/enfant.png";
-import close from "../assets/close.png";
-import medicament from "../assets/med.png";
-import task from "../assets/task_8089604.png";
-import document from "../assets/doc.png";
-import cd from "../assets/cd4bd9b0ea2807611ba3a67c331bff0b-removebg-preview.png"
+
+import menu from "../../assets/menu.png";
+import animal from "../../assets/betail.png";
+
+import close from "../../assets/close.png";
+
+import ouv from "../../assets/process_3516613.png";
 import { Alert } from "react-native";
 
-export default function ProfilEmpl({ navigation }) {
+export default function Profil({ navigation }) {
   const [showMenu, setShowMenu] = useState(false);
   const [user, setUser] = useState("");
   const [userId, setUserId] = useState("");
@@ -58,7 +57,7 @@ export default function ProfilEmpl({ navigation }) {
         console.log(userData.Data.Num_tel);
         setNum_tel(userData.Data.Num_tel);
         console.log(userData.Data.avatar);
-        setAvatar(userData.Data.avatar);
+        setAvatarr(userData.Data.avatar);
 
         console.log(Num_tel);
       } catch (error) {
@@ -76,6 +75,7 @@ export default function ProfilEmpl({ navigation }) {
 
   const openImageLibrary = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
     if (status === "granted") {
       const response = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -86,43 +86,29 @@ export default function ProfilEmpl({ navigation }) {
       });
 
       if (!response.cancelled) {
+        console.log("ffffffffff" + response.assets[0].uri);
         setAvatar(response.assets[0].uri);
-        try {
-          const uploadResult = await FileSystem.uploadAsync(
-            "http://192.168.195.216:3000/upload-image",
-            response.assets[0].uri,
-            {
-              fieldName: "avatar",
-              uploadType: FileSystem.FileSystemUploadType.MULTIPART,
-            }
-          );
-          setAvatarFile(uploadResult.body);  // Ensure correct handling
-          console.log("Upload success:", uploadResult.body);
-        } catch (error) {
-          console.error("Image upload failed:", error);
-        }
+        FilesSystem.uploadAsync(
+          "http://192.168.195.216:3000/upload-image",
+          response.assets[0].uri,
+          {
+            fieldName: "avatar",
+            uploadType: FilesSystem.FileSystemUploadType.MULTIPART,
+          }
+        ).then((res) => setAvatarFile(res.body));
       }
     }
   };
 
   const Update = async () => {
-    if (!avatarFile) {
-      Alert.alert("Erreur", "Veuillez sélectionner une image d'abord.");
-      return;
-    }
-
     try {
       const formData = new FormData();
       formData.append("email", email);
       formData.append("Num_tel", Num_tel);
-      formData.append("avatar", {
-        uri: avatarFile,
-        name: "avatar.jpg", // or appropriate file name
-        type: "image/jpeg", // or appropriate file type
-      });
+      formData.append("avatar", avatarFile);
 
       const response = await fetch(
-        `http://192.168.195.216:3000/modifier/${userId}`,
+        `http://192.168.195.216:3000/modifier/${user.Data._id}`,
         {
           method: "PUT",
           headers: {
@@ -133,18 +119,18 @@ export default function ProfilEmpl({ navigation }) {
       );
 
       const data = await response.json();
-      if (response.ok) {
+      if (data) {
         Alert.alert("Succès", "Profil mis à jour avec succès.");
         navigation.navigate("Profil");
       } else {
         Alert.alert("Erreur", "Échec de la mise à jour du profil.");
       }
     } catch (error) {
-      console.log("Update error:", error);
+      console.log(error);
     }
   };
   const logoutUser = async () => {
-    navigation.navigate("loginE");
+    navigation.navigate("LoginC");
   };
   useEffect(() => {
     console.log("Num_tel in useEffect:", Num_tel);
@@ -162,16 +148,11 @@ export default function ProfilEmpl({ navigation }) {
               marginBottom: 20,
             }}
           >
-           <TouchableOpacity style={styles.uploadBtnContainer}>
-           { user?.Data?.avatar ?(<Image
+            <TouchableOpacity style={styles.uploadBtnContainer}>
+              <Image
                 source={{ uri: user?.Data?.avatar }}
                 style={{ width: "100%", height: "100%" }}
-              />):(
-<Image
-                source={cd}
-                style={{ width: "100%", height: "100%" }}
               />
-              )}
             </TouchableOpacity>
 
             <Text
@@ -197,7 +178,7 @@ export default function ProfilEmpl({ navigation }) {
               >
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("dashEmpl");
+                    navigation.navigate("dash");
                   }}
                 >
                   <View
@@ -273,7 +254,83 @@ export default function ProfilEmpl({ navigation }) {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("animall");
+                    navigation.navigate("ouv");
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      paddingVertical: 8,
+                      backgroundColor: "transparent",
+                      paddingLeft: 5,
+                      paddingRight: 35,
+                      borderRadius: 8,
+                      marginTop: 20,
+                    }}
+                  >
+                    <Image
+                      source={ouv}
+                      style={{
+                        width: 25,
+                        height: 25,
+                        tintColor: "white",
+                      }}
+                    ></Image>
+
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        fontWeight: "bold",
+                        paddingLeft: 15,
+                        color: "white",
+                      }}
+                    >
+                      Ouvriers
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("vet");
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      paddingVertical: 8,
+                      backgroundColor: "transparent",
+                      paddingLeft: 5,
+                      paddingRight: 35,
+                      borderRadius: 8,
+                      marginTop: 20,
+                    }}
+                  >
+                    <Image
+                      source={vet}
+                      style={{
+                        width: 25,
+                        height: 25,
+                        tintColor: "white",
+                      }}
+                    ></Image>
+
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        fontWeight: "bold",
+                        paddingLeft: 15,
+                        color: "white",
+                      }}
+                    >
+                      vétérinaires
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("animal");
                   }}
                 >
                   <View
@@ -309,47 +366,10 @@ export default function ProfilEmpl({ navigation }) {
                     </Text>
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate("mesTaches");
-                  }}
-                >
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      paddingVertical: 8,
-                      backgroundColor: "transparent",
-                      paddingLeft: 5,
-                      paddingRight: 35,
-                      borderRadius: 8,
-                      marginTop: 20,
-                    }}
-                  >
-                    <Image
-                      source={task}
-                      style={{
-                        width: 25,
-                        height: 25,
-                        tintColor: "white",
-                      }}
-                    ></Image>
 
-                    <Text
-                      style={{
-                        fontSize: 15,
-                        fontWeight: "bold",
-                        paddingLeft: 15,
-                        color: "white",
-                      }}
-                    >
-                      Taches
-                    </Text>
-                  </View>
-                </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("demandeConge");
+                    navigation.navigate("conge");
                   }}
                 >
                   <View
@@ -381,51 +401,14 @@ export default function ProfilEmpl({ navigation }) {
                         color: "white",
                       }}
                     >
-                      Demande Congé
+                      Congés
                     </Text>
                   </View>
                 </TouchableOpacity>
+
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("listeC");
-                  }}
-                >
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      paddingVertical: 8,
-                      backgroundColor: "transparent",
-
-                      paddingRight: 48,
-                      borderRadius: 8,
-                      marginTop: 20,
-                    }}
-                  >
-                    <Image
-                      source={cland}
-                      style={{
-                        width: 40,
-                        height: 40,
-                        tintColor: "white",
-                      }}
-                    ></Image>
-
-                    <Text
-                      style={{
-                        fontSize: 15,
-                        fontWeight: "bold",
-                        paddingLeft: 5,
-                        color: "white",
-                      }}
-                    >
-                      Mes demandes
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate("stockE");
+                    navigation.navigate("stock");
                   }}
                 >
                   <View
@@ -529,7 +512,7 @@ export default function ProfilEmpl({ navigation }) {
                   },
                 ],
               }}
-              source={require("../assets/4.jpg")}
+              source={require("../../assets/4.jpg")}
             >
               <TouchableOpacity
                 onPress={() => {
@@ -553,14 +536,14 @@ export default function ProfilEmpl({ navigation }) {
 
                   setShowMenu(!showMenu);
                 }}
-                source={require("../assets/4.jpg")}
+                source={require("../../assets/4.jpg")}
               >
                 <Image
                   source={showMenu ? close : menu}
                   style={{
                     width: 30,
                     height: 30,
-                    tintColor: "#37B7C3",
+                    tintColor: "#219C90",
                     marginTop: 40,
                     marginLeft: 20,
                   }}
@@ -578,20 +561,21 @@ export default function ProfilEmpl({ navigation }) {
                 marginBottom: 20,
               }}
             >
-             
               <TouchableOpacity
                 onPress={openImageLibrary}
                 style={styles.uploadBtnContainer}
               >
-                 {avatar ?(<Image
-                source={{uri:avatar }}
-                style={{ width: "100%", height: "100%" }}
-              />):(
-<Image
-                source={cd}
-                style={{ width: "100%", height: "100%" }}
-              />
-              )}
+                {avatar ? (
+                  <Image
+                    source={{ uri: avatar }}
+                    style={{ width: "100%", height: "100%" }}
+                  />
+                ) : (
+                  <Image
+                    source={{ uri: avatarr }}
+                    style={{ width: "100%", height: "100%" }}
+                  />
+                )}
               </TouchableOpacity>
               <Text
                 style={{
@@ -682,7 +666,7 @@ export default function ProfilEmpl({ navigation }) {
               <TouchableOpacity
                 style={styles.signIn}
                 onPress={() => {
-                  Update()
+                  Update();
                 }}
               >
                 <LinearGradient
@@ -712,13 +696,13 @@ export default function ProfilEmpl({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#37B7C3",
+    backgroundColor: "#79C2BE",
     alignItems: "flex-start",
     justifyContent: "flex-start",
   },
   s: {
     color: "#rgb(97, 172, 243)",
-    backgroundColor: "#37B7C3",
+    backgroundColor: "#79C2BE",
   },
 
   uploadBtnContainer: {
@@ -729,7 +713,7 @@ const styles = StyleSheet.create({
 
     borderWidth: 0,
     overflow: "hidden",
-    marginTop: 30,
+    marginTop: 50,
   },
   uploadBtnContainers: {
     height: 125,

@@ -6,150 +6,126 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
-  Platform,
-  ScrollView,
   TextInput,
-  ImageBackground,
+  View,
+  ScrollView,
+  Dimensions,
 } from "react-native";
-import profile from "../assets/prof.png";
+import profile from "../../assets/prof.png";
+import { getClientData } from "../../utils/AsyncStorageClient";
 import { LinearGradient } from "expo-linear-gradient";
-import { getClientData } from "../utils/AsyncStorageClient";
-import { useTheme } from "react-native-paper";
-import home from "../assets/home.png";
-import stock from "../assets/stocker.png";
+// Tab ICons...
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import animal from "../../assets/betail.png";
+import conge from "../../assets/dema-removebg-preview.png";
+import home from "../../assets/home.png";
+import stock from "../../assets/stocker.png";
 import * as ImagePicker from "expo-image-picker";
-import logout from "../assets/logout.png";
-import cland from "../assets/clandr.png";
-import list from "../assets/hihi.png";
-import Icon from "react-native-vector-icons/Feather";
-import Contact from "../assets/b.png";
-import menu from "../assets/menu.png";
-import animal from "../assets/betail.png";
-import enfant1 from "../assets/enfant.png";
-import close from "../assets/close.png";
-import medicament from "../assets/med.png";
-import task from "../assets/task_8089604.png";
-import document from "../assets/doc.png";
-import cd from "../assets/cd4bd9b0ea2807611ba3a67c331bff0b-removebg-preview.png"
-import { Alert } from "react-native";
+import logout from "../../assets/logout.png";
+import { AntDesign } from "@expo/vector-icons";
+const { width: WIDTH } = Dimensions.get("window");
+// Menu
+import task from "../../assets/task_8089604.png";
+import menu from "../../assets/menu.png";
+import cd from "../../assets/cd4bd9b0ea2807611ba3a67c331bff0b-removebg-preview.png"
+import cland from "../../assets/clandr.png";
 
-export default function ProfilEmpl({ navigation }) {
+import close from "../../assets/close.png";
+
+import { useIsFocused } from "@react-navigation/native";
+
+import { Button } from "react-native-paper";
+import Toast from "react-native-toast-message";
+export default function DemandeConge({ navigation }) {
+  const [currentTab, setCurrentTab] = useState("Home");
+
+  const [showPopup, setShowPopup] = useState(false);
+  const [isButtonVisible, setIsButtonVisible] = useState(true);
+
   const [showMenu, setShowMenu] = useState(false);
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [isDatePickerVisiblee, setDatePickerVisibilityy] = useState(false);
   const [user, setUser] = useState("");
-  const [userId, setUserId] = useState("");
-  const [rendezVous, setRendezVous] = useState([]);
-  const [selectedRendezVous, setSelectedRendezVous] = useState(null);
   const offsetValue = useRef(new Animated.Value(0)).current;
+
   const scaleValue = useRef(new Animated.Value(1)).current;
   const closeButtonOffset = useRef(new Animated.Value(0)).current;
-  const { colors } = useTheme();
-
-  const [Num_tel, setNum_tel] = useState("");
+  const [dateD, setDateD] = useState("");
+  const [dateFin, setDateF] = useState("");
+  const [raison, setRaison] = useState(null);
+  const [date, setDate] = useState(new Date());
+  const [datee, setDatee] = useState(new Date());
+  const regEx = /[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,8}(.[a-z{2,8}])?/g;
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const userData = await getClientData();
-        setUser(userData);
-        setUserId(userData.Data._id);
-        console.log("UserData:", userData);
-        console.log("User ID:", userData.Data._id);
-        setEmail(userData.Data.email);
-        console.log(userData.Data.Num_tel);
-        setNum_tel(userData.Data.Num_tel);
-        console.log(userData.Data.avatar);
-        setAvatar(userData.Data.avatar);
-
-        console.log(Num_tel);
-      } catch (error) {
-        console.error("Error fetching user dbata:", error);
-      }
+    const fetchUserData = async () => {
+      const userData = await getClientData();
+      console.log(userData.Data._id);
+      setUser(userData);
     };
 
-    fetchData();
-  }, [Num_tel]);
-  const [email, setEmail] = useState(user?.Data?.email);
-  const [avatar, setAvatar] = useState("");
-  const [avatarr, setAvatarr] = useState("");
-  const [avatarFile, setAvatarFile] = useState();
-  const regEx = /[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,8}(.[a-z{2,8}])?/g;
+    fetchUserData();
+  }, []);
+  const [selectedImage, setSelectedImage] = useState(null);
 
-  const openImageLibrary = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status === "granted") {
-      const response = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-        base64: true,
-      });
-
-      if (!response.cancelled) {
-        setAvatar(response.assets[0].uri);
-        try {
-          const uploadResult = await FileSystem.uploadAsync(
-            "http://192.168.195.216:3000/upload-image",
-            response.assets[0].uri,
-            {
-              fieldName: "avatar",
-              uploadType: FileSystem.FileSystemUploadType.MULTIPART,
-            }
-          );
-          setAvatarFile(uploadResult.body);  // Ensure correct handling
-          console.log("Upload success:", uploadResult.body);
-        } catch (error) {
-          console.error("Image upload failed:", error);
-        }
-      }
-    }
+  const showDatePicker = () => setDatePickerVisibility(true);
+  const hideDatePicker = () => setDatePickerVisibility(false);
+  const handleDateConfirm = (date) => {
+    setDate(date);
+    hideDatePicker();
+    setDateD(dateFin);
   };
 
-  const Update = async () => {
-    if (!avatarFile) {
-      Alert.alert("Erreur", "Veuillez sélectionner une image d'abord.");
-      return;
-    }
+  const showDatePickerr = () => setDatePickerVisibilityy(true);
+  const hideDatePickerr = () => setDatePickerVisibilityy(false);
+  const handleDateConfirmm = (date) => {
+    setDatee(date);
+    setDateF(date);
+    hideDatePicker();
+  };
+
+  const addConge = async () => {
+    const data = await getClientData();
 
     try {
-      const formData = new FormData();
-      formData.append("email", email);
-      formData.append("Num_tel", Num_tel);
-      formData.append("avatar", {
-        uri: avatarFile,
-        name: "avatar.jpg", // or appropriate file name
-        type: "image/jpeg", // or appropriate file type
+      const requestBody = JSON.stringify({
+        dateDébut: date,
+        dateFin: datee,
+
+        raison: raison,
+        employeur: data.Data._id,
       });
 
-      const response = await fetch(
-        `http://192.168.195.216:3000/modifier/${userId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          body: formData,
-        }
-      );
+      const response = await fetch("http://192.168.195.216:3000/add-conge", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: requestBody,
+      });
 
-      const data = await response.json();
       if (response.ok) {
-        Alert.alert("Succès", "Profil mis à jour avec succès.");
-        navigation.navigate("Profil");
+        Toast.show({
+          position: "top",
+          type: "success",
+
+          text1: "Ajouter un demande de congé",
+          text2: "demande ajouté avec succès",
+
+          autoHide: true,
+          visibilityTime: 3000,
+          autoHide: true,
+          onHide: () => {
+            navigation.navigate("dashEmpl");
+          },
+          onShow: () => {},
+        });
       } else {
-        Alert.alert("Erreur", "Échec de la mise à jour du profil.");
+        console.error("Échec de l'ajout du demande");
       }
     } catch (error) {
-      console.log("Update error:", error);
+      console.error("Erreur lors de l'ajout du contact:", error);
     }
   };
-  const logoutUser = async () => {
-    navigation.navigate("loginE");
-  };
-  useEffect(() => {
-    console.log("Num_tel in useEffect:", Num_tel);
-  }, [Num_tel]);
-
   return (
     <>
       <SafeAreaView style={styles.container}>
@@ -157,9 +133,10 @@ export default function ProfilEmpl({ navigation }) {
           <View
             style={{
               justifyContent: "flex-start",
-              padding: 15,
+              padding: 14,
               alignItems: "center",
-              marginBottom: 20,
+              marginBottom: 21,
+              marginTop: 100,
             }}
           >
            <TouchableOpacity style={styles.uploadBtnContainer}>
@@ -186,7 +163,7 @@ export default function ProfilEmpl({ navigation }) {
               {user?.Data?.nom} {user?.Data?.prenom}
             </Text>
 
-            <View style={{ flexGrow: 1, marginTop: 20, marginRight: 48 }}>
+            <View style={{ flexGrow: 1, marginRight: 40 }}>
               <TouchableOpacity
                 onPress={() => {
                   if (title == "LogOut") {
@@ -206,8 +183,8 @@ export default function ProfilEmpl({ navigation }) {
                       alignItems: "center",
                       paddingVertical: 8,
                       backgroundColor: "transparent",
-                      paddingLeft: 5,
-
+                      paddingLeft: 13,
+                      paddingRight: 35,
                       borderRadius: 8,
                       marginTop: 30,
                     }}
@@ -235,7 +212,7 @@ export default function ProfilEmpl({ navigation }) {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("update");
+                    navigation.navigate("prof");
                   }}
                 >
                   <View
@@ -243,7 +220,7 @@ export default function ProfilEmpl({ navigation }) {
                       flexDirection: "row",
                       alignItems: "center",
                       paddingVertical: 8,
-                      backgroundColor: "white",
+                      backgroundColor: "transparent",
                       paddingLeft: 5,
                       paddingRight: 35,
                       borderRadius: 8,
@@ -255,7 +232,7 @@ export default function ProfilEmpl({ navigation }) {
                       style={{
                         width: 25,
                         height: 25,
-                        tintColor: "#79C2BE",
+                        tintColor: "white",
                       }}
                     ></Image>
 
@@ -264,7 +241,7 @@ export default function ProfilEmpl({ navigation }) {
                         fontSize: 15,
                         fontWeight: "bold",
                         paddingLeft: 15,
-                        color: "#79C2BE",
+                        color: "white",
                       }}
                     >
                       Profile
@@ -357,7 +334,7 @@ export default function ProfilEmpl({ navigation }) {
                       flexDirection: "row",
                       alignItems: "center",
                       paddingVertical: 8,
-                      backgroundColor: "transparent",
+                      backgroundColor: "white",
 
                       paddingRight: 48,
                       borderRadius: 8,
@@ -369,7 +346,7 @@ export default function ProfilEmpl({ navigation }) {
                       style={{
                         width: 40,
                         height: 40,
-                        tintColor: "white",
+                        tintColor: "#79C2BE",
                       }}
                     ></Image>
 
@@ -378,7 +355,7 @@ export default function ProfilEmpl({ navigation }) {
                         fontSize: 15,
                         fontWeight: "bold",
                         paddingLeft: 5,
-                        color: "white",
+                        color: "#79C2BE",
                       }}
                     >
                       Demande Congé
@@ -461,14 +438,19 @@ export default function ProfilEmpl({ navigation }) {
                     </Text>
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={logoutUser}>
+
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("loginE");
+                  }}
+                >
                   <View
                     style={{
                       flexDirection: "row",
                       alignItems: "center",
                       paddingVertical: 8,
                       backgroundColor: "transparent",
-                      paddingLeft: 5,
+                      paddingLeft: 8,
                       paddingRight: 30,
                       borderRadius: 8,
                       marginTop: 20,
@@ -509,7 +491,7 @@ export default function ProfilEmpl({ navigation }) {
             bottom: 0,
             left: 0,
             right: 0,
-            paddingHorizontal: 10,
+            paddingHorizontal: 15,
             paddingVertical: 20,
             borderRadius: showMenu ? 15 : 0,
 
@@ -519,7 +501,6 @@ export default function ProfilEmpl({ navigation }) {
           {
             // Menu Button...
           }
-
           <ScrollView style={{ marginVertical: 0 }}>
             <Animated.View
               style={{
@@ -529,7 +510,6 @@ export default function ProfilEmpl({ navigation }) {
                   },
                 ],
               }}
-              source={require("../assets/4.jpg")}
             >
               <TouchableOpacity
                 onPress={() => {
@@ -553,7 +533,6 @@ export default function ProfilEmpl({ navigation }) {
 
                   setShowMenu(!showMenu);
                 }}
-                source={require("../assets/4.jpg")}
               >
                 <Image
                   source={showMenu ? close : menu}
@@ -562,146 +541,100 @@ export default function ProfilEmpl({ navigation }) {
                     height: 30,
                     tintColor: "#37B7C3",
                     marginTop: 40,
-                    marginLeft: 20,
                   }}
                 ></Image>
               </TouchableOpacity>
 
-              <ScrollView horizontal={true}></ScrollView>
-            </Animated.View>
+              <ScrollView horizontal={true}>
+                <Toast />
+                <View style={styles.popupContainer}>
+                  <Image
+                    source={conge}
+                    style={{
+                      width: 210,
+                      height: 180,
+                      alignSelf: "center",
+                      marginTop: 5,
+                    }}
+                  />
 
-            <View
-              style={{
-                justifyContent: "flex-start",
-                padding: 15,
-                alignItems: "center",
-                marginBottom: 20,
-              }}
-            >
-             
-              <TouchableOpacity
-                onPress={openImageLibrary}
-                style={styles.uploadBtnContainer}
-              >
-                 {avatar ?(<Image
-                source={{uri:avatar }}
-                style={{ width: "100%", height: "100%" }}
-              />):(
-<Image
-                source={cd}
-                style={{ width: "100%", height: "100%" }}
-              />
-              )}
-              </TouchableOpacity>
-              <Text
-                style={{
-                  fontSize: 22,
-                  fontWeight: "bold",
-                  color: "black",
-                  marginTop: 20,
-                  marginRight: 70,
-                }}
-              >
-                &nbsp;&nbsp; &nbsp;&nbsp;{user?.Data?.nom} {user?.Data?.prenom}
-              </Text>
-            </View>
-
-            <Text
-              style={[
-                styles.text_footer,
-                {
-                  color: colors.text,
-                  fontSize: 15,
-                  marginTop: 35,
-                  marginBottom: 15,
-                },
-              ]}
-            >
-              Email
-            </Text>
-            <View style={styles.action}>
-              <Icon
-                name="mail"
-                color="#219C90"
-                size={20}
-                style={{
-                  marginTop: -10,
-                }}
-              />
-              <TextInput
-                placeholder="Email"
-                placeholderTextColor="#666666"
-                value={email}
-                style={[
-                  styles.textInput,
-                  {
-                    color: colors.text,
-                  },
-                ]}
-                onChangeText={(val) => setEmail(val)}
-              />
-            </View>
-
-            <Text
-              style={[
-                styles.text_footer,
-                {
-                  color: colors.text,
-                  fontSize: 15,
-                  marginTop: 35,
-                  marginBottom: 15,
-                },
-              ]}
-            >
-              Phone
-            </Text>
-            <View style={styles.action}>
-              <Icon
-                name="phone"
-                color="#219C90"
-                size={20}
-                style={{
-                  marginTop: -10,
-                }}
-              />
-              <TextInput
-                placeholder="Phone"
-                placeholderTextColor="#666666"
-                value={Num_tel}
-                onChangeText={(val) => setNum_tel(val)}
-                style={[
-                  styles.textInput,
-                  {
-                    color: colors.text,
-                  },
-                ]}
-              />
-            </View>
-
-            <View style={styles.button}>
-              <TouchableOpacity
-                style={styles.signIn}
-                onPress={() => {
-                  Update()
-                }}
-              >
-                <LinearGradient
-                  colors={["#79C2BE", "#79C2BE"]}
-                  style={styles.signIn}
-                >
-                  <Text
-                    style={[
-                      styles.textSign,
-                      {
-                        color: "#fff",
-                      },
-                    ]}
+                  <Text style={styles.contactLabel}>Date début:           </Text>
+                  <TouchableOpacity
+                    onPress={() => setDatePickerVisibility(true)}
                   >
-                    S'Update
-                  </Text>
-                </LinearGradient>
-              </TouchableOpacity>
-            </View>
+                    <View style={styles.inputContainer}>
+                      <Image
+                        source={require("../../assets/calendrier.png")}
+                        style={styles.icon}
+                      />
+                      <TextInput
+                        placeholder="Date début"
+                        style={{ width: 240 }}
+                        value={date.toDateString()}
+                        editable={false}
+                      />
+                    </View>
+                  </TouchableOpacity>
+
+                  <Text style={styles.contactLabel}>Date Fin:                </Text>
+                  <TouchableOpacity
+                    onPress={() => setDatePickerVisibilityy(true)}
+                  >
+                    <View style={styles.inputContainer}>
+                      <Image
+                        source={require("../../assets/calendrier.png")}
+                        style={styles.icon}
+                      />
+                      <TextInput
+                        placeholder="Date Fin"
+                        style={{ width: 240 }}
+                        value={datee.toDateString()}
+                        editable={false}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                  <Text style={styles.contactLabel}>Raison:                   </Text>
+
+                  <View style={styles.inputContainer}>
+                    <Image
+                      source={require("../../assets/ask_14791674.png")}
+                      style={styles.iconn}
+                    />
+                    <TextInput
+                      placeholder="raison"
+                      style={{ width: 240 }}
+                      onChangeText={(val) => setRaison(val)}
+                    />
+                  </View>
+
+                  <DateTimePickerModal
+                    isVisible={isDatePickerVisible}
+                    mode="date"
+                    onConfirm={handleDateConfirm}
+                    onCancel={hideDatePicker}
+                  />
+                  <DateTimePickerModal
+                    isVisible={isDatePickerVisiblee}
+                    mode="date"
+                    onConfirm={handleDateConfirmm}
+                    onCancel={hideDatePickerr}
+                  />
+
+                  <View style={styles.button}>
+                    <TouchableOpacity style={styles.signIn} onPress={addConge}>
+                      <LinearGradient
+                        colors={["#7FA1C3", "#7FA1C3"]}
+                        style={styles.linearGradient}
+                      >
+                        <Text style={[styles.textSign, { color: "#fff" }]}>
+                          Ajouter
+                        </Text>
+                      </LinearGradient>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </ScrollView>
+            </Animated.View>
           </ScrollView>
         </Animated.View>
       </SafeAreaView>
@@ -719,6 +652,26 @@ const styles = StyleSheet.create({
   s: {
     color: "#rgb(97, 172, 243)",
     backgroundColor: "#37B7C3",
+    marginTop: -100,
+  },
+  contactRow: {
+    flexDirection: "row",
+    marginBottom: 10,
+  },
+  contactLabel: {
+    color: "black",
+    fontWeight: "bold",
+    fontSize: 16,
+    marginRight: 150,
+
+    marginTop: 10,
+  },
+  button: {
+    alignItems: "center",
+    marginTop: 70,
+    borderRadius: 8,
+    padding: 5,
+    paddingHorizontal: 10,
   },
 
   uploadBtnContainer: {
@@ -730,56 +683,123 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     overflow: "hidden",
     marginTop: 30,
+    marginBottom: 40,
   },
-  uploadBtnContainers: {
-    height: 125,
-    width: 125,
-    borderRadius: 125 / 2,
-    justifyContent: "center",
+  imageContainer: {
+    marginTop: 20,
     alignItems: "center",
-    borderStyle: "dashed",
-    borderColor: "#01BACF",
-    borderWidth: 1,
-    alignSelf: "center",
-    overflow: "hidden",
   },
-  uploadBtns: {
-    textAlign: "center",
-    fontSize: 16,
-    opacity: 0.3,
-    fontWeight: "bold",
-    color: "#219C90",
+  image: {
+    width: WIDTH - 40,
+    height: 200,
+    borderRadius: 10,
+    resizeMode: "cover",
   },
-  action: {
+  uploadButton: {
     flexDirection: "row",
-    marginTop: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#4A919E",
-    paddingBottom: 5,
-  },
-  textInput: {
-    flex: 1,
-    marginTop: Platform.OS === "ios" ? 0 : -12,
-    paddingLeft: 10,
-    color: "#4A919E",
-  },
-  errorMsg: {
-    color: "#FF0000",
-    fontSize: 12,
-  },
-  button: {
     alignItems: "center",
-    marginTop: 40,
+    marginTop: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    backgroundColor: "#e0f0ff",
+  },
+  uploadIcon: {
+    width: 40,
+    height: 40,
+  },
+  cameraIcon: {
+    width: 37,
+    height: 37,
+    tintColor: "blue",
+  },
+  uploadText: {
+    fontSize: 16,
+    fontWeight: "500",
+    marginLeft: 10,
   },
   signIn: {
-    width: "100%",
+    backgroundColor: "#7FA1C3",
+    width: WIDTH - 60,
     height: 50,
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 15,
+    borderRadius: 8,
+    marginBottom: 30,
+    marginTop: -50,
+    paddingHorizontal: 20,
   },
   textSign: {
     fontSize: 18,
+    fontWeight: "bold",
+  },
+  loginFormTextInput: {
+    width: WIDTH - 55,
+    height: 45,
+    borderBottomWidth: 1,
+    borderColor: "#rgb(97, 172, 243)",
+    fontSize: 16,
+    paddingLeft: 45,
+    marginHorizontal: 25,
+    marginTop: 25,
+  },
+  popupContainer: {
+    backgroundColor: "white",
+    padding: 10,
+    marginLeft: 10,
+    borderRadius: 10,
+    elevation: 5,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    alignItems: "center",
+    width: "90%",
+    marginTop: "10%",
+    alignSelf: "center",
+    marginBottom: 20,
+  },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 0.6,
+    borderColor: "#7FA1C3",
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    marginTop: 20,
+    height: 50,
+  },
+
+  icon: {
+    marginRight: 11,
+    width: 25,
+    height: 25,
+    color: "#79C2BE",
+    tintColor: "#7FA1C3",
+  },
+  iconn: {
+    marginRight: 11,
+    width: 25,
+    height: 25,
+    color: "#79C2BE",
+  },
+  input: {
+    flex: 1,
+    height: 70,
+    marginLeft: 10,
+    borderWidth: 0,
+    borderColor: "rgb(70, 143, 183)",
+    borderRadius: 8,
+    paddingHorizontal: 0,
+  },
+  buttons: {
+    backgroundColor: "#0147A6",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "white",
     fontWeight: "bold",
   },
 });
