@@ -16,7 +16,7 @@ import {
   Modal,
   Button,
 } from "react-native";
-
+import { REACT_APP_API_BASE_URL } from '@env';
 import * as Animatable from "react-native-animatable";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -97,13 +97,18 @@ const LoginC = ({ navigation }) => {
   };
 
   const loginHandle = () => {
+
+
+    console.log(JSON.stringify(process.env, null, 2));
+   
+
     if (!data.email || !data.password) {
       setError(true);
       console.log("Champs obligatoires non remplis");
       return;
     }
 
-    fetch("http://192.168.195.216:3000/login", {
+    fetch(`${REACT_APP_API_BASE_URL}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -158,7 +163,7 @@ const LoginC = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [email, setEmail] = useState("");
   const sendPasswordReset = () => {
-    fetch("http://192.168.195.216:3000/emailyni", {
+    fetch(`${REACT_APP_API_BASE_URL}/emailyni`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

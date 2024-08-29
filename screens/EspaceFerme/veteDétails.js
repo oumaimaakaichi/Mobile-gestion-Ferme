@@ -15,6 +15,7 @@ import axios from "axios";
 import { Picker } from "@react-native-picker/picker";
 import vet from "../../assets/v-removebg-preview.png"
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
+import { REACT_APP_API_BASE_URL } from '@env';
 
 export default function VeterinaireDétail({ route, navigation }) {
   const { itemId, getConge, proprietaireId } = route.params;
@@ -36,7 +37,7 @@ export default function VeterinaireDétail({ route, navigation }) {
     if (proprietaireId) {
       axios
         .get(
-          `http://192.168.195.216:3000/taches-by-proprietaire/${proprietaireId}`
+          `${REACT_APP_API_BASE_URL}/taches-by-proprietaire/${proprietaireId}`
         )
         .then((response) => {
           setTasks(response.data);
@@ -47,29 +48,12 @@ export default function VeterinaireDétail({ route, navigation }) {
     }
   }, [proprietaireId]);
 
-  const handleAssignTask = () => {
-    if (selectedTask) {
-      axios
-        .post("http://192.168.195.216:3000/assign-task", {
-          userId: conge._id,
-          taskId: selectedTask,
-        })
-        .then((response) => {
-          alert("Task assigned successfully");
-          setIsModalVisible(false);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    } else {
-      alert("Please select a task");
-    }
-  };
+
 
   const handleAssignTasks = (taskId) => {
     if (taskId) {
       axios
-        .post("http://192.168.195.216:3000/assign-task", {
+        .post(`${REACT_APP_API_BASE_URL}/assign-task`, {
           userId: conge._id,
           taskId: taskId,
         })
@@ -88,7 +72,7 @@ export default function VeterinaireDétail({ route, navigation }) {
   const handleAddTask = () => {
     if (newTaskName && newTaskDescription) {
       axios
-        .post("http://192.168.195.216:3000/add-tache", {
+        .post(`${REACT_APP_API_BASE_URL}/add-tache`, {
           tache: newTaskName,
           description: newTaskDescription,
           proprietaire: proprietaireId,
@@ -103,7 +87,7 @@ export default function VeterinaireDétail({ route, navigation }) {
 
           axios
             .get(
-              `http://192.168.195.216:3000/taches-by-proprietaire/${proprietaireId}`
+              `${REACT_APP_API_BASE_URL}/taches-by-proprietaire/${proprietaireId}`
             )
             .then((response) => {
               setTasks(response.data);

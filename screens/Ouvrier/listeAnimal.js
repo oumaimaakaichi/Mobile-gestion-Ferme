@@ -12,6 +12,8 @@ import {
 import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { getClientData } from "../../utils/AsyncStorageClient";
 import Toast from "react-native-toast-message";
+import { REACT_APP_API_BASE_URL } from '@env';
+
 import { useFocusEffect } from "@react-navigation/native";
 const { width: WIDTH } = Dimensions.get("window");
 export default function ListAnimal2({ navigation }) {
@@ -20,7 +22,7 @@ export default function ListAnimal2({ navigation }) {
   const fetchData = async () => {
     const userData = await getClientData();
     const response = await fetch(
-      `http://192.168.195.216:3000/AnimalParFerme/${userData?.Data?.proprietaire}`
+      `${REACT_APP_API_BASE_URL}/AnimalParFerme/${userData?.Data?.proprietaire}`
     );
     const jsonData = await response.json();
     setData(jsonData);

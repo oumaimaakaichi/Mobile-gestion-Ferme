@@ -21,7 +21,9 @@ import Toast from "react-native-toast-message";
 import Feather from "react-native-vector-icons/Feather";
 import axios from "axios";
 import { useTheme } from "react-native-paper";
-import Icon from "react-native-vector-icons/Feather";
+import Icon from "react-native-vector-icons/Feather"
+import { REACT_APP_API_BASE_URL } from '@env';
+
 import * as FilesSystem from "expo-file-system";
 const InscriC = ({ navigation }) => {
   const [data, setData] = React.useState({
@@ -68,7 +70,7 @@ const InscriC = ({ navigation }) => {
         console.log("ffffffffff" + response.assets[0].uri);
         setAvatar(response.assets[0].uri);
         FilesSystem.uploadAsync(
-          "http://192.168.195.216:3000/upload-image",
+          `${REACT_APP_API_BASE_URL}/upload-image`,
           response.assets[0].uri,
           {
             fieldName: "avatar",
@@ -107,7 +109,7 @@ const InscriC = ({ navigation }) => {
       formData.append("cin", cin);
       formData.append("role", "Ferme");
       formData.append("avatar", avatarFile);
-      const response = await fetch("http://192.168.195.216:3000/add-user", {
+      const response = await fetch(`${REACT_APP_API_BASE_URL}/add-user`, {
         method: "POST",
         headers: {
           "Content-Type": "multipart/form-data",

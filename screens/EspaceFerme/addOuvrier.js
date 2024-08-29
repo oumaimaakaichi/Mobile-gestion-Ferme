@@ -27,6 +27,7 @@ import ouv from "../../assets/process_3516613.png";
 import menu from "../../assets/menu.png";
 import vet from "../../assets/veterinaire (1).png"
 import cland from "../../assets/clandr.png";
+import { REACT_APP_API_BASE_URL } from '@env';
 
 import close from "../../assets/close.png";
 
@@ -82,7 +83,7 @@ export default function AddOuv({ navigation }) {
       };
 
      
-      const response = await fetch("http://192.168.195.216:3000/add-Compte", {
+      const response = await fetch(`${REACT_APP_API_BASE_URL}/add-Compte`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json", 

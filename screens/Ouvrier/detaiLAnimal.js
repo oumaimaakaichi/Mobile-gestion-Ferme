@@ -12,6 +12,7 @@ import {
   Modal,
 } from "react-native";
 import axios from "axios";
+import { REACT_APP_API_BASE_URL } from '@env';
 
 const { width: WIDTH } = Dimensions.get("window");
 const { height: HEIGHT } = Dimensions.get("window");
@@ -35,7 +36,7 @@ export default function AnimalDétail2({ route, navigation }) {
   const handleEdit = async () => {
     try {
       const response = await axios.patch(
-        `http://192.168.195.216:3000/api/updateAn/${animal._id}`,
+        `${REACT_APP_API_BASE_URL}/api/updateAn/${animal._id}`,
         editAnimal
       );
       setMessage(response.data.message);

@@ -33,6 +33,7 @@ import task from "../assets/task_8089604.png";
 import document from "../assets/doc.png";
 import cd from "../assets/cd4bd9b0ea2807611ba3a67c331bff0b-removebg-preview.png"
 import { Alert } from "react-native";
+import { REACT_APP_API_BASE_URL } from '@env';
 
 export default function ProfilEmpl({ navigation }) {
   const [showMenu, setShowMenu] = useState(false);
@@ -89,7 +90,7 @@ export default function ProfilEmpl({ navigation }) {
         setAvatar(response.assets[0].uri);
         try {
           const uploadResult = await FileSystem.uploadAsync(
-            "http://192.168.195.216:3000/upload-image",
+            `${REACT_APP_API_BASE_URL}/upload-image`,
             response.assets[0].uri,
             {
               fieldName: "avatar",
@@ -122,7 +123,7 @@ export default function ProfilEmpl({ navigation }) {
       });
 
       const response = await fetch(
-        `http://192.168.195.216:3000/modifier/${userId}`,
+        `${REACT_APP_API_BASE_URL}/modifier/${userId}`,
         {
           method: "PUT",
           headers: {

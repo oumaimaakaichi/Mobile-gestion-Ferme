@@ -18,6 +18,7 @@ import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
 import logout from "../../assets/logout.png";
 import cland from "../../assets/clandr.png";
+import { REACT_APP_API_BASE_URL } from '@env';
 
 import axios from "axios";
 
@@ -106,7 +107,7 @@ export default function Dashboard({ navigation }) {
       const clientData = await getClientData();
       setIsLoading(true);
       const response = await axios.get(
-        `http://192.168.195.216:3000/conges/${clientData?.Data?._id}`
+        `${REACT_APP_API_BASE_URL}/conges/${clientData?.Data?._id}`
       );
       setData(response.data);
       setIsLoading(false);

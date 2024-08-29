@@ -11,7 +11,8 @@ import {
 } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Picker } from "@react-native-picker/picker";
-import task from "../../assets/add.png";
+import add from "../../assets/add.png";
+import { REACT_APP_API_BASE_URL } from '@env';
 
 const VaccinationsScreen = ({ route, navigation }) => {
   const { itemId } = route.params;
@@ -23,18 +24,16 @@ const VaccinationsScreen = ({ route, navigation }) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
   const [vaccinationNames, setVaccinationNames] = useState([
-    "Rabies",
-    "Parvovirus",
-    "Distemper",
-    "Hepatitis",
-    "Leptospirosis",
+    "HL",
+    "CL",
+    
   ]);
 
   useEffect(() => {
     const fetchVaccinations = async () => {
       try {
         const response = await fetch(
-          `http://192.168.195.216:3000/getAllVaccinations/${itemId}`
+          `${REACT_APP_API_BASE_URL}/getAllVaccinations/${itemId}`
         );
         const data = await response.json();
         if (response.ok) {
@@ -55,7 +54,7 @@ const VaccinationsScreen = ({ route, navigation }) => {
   const handleAddVaccination = async () => {
     try {
       const response = await fetch(
-        `http://192.168.195.216:3000/addVaccination/${itemId}`,
+        `${REACT_APP_API_BASE_URL}/addVaccination/${itemId}`,
         {
           method: "POST",
           headers: {
@@ -106,7 +105,7 @@ const VaccinationsScreen = ({ route, navigation }) => {
 
       <TouchableOpacity onPress={() => setModalVisible(true)}>
         <View style={styles.addButton}>
-          <Image source={task} style={styles.addIcon} />
+          <Image source={add} style={styles.addIcon} />
         </View>
       </TouchableOpacity>
 
@@ -199,9 +198,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   addIcon: {
-    width: 30,
-    height: 30,
+    width: 35,
+    height: 35,
     tintColor: "#674188",
+    marginRight:20
   },
   addText: {
     fontSize: 16,

@@ -13,6 +13,7 @@ import {
 import { getClientData } from "../../utils/AsyncStorageClient";
 import axios from "axios";
 import { useFocusEffect } from "@react-navigation/native";
+import { REACT_APP_API_BASE_URL } from '@env';
 
 const { width: WIDTH } = Dimensions.get("window");
 
@@ -25,7 +26,7 @@ export default function ListStock({ navigation }) {
   const fetchData = async () => {
     const userData = await getClientData();
     const response = await fetch(
-      `http://192.168.195.216:3000/stocks-by-owner/${userData?.Data?._id}`
+      `${REACT_APP_API_BASE_URL}/stocks-by-owner/${userData?.Data?._id}`
     );
     const jsonData = await response.json();
     setData(jsonData);
@@ -44,7 +45,7 @@ export default function ListStock({ navigation }) {
   const handleEdit = async () => {
     try {
       const response = await axios.patch(
-        `http://192.168.195.216:3000/update-stock/${editStock._id}`,
+        `${REACT_APP_API_BASE_URL}/update-stock/${editStock._id}`,
         editStock
       );
       setData((prevData) =>

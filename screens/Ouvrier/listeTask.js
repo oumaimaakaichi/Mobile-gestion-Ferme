@@ -11,6 +11,7 @@ import {
   FlatList,
 } from "react-native";
 import axios from "axios";
+import { REACT_APP_API_BASE_URL } from '@env';
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
 
@@ -21,7 +22,7 @@ export default function ListTaskkk({ route, navigation, proprietaireId }) {
   const handleMarkAsDone = async (taskId) => {
     try {
       await axios.put(
-        `http://192.168.195.216:3000/utilisateur/${proprietaireId}/taches/${taskId}`
+        `${REACT_APP_API_BASE_URL}/utilisateur/${proprietaireId}/taches/${taskId}`
       );
 
       setTasks((prevTasks) =>
@@ -38,7 +39,7 @@ export default function ListTaskkk({ route, navigation, proprietaireId }) {
     const fetchTasks = async () => {
       try {
         const response = await axios.get(
-          `http://192.168.195.216:3000/employeur/${proprietaireId}/taches`
+          `${REACT_APP_API_BASE_URL}/employeur/${proprietaireId}/taches`
         );
         setTasks(response.data);
       } catch (error) {
@@ -97,7 +98,7 @@ export default function ListTaskkk({ route, navigation, proprietaireId }) {
 
   return (
     <SafeAreaView
-      style={{ height: HEIGHT, backgroundColor: "white", marginTop: 20 }}
+      style={{ height: HEIGHT, backgroundColor: "white", marginTop: 20 , height:"100%" }}
     >
       <ScrollView>
         <FlatList
@@ -128,6 +129,7 @@ const styles = StyleSheet.create({
     padding: 10,
     marginStart: 7,
     marginEnd: 8,
+    
   },
   row: {
     flexDirection: "row",

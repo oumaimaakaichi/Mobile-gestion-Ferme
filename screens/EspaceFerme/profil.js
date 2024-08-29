@@ -32,6 +32,7 @@ import close from "../../assets/close.png";
 
 import ouv from "../../assets/process_3516613.png";
 import { Alert } from "react-native";
+import { REACT_APP_API_BASE_URL } from '@env';
 
 export default function Profil({ navigation }) {
   const [showMenu, setShowMenu] = useState(false);
@@ -89,7 +90,7 @@ export default function Profil({ navigation }) {
         console.log("ffffffffff" + response.assets[0].uri);
         setAvatar(response.assets[0].uri);
         FilesSystem.uploadAsync(
-          "http://192.168.195.216:3000/upload-image",
+          `${REACT_APP_API_BASE_URL}/upload-image`,
           response.assets[0].uri,
           {
             fieldName: "avatar",
@@ -108,7 +109,7 @@ export default function Profil({ navigation }) {
       formData.append("avatar", avatarFile);
 
       const response = await fetch(
-        `http://192.168.195.216:3000/modifier/${user.Data._id}`,
+        `${REACT_APP_API_BASE_URL}/modifier/${user.Data._id}`,
         {
           method: "PUT",
           headers: {

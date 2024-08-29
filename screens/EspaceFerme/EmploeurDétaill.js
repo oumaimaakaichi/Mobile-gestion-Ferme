@@ -14,6 +14,8 @@ import {
 import axios from "axios";
 import { Picker } from "@react-native-picker/picker";
 import emp from "../../assets/so-removebg-preview.png"
+import { REACT_APP_API_BASE_URL } from '@env';
+
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
 
 export default function EmploeDétail({ route, navigation }) {
@@ -36,7 +38,7 @@ export default function EmploeDétail({ route, navigation }) {
     if (proprietaireId) {
       axios
         .get(
-          `http://192.168.195.216:3000/taches-by-proprietaire/${proprietaireId}`
+          `${REACT_APP_API_BASE_URL}/taches-by-proprietaire/${proprietaireId}`
         )
         .then((response) => {
           setTasks(response.data);
@@ -50,7 +52,7 @@ export default function EmploeDétail({ route, navigation }) {
   const handleAssignTask = () => {
     if (selectedTask) {
       axios
-        .post("http://192.168.195.216:3000/assign-task", {
+        .post(`${REACT_APP_API_BASE_URL}/assign-task`, {
           userId: conge._id,
           taskId: selectedTask,
         })
@@ -69,7 +71,7 @@ export default function EmploeDétail({ route, navigation }) {
   const handleAssignTasks = (taskId) => {
     if (taskId) {
       axios
-        .post("http://192.168.195.216:3000/assign-task", {
+        .post(`${REACT_APP_API_BASE_URL}/assign-task`, {
           userId: conge._id,
           taskId: taskId,
         })
@@ -88,7 +90,7 @@ export default function EmploeDétail({ route, navigation }) {
   const handleAddTask = () => {
     if (newTaskName && newTaskDescription) {
       axios
-        .post("http://192.168.195.216:3000/add-tache", {
+        .post(`${REACT_APP_API_BASE_URL}/add-tache`, {
           tache: newTaskName,
           description: newTaskDescription,
           proprietaire: proprietaireId,
@@ -103,7 +105,7 @@ export default function EmploeDétail({ route, navigation }) {
 
           axios
             .get(
-              `http://192.168.195.216:3000/taches-by-proprietaire/${proprietaireId}`
+              `${REACT_APP_API_BASE_URL}/taches-by-proprietaire/${proprietaireId}`
             )
             .then((response) => {
               setTasks(response.data);

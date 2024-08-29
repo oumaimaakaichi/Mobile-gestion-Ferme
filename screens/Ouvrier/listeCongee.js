@@ -3,6 +3,8 @@ import axios from "axios";
 import { View, Text, StyleSheet, ScrollView, Image } from "react-native";
 import { Card } from "react-native-paper";
 import { Picker } from "@react-native-picker/picker";
+import { REACT_APP_API_BASE_URL } from '@env';
+
 import { getClientData } from "../../utils/AsyncStorageClient";
 const ListeC = ({ proprietaireId, navigation }) => {
   const [conges, setConges] = useState([]);
@@ -15,7 +17,7 @@ const ListeC = ({ proprietaireId, navigation }) => {
       const userData = await getClientData();
       try {
         const response = await axios.get(
-          `http://192.168.195.216:3000/conge/${userData.Data._id}`
+          `${REACT_APP_API_BASE_URL}/conge/${userData.Data._id}`
         );
         setConges(response.data);
       } catch (err) {

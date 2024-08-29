@@ -33,6 +33,7 @@ import cland from "../../assets/clandr.png";
 import close from "../../assets/close.png";
 
 import { useIsFocused } from "@react-navigation/native";
+import { REACT_APP_API_BASE_URL } from '@env';
 
 import { Button } from "react-native-paper";
 import Toast from "react-native-toast-message";
@@ -95,7 +96,7 @@ export default function DemandeConge({ navigation }) {
         employeur: data.Data._id,
       });
 
-      const response = await fetch("http://192.168.195.216:3000/add-conge", {
+      const response = await fetch(`${REACT_APP_API_BASE_URL}/add-conge`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

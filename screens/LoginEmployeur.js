@@ -23,6 +23,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import Feather from "react-native-vector-icons/Feather";
 
 import { useTheme } from "react-native-paper";
+import { REACT_APP_API_BASE_URL } from '@env';
 
 import { storeClientData } from "../utils/AsyncStorageClient";
 import axios from "axios";
@@ -103,7 +104,7 @@ const LoginEmployeur = ({ navigation }) => {
       return;
     }
 
-    fetch("http://192.168.195.216:3000/login", {
+    fetch(`${REACT_APP_API_BASE_URL}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -174,7 +175,7 @@ const LoginEmployeur = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [email, setEmail] = useState("");
   const sendPasswordReset = () => {
-    fetch("http://192.168.195.216:3000/emailyni", {
+    fetch(`${REACT_APP_API_BASE_URL}/emailyni`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

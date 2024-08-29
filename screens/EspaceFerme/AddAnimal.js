@@ -15,6 +15,7 @@ import profile from "../../assets/prof.png";
 import { getClientData } from "../../utils/AsyncStorageClient";
 import { LinearGradient } from "expo-linear-gradient";
 
+import { REACT_APP_API_BASE_URL } from '@env';
 
 import animals from "../../assets/caw-removebg-preview.png";
 import home from "../../assets/home.png";
@@ -124,7 +125,7 @@ export default function AddAnimal({ navigation }) {
           name: imageName,
         });
   
-        const response = await fetch("http://192.168.195.216:3000/ajouter-animal", {
+        const response = await fetch(`${REACT_APP_API_BASE_URL}/ajouter-animal`, {
           method: "POST",
           body: formData, 
         });

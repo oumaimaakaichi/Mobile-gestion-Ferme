@@ -28,7 +28,7 @@ import animal from "../../assets/betail.png";
 
 import { useIsFocused } from "@react-navigation/native";
 import { Alert } from "react-native";
-import ListAnimal from "./ListeAnimals";
+
 import vet from "../../assets/veterinaire (1).png"
 export default function Stocks({ navigation }) {
   const [showMenu, setShowMenu] = useState(false);

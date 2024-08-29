@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
+import { REACT_APP_API_BASE_URL } from '@env';
 
 const VaccinationsScreenP = ({ route, navigation }) => {
   const { itemId } = route.params;
@@ -26,7 +27,7 @@ const VaccinationsScreenP = ({ route, navigation }) => {
     const fetchVaccinations = async () => {
       try {
         const response = await fetch(
-          `http://192.168.195.216:3000/getAllVaccinations/${itemId}`
+          `${REACT_APP_API_BASE_URL}/getAllVaccinations/${itemId}`
         );
         const data = await response.json();
         if (response.ok) {
@@ -47,7 +48,7 @@ const VaccinationsScreenP = ({ route, navigation }) => {
   const handleAddVaccination = async () => {
     try {
       const response = await fetch(
-        `http://192.168.195.216:3000/addVaccination/${itemId}`,
+        `${REACT_APP_API_BASE_URL}/addVaccination/${itemId}`,
         {
           method: "POST",
           headers: {

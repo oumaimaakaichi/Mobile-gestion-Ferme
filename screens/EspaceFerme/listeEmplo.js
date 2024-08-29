@@ -3,6 +3,7 @@ import axios from "axios";
 import { View, Text, StyleSheet, ScrollView, Image } from "react-native";
 import { Card } from "react-native-paper";
 import { Picker } from "@react-native-picker/picker";
+import { REACT_APP_API_BASE_URL } from '@env';
 
 const EmployeurList = ({ proprietaireId, navigation }) => {
   const [conges, setConges] = useState([]);
@@ -14,7 +15,7 @@ const EmployeurList = ({ proprietaireId, navigation }) => {
     const fetchConges = async () => {
       try {
         const response = await axios.get(
-          `http://192.168.195.216:3000/users-by-owner/${proprietaireId}`
+          `${REACT_APP_API_BASE_URL}/users-by-owner/${proprietaireId}`
         );
         setConges(response.data);
       } catch (err) {

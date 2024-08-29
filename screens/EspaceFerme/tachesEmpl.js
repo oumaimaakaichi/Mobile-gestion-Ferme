@@ -11,6 +11,7 @@ import {
   FlatList,
 } from "react-native";
 import axios from "axios";
+import { REACT_APP_API_BASE_URL } from '@env';
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get("window");
 
@@ -28,7 +29,7 @@ export default function TachesE({ route, navigation }) {
     const fetchTasks = async () => {
       try {
         const response = await axios.get(
-          `http://192.168.195.216:3000/employeur/${itemId}/taches`
+          `${REACT_APP_API_BASE_URL}/employeur/${itemId}/taches`
         );
         setTasks(response.data);
       } catch (error) {
@@ -51,7 +52,7 @@ export default function TachesE({ route, navigation }) {
           <Text style={styles.contactValue}>{item.tache.tache}</Text>
         </View>
         <View style={styles.row}>
-          <Text style={styles.contactLabel}>Status: </Text>
+          <Text style={styles.contactLabel}>Statuss: </Text>
           <Text
             style={{ color: getStatusColor(item.status), fontWeight: "bold" }}
             color={getStatusColor(item.status)}
