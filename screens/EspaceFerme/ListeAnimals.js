@@ -22,7 +22,7 @@ export default function ListAnimal({ navigation }) {
   const fetchData = async () => {
     const userData = await getClientData();
     const response = await fetch(
-      `${REACT_APP_API_BASE_URL}/AnimalParFerme/${userData?.Data?._id}`
+      `http://192.168.177.216:3000/AnimalParFerme/${userData?.Data?._id}`
     );
     const jsonData = await response.json();
     setData(jsonData);
@@ -40,7 +40,7 @@ export default function ListAnimal({ navigation }) {
   const deleteAnimal = async (id) => {
     console.log(id);
     try {
-      await fetch(`${REACT_APP_API_BASE_URL}/api/deleteAni/${id}`, {
+      await fetch(`http://192.168.177.216:3000/api/deleteAni/${id}`, {
         method: "DELETE",
       });
       Toast.show({

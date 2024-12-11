@@ -104,7 +104,7 @@ const LoginEmployeur = ({ navigation }) => {
       return;
     }
 
-    fetch(`${REACT_APP_API_BASE_URL}/login`, {
+    fetch(`http://192.168.177.216:3000/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -175,7 +175,7 @@ const LoginEmployeur = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [email, setEmail] = useState("");
   const sendPasswordReset = () => {
-    fetch(`${REACT_APP_API_BASE_URL}/emailyni`, {
+    fetch(`http://192.168.177.216:3000/emailyni`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

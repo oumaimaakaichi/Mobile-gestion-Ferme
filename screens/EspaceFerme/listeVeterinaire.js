@@ -15,7 +15,7 @@ const VeterinaireList = ({ proprietaireId, navigation }) => {
     const fetchConges = async () => {
       try {
         const response = await axios.get(
-          `${REACT_APP_API_BASE_URL}/Vete-by-owner/${proprietaireId}`
+          `http://192.168.177.216:3000/Vete-by-owner/${proprietaireId}`
         );
         setConges(response.data);
       } catch (err) {
@@ -44,7 +44,7 @@ const VeterinaireList = ({ proprietaireId, navigation }) => {
           }}
         >
           <Text style={styles.title}>
-            Employé: {conge.nom} {conge.prenom}      
+            Véterinaire: {conge.nom} {conge.prenom}      
           </Text>
           <Card.Content style={styles.cardContent}>
             <View style={styles.infoContainer}>
@@ -110,8 +110,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   image: {
-    width: "120%",
-    height: "120%",
+    width: "100%",
+    height: "100%",
     resizeMode: "cover",
   },
   statusContainer: {

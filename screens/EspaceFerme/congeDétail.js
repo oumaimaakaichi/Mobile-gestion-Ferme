@@ -45,7 +45,7 @@ export default function CongeDétail({ route, navigation }) {
   const handleAccept = async () => {
     try {
       const response = await axios.patch(
-        `${REACT_APP_API_BASE_URL}/conge/accepter/${getConge._id}`
+        `http://192.168.177.216:3000/conge/accepter/${getConge._id}`
       );
       if (response.status === 200) {
         setConge(response.data.conge);
@@ -59,8 +59,8 @@ export default function CongeDétail({ route, navigation }) {
   const handleReject = async () => {
     try {
       const response = await axios.patch(
-        `${REACT_APP_API_BASE_URL}/conge/refuser/${getConge._id}`
-      );
+        `http://192.168.177.216:3000/conge/refuser/${getConge._id}`
+      )
       if (response.status === 200) {
         setConge(response.data.conge);
       }

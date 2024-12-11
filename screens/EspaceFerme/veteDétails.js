@@ -37,7 +37,7 @@ export default function VeterinaireDétail({ route, navigation }) {
     if (proprietaireId) {
       axios
         .get(
-          `${REACT_APP_API_BASE_URL}/taches-by-proprietaire/${proprietaireId}`
+          `http://192.168.177.216:3000/taches-by-proprietaire/${proprietaireId}`
         )
         .then((response) => {
           setTasks(response.data);
@@ -53,7 +53,7 @@ export default function VeterinaireDétail({ route, navigation }) {
   const handleAssignTasks = (taskId) => {
     if (taskId) {
       axios
-        .post(`${REACT_APP_API_BASE_URL}/assign-task`, {
+        .post(`http://192.168.177.216:3000/assign-task`, {
           userId: conge._id,
           taskId: taskId,
         })
@@ -72,7 +72,7 @@ export default function VeterinaireDétail({ route, navigation }) {
   const handleAddTask = () => {
     if (newTaskName && newTaskDescription) {
       axios
-        .post(`${REACT_APP_API_BASE_URL}/add-tache`, {
+        .post(`http://192.168.177.216:3000/add-tache`, {
           tache: newTaskName,
           description: newTaskDescription,
           proprietaire: proprietaireId,
@@ -87,7 +87,7 @@ export default function VeterinaireDétail({ route, navigation }) {
 
           axios
             .get(
-              `${REACT_APP_API_BASE_URL}/taches-by-proprietaire/${proprietaireId}`
+              `http://192.168.177.216:3000/taches-by-proprietaire/${proprietaireId}`
             )
             .then((response) => {
               setTasks(response.data);

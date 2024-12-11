@@ -15,7 +15,7 @@ const CongesList = ({ proprietaireId, navigation }) => {
     const fetchConges = async () => {
       try {
         const response = await axios.get(
-          `${REACT_APP_API_BASE_URL}/conges/${proprietaireId}`
+          `http://192.168.177.216:3000/conges/${proprietaireId}`
         );
         setConges(response.data);
       } catch (err) {

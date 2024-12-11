@@ -22,7 +22,7 @@ export default function ListTaskkk({ route, navigation, proprietaireId }) {
   const handleMarkAsDone = async (taskId) => {
     try {
       await axios.put(
-        `${REACT_APP_API_BASE_URL}/utilisateur/${proprietaireId}/taches/${taskId}`
+        `http://192.168.177.216:3000/utilisateur/${proprietaireId}/taches/${taskId}`
       );
 
       setTasks((prevTasks) =>
@@ -39,7 +39,7 @@ export default function ListTaskkk({ route, navigation, proprietaireId }) {
     const fetchTasks = async () => {
       try {
         const response = await axios.get(
-          `${REACT_APP_API_BASE_URL}/employeur/${proprietaireId}/taches`
+          `http://192.168.177.216:3000/employeur/${proprietaireId}/taches`
         );
         setTasks(response.data);
       } catch (error) {

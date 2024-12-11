@@ -83,7 +83,7 @@ export default function AddOuv({ navigation }) {
       };
 
      
-      const response = await fetch(`${REACT_APP_API_BASE_URL}/add-Compte`, {
+      const response = await fetch(`http://192.168.177.216:3000/add-Compte`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json", 

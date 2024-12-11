@@ -83,7 +83,7 @@ export default function AddStock({ navigation }) {
         proprietaire: data.Data._id,
       });
 
-      const response = await fetch(`${REACT_APP_API_BASE_URL}/add-stock`, {
+      const response = await fetch(`http://192.168.177.216:3000/add-stock`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

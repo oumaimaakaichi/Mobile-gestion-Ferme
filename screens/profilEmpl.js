@@ -90,7 +90,7 @@ export default function ProfilEmpl({ navigation }) {
         setAvatar(response.assets[0].uri);
         try {
           const uploadResult = await FileSystem.uploadAsync(
-            `${REACT_APP_API_BASE_URL}/upload-image`,
+            `http://192.168.177.216:3000/upload-image`,
             response.assets[0].uri,
             {
               fieldName: "avatar",
@@ -123,7 +123,7 @@ export default function ProfilEmpl({ navigation }) {
       });
 
       const response = await fetch(
-        `${REACT_APP_API_BASE_URL}/modifier/${userId}`,
+        `http://192.168.177.216:3000/modifier/${userId}`,
         {
           method: "PUT",
           headers: {

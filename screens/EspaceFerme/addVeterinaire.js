@@ -83,7 +83,7 @@ export default function AddVeterinaire({ navigation }) {
       };
 
      
-      const response = await fetch(`${REACT_APP_API_BASE_URL}/add-CompteV`, {
+      const response = await fetch(`http://192.168.177.216:3000/add-CompteV`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json", 

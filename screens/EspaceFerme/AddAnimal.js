@@ -125,7 +125,7 @@ export default function AddAnimal({ navigation }) {
           name: imageName,
         });
   
-        const response = await fetch(`${REACT_APP_API_BASE_URL}/ajouter-animal`, {
+        const response = await fetch(`http://192.168.177.216:3000/ajouter-animal`, {
           method: "POST",
           body: formData, 
         });

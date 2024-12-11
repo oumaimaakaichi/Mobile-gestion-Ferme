@@ -70,7 +70,7 @@ const InscriC = ({ navigation }) => {
         console.log("ffffffffff" + response.assets[0].uri);
         setAvatar(response.assets[0].uri);
         FilesSystem.uploadAsync(
-          `${REACT_APP_API_BASE_URL}/upload-image`,
+          `http://192.168.177.216:3000/upload-image`,
           response.assets[0].uri,
           {
             fieldName: "avatar",
@@ -109,7 +109,7 @@ const InscriC = ({ navigation }) => {
       formData.append("cin", cin);
       formData.append("role", "Ferme");
       formData.append("avatar", avatarFile);
-      const response = await fetch(`${REACT_APP_API_BASE_URL}/add-user`, {
+      const response = await fetch(`http://192.168.177.216:3000/add-user`, {
         method: "POST",
         headers: {
           "Content-Type": "multipart/form-data",

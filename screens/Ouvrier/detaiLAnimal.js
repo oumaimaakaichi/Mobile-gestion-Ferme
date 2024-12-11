@@ -36,7 +36,7 @@ export default function AnimalDétail2({ route, navigation }) {
   const handleEdit = async () => {
     try {
       const response = await axios.patch(
-        `${REACT_APP_API_BASE_URL}/api/updateAn/${animal._id}`,
+        `http://192.168.177.216:3000/api/updateAn/${animal._id}`,
         editAnimal
       );
       setMessage(response.data.message);

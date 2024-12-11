@@ -27,7 +27,7 @@ const VaccinationsScreenP = ({ route, navigation }) => {
     const fetchVaccinations = async () => {
       try {
         const response = await fetch(
-          `${REACT_APP_API_BASE_URL}/getAllVaccinations/${itemId}`
+          `http://192.168.177.216:3000/getAllVaccinations/${itemId}`
         );
         const data = await response.json();
         if (response.ok) {
@@ -48,7 +48,7 @@ const VaccinationsScreenP = ({ route, navigation }) => {
   const handleAddVaccination = async () => {
     try {
       const response = await fetch(
-        `${REACT_APP_API_BASE_URL}/addVaccination/${itemId}`,
+        `http://192.168.177.216:3000/addVaccination/${itemId}`,
         {
           method: "POST",
           headers: {

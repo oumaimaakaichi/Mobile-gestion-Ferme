@@ -26,7 +26,7 @@ export default function ListStock({ navigation }) {
   const fetchData = async () => {
     const userData = await getClientData();
     const response = await fetch(
-      `${REACT_APP_API_BASE_URL}/stocks-by-owner/${userData?.Data?._id}`
+      `http://192.168.177.216:3000/stocks-by-owner/${userData?.Data?._id}`
     );
     const jsonData = await response.json();
     setData(jsonData);
@@ -45,7 +45,7 @@ export default function ListStock({ navigation }) {
   const handleEdit = async () => {
     try {
       const response = await axios.patch(
-        `${REACT_APP_API_BASE_URL}/update-stock/${editStock._id}`,
+        `http://192.168.177.216:3000/update-stock/${editStock._id}`,
         editStock
       );
       setData((prevData) =>

@@ -17,7 +17,7 @@ const ListeC = ({ proprietaireId, navigation }) => {
       const userData = await getClientData();
       try {
         const response = await axios.get(
-          `${REACT_APP_API_BASE_URL}/conge/${userData.Data._id}`
+          `http://192.168.177.216:3000/conge/${userData.Data._id}`
         );
         setConges(response.data);
       } catch (err) {

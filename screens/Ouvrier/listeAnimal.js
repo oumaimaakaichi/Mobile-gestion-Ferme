@@ -22,7 +22,7 @@ export default function ListAnimal2({ navigation }) {
   const fetchData = async () => {
     const userData = await getClientData();
     const response = await fetch(
-      `${REACT_APP_API_BASE_URL}/AnimalParFerme/${userData?.Data?.proprietaire}`
+      `http://192.168.177.216:3000/AnimalParFerme/${userData?.Data?.proprietaire}`
     );
     const jsonData = await response.json();
     setData(jsonData);

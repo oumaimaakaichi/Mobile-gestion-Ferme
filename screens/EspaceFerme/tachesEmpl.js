@@ -29,7 +29,7 @@ export default function TachesE({ route, navigation }) {
     const fetchTasks = async () => {
       try {
         const response = await axios.get(
-          `${REACT_APP_API_BASE_URL}/employeur/${itemId}/taches`
+          `http://192.168.177.216:3000/employeur/${itemId}/taches`
         );
         setTasks(response.data);
       } catch (error) {
